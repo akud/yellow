@@ -1,28 +1,18 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Edge from './components/Edge';
+import Graph from './components/Graph';
+import Node from './components/Node';
 
-class App extends Component {
+export default class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Graph width={1000} height={500} border={true}>
+        <Node nodeId="1" />
+        <Node nodeId="2" />
+        <Node nodeId="3" />
+        <Edge fromNodeId="1" toNodeId="3" distance={50} />
+        <Edge fromNodeId="2" toNodeId="3" distance={150} />
+      </Graph>
     );
   }
 }
-
-export default App;

@@ -1,25 +1,42 @@
 {
-  "name": "yellow-client",
+  "name": "yellow",
   "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "react-scripts": "2.1.3"
-  },
+  "description": "Interactive Graphical Document Editor",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "NODE_PATH=\"$NODE_PATH:./src/\" react-scripts start",
+    "build": "NODE_PATH=\"$NODE_PATH:./src/\" react-scripts build",
+    "test": "NODE_PATH=\"$NODE_PATH:./src/\" jest",
+    "test:debug": "NODE_PATH=\"$NODE_PATH:./src/\" node-inspect $(npm bin)/jest",
+    "eject": "NODE_PATH=\"$NODE_PATH:./src/\" react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "jest": {
+    "setupTestFrameworkScriptFile": "./src/test-utils/setup.js"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "license": "MIT",
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "dependencies": {
+    "d3-force": "^2.0.0",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "7.0.0-bridge.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.7.1",
+    "jest": "^23.6.0",
+    "react-scripts": "2.1.3",
+    "react-test-renderer": "^16.7.0"
+  }
 }
