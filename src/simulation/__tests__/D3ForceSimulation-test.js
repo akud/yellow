@@ -6,6 +6,7 @@ import D3ForceSimulation from '../D3ForceSimulation';
 describe('D3ForceSimulation', () => {
   let baseSimulation;
   let linkForce;
+  let collisionForce;
 
   beforeEach(() => {
     baseSimulation = {
@@ -18,10 +19,13 @@ describe('D3ForceSimulation', () => {
     linkForce = {
       distance: jest.fn().mockReturnValue('forceLinkWithDistance'),
     };
+    collisionForce = {
+      radius: jest.fn().mockReturnValue('collisionForceWithRadius'),
+    };
     d3.forceManyBody.mockReturnValue('forceManyBody');
     d3.forceLink.mockReturnValue(linkForce);
     d3.forceCenter.mockReturnValue('forceCenter');
-    d3.forceCollide.mockReturnValue('forceCollide');
+    d3.forceCollide.mockReturnValue(collisionForce);
   });
 
   it('initializes a simulation in the constructor', () => {
@@ -52,12 +56,17 @@ describe('D3ForceSimulation', () => {
     expect(d3.forceCollide).toHaveBeenCalled();
     expect(baseSimulation.force).toHaveBeenCalledWith('charge', 'forceManyBody');
     expect(baseSimulation.force).toHaveBeenCalledWith('link', 'forceLinkWithDistance');
-    expect(baseSimulation.force).toHaveBeenCalledWith('collision', 'forceCollide');
+    expect(baseSimulation.force).toHaveBeenCalledWith('collision', 'collisionForceWithRadius');
     expect(baseSimulation.force).toHaveBeenCalledWith('center', 'forceCenter');
 
     expect(linkForce.distance).toHaveBeenCalledWith(expect.functionThatReturns([
       { input: { distance: 1 }, output: 1 },
       { input: { distance: 45 }, output: 45 },
+    ]));
+
+    expect(collisionForce.radius).toHaveBeenCalledWith(expect.functionThatReturns([
+      { input: { radius: 1 }, output: 1 },
+      { input: { radius: 45 }, output: 45 },
     ]));
   });
 

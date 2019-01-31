@@ -43,7 +43,7 @@ export default class D3ForceSimulation {
         'link', d3.forceLink(this.edges).distance(d => d.distance)
       )
       .force('center', d3.forceCenter(options.width / 2, options.height / 2))
-      .force('collision', d3.forceCollide());
+      .force('collision', d3.forceCollide().radius(n => n.radius));
   }
 
   /**
