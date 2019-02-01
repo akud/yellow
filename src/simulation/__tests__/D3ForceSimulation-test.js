@@ -2,6 +2,8 @@ jest.mock('d3-force');
 
 import * as d3 from 'd3-force';
 import D3ForceSimulation from '../D3ForceSimulation';
+import SimulatedNode from '../SimulatedNode';
+import SimulatedEdge from '../SimulatedEdge';
 
 describe('D3ForceSimulation', () => {
   let baseSimulation;
@@ -17,11 +19,18 @@ describe('D3ForceSimulation', () => {
     d3.forceSimulation.mockReturnValue(baseSimulation);
 
     linkForce = {
-      distance: jest.fn().mockReturnValue('forceLinkWithDistance'),
+      distance: jest.fn(),
+      id: jest.fn(),
     };
     collisionForce = {
-      radius: jest.fn().mockReturnValue('collisionForceWithRadius'),
+      radius: jest.fn(),
     };
+
+    linkForce.distance.mockReturnValue(linkForce);
+    linkForce.id.mockReturnValue(linkForce);
+
+    collisionForce.radius.mockReturnValue(collisionForce);
+
     d3.forceManyBody.mockReturnValue('forceManyBody');
     d3.forceLink.mockReturnValue(linkForce);
     d3.forceCenter.mockReturnValue('forceCenter');
@@ -29,39 +38,38 @@ describe('D3ForceSimulation', () => {
   });
 
   it('initializes a simulation in the constructor', () => {
+    const nodes = [
+      new SimulatedNode({ id: '1' }),
+      new SimulatedNode({ id: '2' }),
+      new SimulatedNode({ id: '3' }),
+    ];
+    const edges = [
+      new SimulatedEdge({ source: '1', target: '2' }),
+      new SimulatedEdge({ source: '3', target: '2' }),
+    ];
     new D3ForceSimulation({
-      nodes: [
-        { nodeId: '1' },
-        { nodeId: '2' },
-        { nodeId: '3' },
-      ],
-      edges: [
-        { fromNodeId: '1', toNodeId: '2' },
-        { fromNodeId: '3', toNodeId: '2' },
-      ],
+      nodes: nodes,
+      edges: edges,
       width: 100,
       height: 200,
     });
-    expect(d3.forceSimulation).toHaveBeenCalledWith([
-        { nodeId: '1' },
-        { nodeId: '2' },
-        { nodeId: '3' },
-    ]);
+    expect(d3.forceSimulation).toHaveBeenCalledWith(nodes);
     expect(d3.forceManyBody).toHaveBeenCalled();
-    expect(d3.forceLink).toHaveBeenCalledWith([
-      expect.objectContaining({ source: 0, target: 1 }),
-      expect.objectContaining({ source: 2, target: 1 }),
-    ]);
+    expect(d3.forceLink).toHaveBeenCalledWith(edges);
     expect(d3.forceCenter).toHaveBeenCalledWith(50, 100);
     expect(d3.forceCollide).toHaveBeenCalled();
     expect(baseSimulation.force).toHaveBeenCalledWith('charge', 'forceManyBody');
-    expect(baseSimulation.force).toHaveBeenCalledWith('link', 'forceLinkWithDistance');
-    expect(baseSimulation.force).toHaveBeenCalledWith('collision', 'collisionForceWithRadius');
+    expect(baseSimulation.force).toHaveBeenCalledWith('link', linkForce);
+    expect(baseSimulation.force).toHaveBeenCalledWith('collision', collisionForce);
     expect(baseSimulation.force).toHaveBeenCalledWith('center', 'forceCenter');
 
     expect(linkForce.distance).toHaveBeenCalledWith(expect.functionThatReturns([
-      { input: { distance: 1 }, output: 1 },
-      { input: { distance: 45 }, output: 45 },
+      { input: { getDistance: () => 1 }, output: 1 },
+      { input: { getDistance: () => 45 }, output: 45 },
+    ]));
+    expect(linkForce.id).toHaveBeenCalledWith(expect.functionThatReturns([
+      { input: { id: 1 }, output: 1 },
+      { input: { id: 45 }, output: 45 },
     ]));
 
     expect(collisionForce.radius).toHaveBeenCalledWith(expect.functionThatReturns([
@@ -82,9 +90,9 @@ describe('D3ForceSimulation', () => {
 
   it('can find node positions', () => {
     const nodes = [
-      { nodeId: '1' },
-      { nodeId: '2' },
-      { nodeId: '3' },
+      new SimulatedNode({ id: '1' }),
+      new SimulatedNode({ id: '2' }),
+      new SimulatedNode({ id: '3' }),
     ];
     const simulation = new D3ForceSimulation({ nodes });
     Object.assign(nodes[0], { x: 1.2, y: 2.3 });
@@ -97,14 +105,14 @@ describe('D3ForceSimulation', () => {
 
   it('can find edge positions', () => {
     const nodes = [
-      { nodeId: '1' },
-      { nodeId: '2' },
-      { nodeId: '3' },
+      new SimulatedNode({ id: '1' }),
+      new SimulatedNode({ id: '2' }),
+      new SimulatedNode({ id: '3' }),
     ];
     const edges = [
-      { fromNodeId: '1', toNodeId: '2' },
-      { fromNodeId: '1', toNodeId: '3' },
-      { fromNodeId: '2', toNodeId: '3' },
+      new SimulatedEdge({ source: '1', target: '2' }),
+      new SimulatedEdge({ source: '1', target: '3' }),
+      new SimulatedEdge({ source: '2', target: '3' }),
     ];
     const simulation = new D3ForceSimulation({ nodes, edges });
     Object.assign(nodes[0], { x: 1.2, y: 2.3 });

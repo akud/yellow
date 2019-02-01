@@ -1,9 +1,16 @@
 import GraphElementType from 'graph/GraphElementType';
 import PropTypes from 'prop-types';
+import SimulatedNode from 'simulation/SimulatedNode';
 import React from 'react';
 
 export default class Node extends React.Component {
   static elementType = GraphElementType.NODE;
+  static toSimulatedElement(props) {
+    return new SimulatedNode({
+      id: props.nodeId,
+      radius: props.radius || Node.defaultProps.radius,
+    });
+  }
 
   static propTypes = {
     nodeId: PropTypes.string.isRequired,

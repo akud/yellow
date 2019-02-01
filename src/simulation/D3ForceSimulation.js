@@ -23,24 +23,19 @@ export default class D3ForceSimulation {
     }, options);
 
     this.nodes = options.nodes;
+    this.edges = options.edges;
 
     this.nodeIndex = this.nodes.reduce((obj, n, i) => {
-      obj[n.nodeId] = i;
+      obj[n.id] = i;
       return obj;
     }, {});
-
-    this.edges = options.edges.map(e => Object.assign(
-      {
-        source: this.nodeIndex[e.fromNodeId],
-        target: this.nodeIndex[e.toNodeId],
-      },
-      e
-    ));
 
     this.simulation = d3.forceSimulation(this.nodes)
       .force('charge', d3.forceManyBody())
       .force(
-        'link', d3.forceLink(this.edges).distance(d => d.distance)
+        'link', d3.forceLink(this.edges)
+                  .distance(d => d.getDistance())
+                  .id(n => n.id)
       )
       .force('center', d3.forceCenter(options.width / 2, options.height / 2))
       .force('collision', d3.forceCollide().radius(n => n.radius));

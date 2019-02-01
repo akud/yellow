@@ -1,9 +1,17 @@
 import GraphElementType from 'graph/GraphElementType';
+import SimulatedEdge from 'simulation/SimulatedEdge';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class Edge extends React.Component {
   static elementType = GraphElementType.EDGE;
+  static toSimulatedElement(props) {
+    return new SimulatedEdge({
+      source: props.fromNodeId,
+      target: props.toNodeId,
+      distance: props.distance || Edge.defaultProps.distance,
+    });
+  }
 
   static propTypes = {
     fromNodeId: PropTypes.string.isRequired,

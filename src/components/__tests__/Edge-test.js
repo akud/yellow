@@ -1,5 +1,6 @@
 import Edge from '../Edge';
 import React from 'react';
+import SimulatedEdge from 'simulation/SimulatedEdge';
 
 import { shallow } from 'enzyme';
 
@@ -40,5 +41,19 @@ describe('Edge', () => {
       />
     );
     expect(wrapper.find('line').length).toBe(0);
+  });
+
+  describe('toSimulatedElement', () => {
+    it('converts the props to an edge object', () => {
+      const edge = Edge.toSimulatedElement({
+        fromNodeId: '53',
+        toNodeId: '127',
+      });
+      expect(edge).toEqual(new SimulatedEdge({
+        source: '53',
+        target: '127',
+        distance: 100,
+      }));
+    });
   });
 });

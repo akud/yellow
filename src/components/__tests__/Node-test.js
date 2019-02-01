@@ -1,5 +1,6 @@
 import Node from '../Node';
 import React from 'react';
+import SimulatedNode from 'simulation/SimulatedNode';
 
 import { shallow } from 'enzyme';
 
@@ -25,5 +26,14 @@ describe('Node', () => {
     expect(wrapper.find('circle').prop('fill')).toBe('#442200');
     expect(wrapper.find('circle').prop('cx')).toBe(420);
     expect(wrapper.find('circle').prop('cy')).toBe(69);
+  });
+
+  describe('toSimulatedElement', () => {
+    it('converts the props to a graph node', () => {
+      const result = Node.toSimulatedElement({
+        nodeId: '827',
+      });
+      expect(new SimulatedNode({ id: '827', radius: 10 })).toEqual(result);
+    });
   });
 });

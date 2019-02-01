@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import D3ForceSimulation from 'simulation/D3ForceSimulation';
 
-const copyProps = c => Object.assign({}, c.props);
+const toSimulatedElement = c => c.type.toSimulatedElement(c.props);
 const isNode = c => c.type.elementType === GraphElementType.NODE;
 const isEdge = c => c.type.elementType === GraphElementType.EDGE;
 
@@ -43,8 +43,8 @@ export default class Graph extends React.Component {
 
     this.state = {
       simulation: this.props.simulationCreator({
-        nodes: this.nodes.map(copyProps),
-        edges: this.edges.map(copyProps),
+        nodes: this.nodes.map(toSimulatedElement),
+        edges: this.edges.map(toSimulatedElement),
         width: this.props.width,
         height: this.props.height,
       }).onNewLayout(simulation => this.setState({ simulation }))

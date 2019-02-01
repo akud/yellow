@@ -1,15 +1,19 @@
 import Graph from '../Graph';
 import React from 'react';
 import GraphElementType from 'graph/GraphElementType';
+import SimulatedNode from 'simulation/SimulatedNode';
+import SimulatedEdge from 'simulation/SimulatedEdge';
 
 import { shallow } from 'enzyme';
 
 
 class Node extends React.Component {
   static elementType = GraphElementType.NODE;
+  static toSimulatedElement = jest.fn();
 }
 class Edge extends React.Component {
   static elementType = GraphElementType.EDGE;
+  static toSimulatedElement = jest.fn();
 }
 
 describe('Graph', () => {
@@ -17,6 +21,8 @@ describe('Graph', () => {
   let simulation;
 
   beforeEach(() => {
+    Node.toSimulatedElement.mockReset();
+    Edge.toSimulatedElement.mockReset();
     simulation = {
       onNewLayout: jest.fn(),
       getNodePosition: jest.fn(),
@@ -54,6 +60,13 @@ describe('Graph', () => {
 
 
   it('passes data to the simulation creator', () => {
+    Node.toSimulatedElement
+      .mockReturnValueOnce('first')
+      .mockReturnValueOnce('second')
+      .mockReturnValueOnce('third');
+
+    Edge.toSimulatedElement.mockReturnValueOnce('edge');
+
     const wrapper = shallow(
       <Graph simulationCreator={simulationCreator} width={500} height={1000}>
         <Node nodeId="1" />
@@ -63,12 +76,19 @@ describe('Graph', () => {
       </Graph>
     );
     expect(simulationCreator).toHaveBeenCalledWith({
-      nodes: [{ nodeId: '1' }, { nodeId: '2' }, { nodeId: '3' }],
-      edges: [{ fromNodeId: '2', toNodeId: '3' }],
+      nodes: [ 'first', 'second', 'third' ],
+      edges: [ 'edge' ],
       width: 500,
       height: 1000,
     });
     expect(simulation.onNewLayout).toHaveBeenCalledWith(expect.any(Function));
+    expect(Node.toSimulatedElement).toHaveBeenCalledWith({ nodeId: '1' });
+    expect(Node.toSimulatedElement).toHaveBeenCalledWith({ nodeId: '2' });
+    expect(Node.toSimulatedElement).toHaveBeenCalledWith({ nodeId: '3' });
+    expect(Edge.toSimulatedElement).toHaveBeenCalledWith({
+      fromNodeId: '2',
+      toNodeId: '3'
+    });
   });
 
   it('passes positions from the simulation to child elements', () => {
