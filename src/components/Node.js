@@ -1,16 +1,18 @@
+import Circle from 'geometry/Circle';
 import GraphElementType from 'graph/GraphElementType';
 import PropTypes from 'prop-types';
-import SimulatedCircle from 'simulation/SimulatedCircle';
+import SimulatedNode from 'simulation/SimulatedNode';
 import React from 'react';
 
 export default class Node extends React.Component {
   static elementType = GraphElementType.NODE;
   static toSimulatedElement(props) {
-    return new SimulatedCircle({
+    return new SimulatedNode({
       id: props.nodeId,
-      radius: props.radius || Node.defaultProps.radius,
-      x: (props.position && props.position.x),
-      y: (props.position && props.position.y),
+      shape: new Circle({
+        center: props.position || { x: 0, y: 0 },
+        radius: props.radius || Node.defaultProps.radius,
+      })
     });
   }
 

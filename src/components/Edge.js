@@ -7,8 +7,8 @@ export default class Edge extends React.Component {
   static elementType = GraphElementType.EDGE;
   static toSimulatedElement(props) {
     return new SimulatedEdge({
-      source: props.fromNodeId,
-      target: props.toNodeId,
+      sourceNodeId: props.fromNodeId,
+      targetNodeId: props.toNodeId,
       distance: props.distance || Edge.defaultProps.distance,
     });
   }

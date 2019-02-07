@@ -1,8 +1,9 @@
-import geometry from '../geometry';
+import Circle from '../Circle';
+import Ray from '../Ray';
 
 describe('geometry', () => {
-  describe('computeCircleIntersection', () => {
-    it('computes the intersection of a circle and a line', () => {
+  describe('computeRayIntersection', () => {
+    it('computes the intersection with the provided ray', () => {
       const testCases = [
         {
           name: 'pi/4 angle up and to the right 1 unit from origin',
@@ -60,12 +61,12 @@ describe('geometry', () => {
           radius: 4,
           expected: { x: 2, y: -1 }
         },
-
       ];
+
       testCases.forEach(({name, nearPoint, farPoint, radius, expected}) => {
-        const intersectionPoint = geometry.computeCircleIntersection({
-          nearPoint, farPoint, radius
-        });
+        const circle = new Circle({ center: nearPoint, radius });
+        const ray = new Ray(farPoint, nearPoint);
+        const intersectionPoint = circle.computeRayIntersection(ray);
         const xDistance = intersectionPoint.x - nearPoint.x;
         const yDistance = intersectionPoint.y - nearPoint.y;
 
@@ -77,7 +78,6 @@ describe('geometry', () => {
 
         expect(intersectionPoint.x, 'Test Case: ' + name).toBeCloseTo(expected.x, 3);
         expect(intersectionPoint.y, 'Test Case: ' + name).toBeCloseTo(expected.y, 3);
-
       });
     });
   });

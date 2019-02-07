@@ -1,6 +1,7 @@
+import Circle from 'geometry/Circle';
 import Node from '../Node';
 import React from 'react';
-import SimulatedCircle from 'simulation/SimulatedCircle';
+import SimulatedNode from 'simulation/SimulatedNode';
 
 import { shallow } from 'enzyme';
 
@@ -29,11 +30,20 @@ describe('Node', () => {
   });
 
   describe('toSimulatedElement', () => {
-    it('converts the props to a graph node', () => {
+    it('converts the props to a simulated node', () => {
       const result = Node.toSimulatedElement({
         nodeId: '827',
       });
-      expect(result).toEqual(new SimulatedCircle({ id: '827', radius: 10 }));
+
+      expect(result).toEqual(
+        new SimulatedNode({
+          id: '827',
+          shape: new Circle({
+            center: { x: 0, y: 0 },
+            radius: 10,
+          })
+        })
+      );
     });
   });
 });

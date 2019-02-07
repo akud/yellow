@@ -44,14 +44,14 @@ describe('Edge', () => {
   });
 
   describe('toSimulatedElement', () => {
-    it('converts the props to an edge object', () => {
+    it.only('converts the props to an edge object', () => {
       const edge = Edge.toSimulatedElement({
         fromNodeId: '53',
         toNodeId: '127',
       });
       expect(edge).toEqual(new SimulatedEdge({
-        source: '53',
-        target: '127',
+        sourceNodeId: '53',
+        targetNodeId: '127',
         distance: 100,
       }));
     });
