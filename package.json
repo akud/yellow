@@ -71,6 +71,7 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "devDependencies": {
+    "@akud/logging": "^0.0.2",
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/preset-env": "^7.3.1",
@@ -79,6 +80,7 @@
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
+    "jest-expect-message": "^1.0.2",
     "react-test-renderer": "^16.7.0"
   },
   "jest": {
@@ -124,7 +126,9 @@
     ]
   },
   "babel": {
-    "plugins": [ "@babel/plugin-proposal-class-properties" ],
+    "plugins": [
+      "@babel/plugin-proposal-class-properties"
+    ],
     "presets": [
       [
         "@babel/preset-env",

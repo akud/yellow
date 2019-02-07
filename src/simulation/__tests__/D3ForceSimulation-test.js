@@ -2,13 +2,12 @@ jest.mock('d3-force');
 
 import * as d3 from 'd3-force';
 import D3ForceSimulation from '../D3ForceSimulation';
-import SimulatedNode from '../SimulatedNode';
-import SimulatedEdge from '../SimulatedEdge';
 
 describe('D3ForceSimulation', () => {
   let baseSimulation;
   let linkForce;
   let collisionForce;
+  let sSequence = 1;
 
   beforeEach(() => {
     baseSimulation = {
@@ -39,13 +38,13 @@ describe('D3ForceSimulation', () => {
 
   it('initializes a simulation in the constructor', () => {
     const nodes = [
-      new SimulatedNode({ id: '1' }),
-      new SimulatedNode({ id: '2' }),
-      new SimulatedNode({ id: '3' }),
+      mockNode({ id: '1' }),
+      mockNode({ id: '2' }),
+      mockNode({ id: '3' }),
     ];
     const edges = [
-      new SimulatedEdge({ source: '1', target: '2' }),
-      new SimulatedEdge({ source: '3', target: '2' }),
+      mockEdge({ source: '1', target: '2' }),
+      mockEdge({ source: '3', target: '2' }),
     ];
     new D3ForceSimulation({
       nodes: nodes,
@@ -90,14 +89,11 @@ describe('D3ForceSimulation', () => {
 
   it('can find node positions', () => {
     const nodes = [
-      new SimulatedNode({ id: '1' }),
-      new SimulatedNode({ id: '2' }),
-      new SimulatedNode({ id: '3' }),
+      mockNode({ id: '1', center: { x: 1.2, y: 2.3 } }),
+      mockNode({ id: '2', center: { x: 3.4, y: 4.5 } }),
+      mockNode({ id: '3', center: { x: 5.6, y: 6.7 } }),
     ];
     const simulation = new D3ForceSimulation({ nodes });
-    Object.assign(nodes[0], { x: 1.2, y: 2.3 });
-    Object.assign(nodes[1], { x: 3.4, y: 4.5 });
-    Object.assign(nodes[2], { x: 5.6, y: 6.7 });
     expect(simulation.getNodePosition('1')).toEqual({ x: 1.2, y: 2.3 });
     expect(simulation.getNodePosition('2')).toEqual({ x: 3.4, y: 4.5 });
     expect(simulation.getNodePosition('3')).toEqual({ x: 5.6, y: 6.7 });
@@ -105,19 +101,16 @@ describe('D3ForceSimulation', () => {
 
   it('can find edge positions', () => {
     const nodes = [
-      new SimulatedNode({ id: '1' }),
-      new SimulatedNode({ id: '2' }),
-      new SimulatedNode({ id: '3' }),
+      mockNode({ id: '1', intersectionPoint: { x: 1.2, y: 2.3 } }),
+      mockNode({ id: '2', intersectionPoint: { x: 3.4, y: 4.5 } }),
+      mockNode({ id: '3', intersectionPoint: { x: 5.6, y: 6.7 } }),
     ];
     const edges = [
-      new SimulatedEdge({ source: '1', target: '2' }),
-      new SimulatedEdge({ source: '1', target: '3' }),
-      new SimulatedEdge({ source: '2', target: '3' }),
+      mockEdge({ source: '1', target: '2' }),
+      mockEdge({ source: '1', target: '3' }),
+      mockEdge({ source: '2', target: '3' }),
     ];
     const simulation = new D3ForceSimulation({ nodes, edges });
-    Object.assign(nodes[0], { x: 1.2, y: 2.3 });
-    Object.assign(nodes[1], { x: 3.4, y: 4.5 });
-    Object.assign(nodes[2], { x: 5.6, y: 6.7 });
     expect(simulation.getEdgePosition('1', '2')).toEqual({
       from: { x: 1.2, y: 2.3 },
       to:   { x: 3.4, y: 4.5 },
@@ -132,5 +125,35 @@ describe('D3ForceSimulation', () => {
     });
   });
 
+
+  const mockNode = opts => {
+    opts = Object.assign({
+      id: (++sSequence).toString(),
+      center: { x: 45, y: 12 },
+      intersectionPoint: { x: 19, y: 345 },
+      radius: 12,
+    }, opts);
+
+    return {
+      id: opts.id,
+      getCollisionRadius: jest.fn().mockReturnValue(opts.radius),
+      getCenter: jest.fn().mockReturnValue(opts.center),
+      computeIntersectionWithLine: jest.fn().mockReturnValue(opts.intersectionPoint),
+    };
+  };
+
+  const mockEdge = opts => {
+    opts = Object.assign({
+      source: (++sSequence).toString(),
+      target: (++sSequence).toString(),
+      distance: 20,
+    }, opts);
+
+    return {
+      source: opts.source,
+      target: opts.target,
+      getDistance: jest.fn().mockReturnValue(opts.distance),
+    };
+  };
 
 });

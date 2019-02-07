@@ -54,17 +54,19 @@ export default class D3ForceSimulation {
    * Find the position of the given node in the current simulation
    */
   getNodePosition(nodeId) {
-    const node = this._getNodeById(nodeId);
-    return { x: node.x, y: node.y };
+    return this._getNodeById(nodeId).getCenter();
   }
 
   /**'
    * Find the position of the edge between the given nodes in the current simulation
    */
   getEdgePosition(sourceNodeId, targetNodeId) {
+    const sourceNode = this._getNodeById(sourceNodeId);
+    const targetNode = this._getNodeById(targetNodeId);
+
     return {
-      from: this.getNodePosition(sourceNodeId),
-      to: this.getNodePosition(targetNodeId),
+      from: sourceNode.computeIntersectionWithLine(targetNode.getCenter()),
+      to: targetNode.computeIntersectionWithLine(sourceNode.getCenter()),
     };
   }
 

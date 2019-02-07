@@ -1,8 +1,6 @@
 import Graph from '../Graph';
 import React from 'react';
 import GraphElementType from 'graph/GraphElementType';
-import SimulatedNode from 'simulation/SimulatedNode';
-import SimulatedEdge from 'simulation/SimulatedEdge';
 
 import { shallow } from 'enzyme';
 

@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@akud/logging@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@akud/logging/-/logging-0.0.2.tgz#ca750dab0a437d066fd8b88ab1e130b2776ee8f8"
+  integrity sha512-YD/5ktxS7fBQzkdBpP0p7pFxNPwySDSND2iYcIe3Bq/YegDyIdt9BC5n4oa42ocglyjUOhJpzIBvVwZOaFc7dg==
+
 "@babel/code-frame@7.0.0", "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.0.0-beta.35":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
@@ -5524,6 +5529,11 @@ jest-environment-node@^23.4.0:
   dependencies:
     jest-mock "^23.2.0"
     jest-util "^23.4.0"
+
+jest-expect-message@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/jest-expect-message/-/jest-expect-message-1.0.2.tgz#6d67cdf093457a607d231038a3b84aa3a076bcba"
+  integrity sha512-WFiXMgwS2lOqQZt1iJMI/hOXpUm32X+ApsuzYcQpW5m16Pv6/Gd9kgC+Q+Q1YVNU04kYcAOv9NXMnjg6kKUy6Q==
 
 jest-get-type@^22.1.0:
   version "22.4.3"

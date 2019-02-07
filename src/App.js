@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import Edge from './components/Edge';
 import Graph from './components/Graph';
 import Node from './components/Node';
+import logging from '@akud/logging';
 
 export default class App extends Component {
+  constructor(props) {
+    super(props);
+    logging.setLevel(logging.DEBUG);
+  }
+
   render() {
     return (
       <Graph width={1000} height={500} border={true}>

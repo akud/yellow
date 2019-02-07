@@ -1,6 +1,6 @@
 import Node from '../Node';
 import React from 'react';
-import SimulatedNode from 'simulation/SimulatedNode';
+import SimulatedCircle from 'simulation/SimulatedCircle';
 
 import { shallow } from 'enzyme';
 
@@ -33,7 +33,7 @@ describe('Node', () => {
       const result = Node.toSimulatedElement({
         nodeId: '827',
       });
-      expect(new SimulatedNode({ id: '827', radius: 10 })).toEqual(result);
+      expect(result).toEqual(new SimulatedCircle({ id: '827', radius: 10 }));
     });
   });
 });
