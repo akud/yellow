@@ -12,7 +12,7 @@ export default class App extends Component {
 
   render() {
     return (
-      <Graph width={1000} height={500} border={true}>
+      <Graph width={1000} height={500} border={true} zoom={2.0}>
         <Node nodeId="1" />
         <Node nodeId="2" radius={20}/>
         <Node nodeId="3" />

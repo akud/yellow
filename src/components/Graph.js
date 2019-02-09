@@ -15,6 +15,7 @@ export default class Graph extends React.Component {
     width: 500,
     height: 500,
     border: false,
+    zoom: 1.0,
   }
 
   static propTypes = {
@@ -22,6 +23,7 @@ export default class Graph extends React.Component {
     width: PropTypes.number,
     height: PropTypes.number,
     border: PropTypes.bool,
+    zoom: PropTypes.number,
   }
 
   constructor(props) {
@@ -45,21 +47,21 @@ export default class Graph extends React.Component {
       simulation: this.props.simulationCreator({
         nodes: this.nodes.map(toSimulatedElement),
         edges: this.edges.map(toSimulatedElement),
-        width: this.props.width,
-        height: this.props.height,
+        width: this.props.width / this.props.zoom,
+        height: this.props.height / this.props.zoom,
       }).onNewLayout(simulation => this.setState({ simulation }))
     }
   }
 
   render() {
     const { simulation } = this.state;
-    const { width, height, border } = this.props;
+    const { width, height, border, zoom } = this.props;
     const { nodes, edges, other } = this;
 
     return (
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        viewBox={`0 0 ${width} ${height}`}
+        viewBox={`0 0 ${width/zoom} ${height/zoom}`}
         width={width}
         height={height}
         style={ border ? { border: '1px solid black' } : {} }

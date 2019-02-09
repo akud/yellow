@@ -40,6 +40,20 @@ describe('Graph', () => {
     expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 325 567');
   });
 
+  it('applies the zoom to width and height', () => {
+    const wrapper = shallow(
+      <Graph simulationCreator={simulationCreator} width={300} height={500} zoom={2.0}/>
+    );
+    expect(wrapper.find('svg').length).toBe(1);
+    expect(wrapper.find('svg').prop('width')).toBe(300);
+    expect(wrapper.find('svg').prop('height')).toBe(500);
+    expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 150 250');
+    expect(simulationCreator).toHaveBeenCalledWith(expect.objectContaining({
+      width: 150,
+      height: 250,
+    }));
+  });
+
   it('does not render a boder by default', () => {
     const wrapper = shallow(
       <Graph simulationCreator={simulationCreator} />
