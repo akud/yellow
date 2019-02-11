@@ -1,5 +1,4 @@
 import utils from 'utils';
-import Ray from 'geometry/Ray';
 
 export default class SimulatedNode {
   constructor({ id, shape }) {
@@ -32,8 +31,8 @@ export default class SimulatedNode {
   }
 
   computeEdgeIntersection(otherNode) {
-    return this.shape.computeRayIntersection(
-      new Ray(otherNode.getCenter(), this.getCenter())
+    return this.shape.computeIntersectionWithRayFrom(
+      otherNode.getCenter()
     );
   }
 }

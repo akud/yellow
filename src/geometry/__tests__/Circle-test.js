@@ -1,9 +1,8 @@
 import Circle from '../Circle';
-import Ray from '../Ray';
 
 describe('geometry', () => {
-  describe('computeRayIntersection', () => {
-    it('computes the intersection with the provided ray', () => {
+  describe('computeIntersectionWithRayFrom', () => {
+    it('computes the intersection with the ray from the provided point to the center', () => {
       const testCases = [
         {
           name: 'pi/4 angle up and to the right 1 unit from origin',
@@ -65,8 +64,7 @@ describe('geometry', () => {
 
       testCases.forEach(({name, nearPoint, farPoint, radius, expected}) => {
         const circle = new Circle({ center: nearPoint, radius });
-        const ray = new Ray(farPoint, nearPoint);
-        const intersectionPoint = circle.computeRayIntersection(ray);
+        const intersectionPoint = circle.computeIntersectionWithRayFrom(farPoint);
         const xDistance = intersectionPoint.x - nearPoint.x;
         const yDistance = intersectionPoint.y - nearPoint.y;
 

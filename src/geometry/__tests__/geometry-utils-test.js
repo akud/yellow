@@ -7,11 +7,66 @@ describe('geometry utils', () => {
     });
   });
 
-  describe('angle', () => {
-    it('computes the angle of the line formed by the two points', () => {
-      expect(geometryUtils.angle({ x: 1, y: 1 }, { x: 5, y: 5 })).toBeCloseTo(Math.PI / 4);
-      expect(geometryUtils.angle({ x: 1, y: 1 }, { x: 4, y: 1 + 3 * Math.sqrt(3) })).toBeCloseTo(Math.PI / 3);
-      expect(geometryUtils.angle({ x: 1, y: 1 }, { x: 1 + 3 * Math.sqrt(3), y: 4 })).toBeCloseTo(Math.PI / 6);
+  describe('radiansToDegrees', () => {
+    it('converts radians to degrees', () => {
+      expect(geometryUtils.radiansToDegrees(Math.PI)).toBeCloseTo(180);
+      expect(geometryUtils.radiansToDegrees(Math.PI / 2)).toBeCloseTo(90);
+      expect(geometryUtils.radiansToDegrees(Math.PI / 4)).toBeCloseTo(45);
+      expect(geometryUtils.radiansToDegrees(Math.PI / 6)).toBeCloseTo(30);
+      expect(geometryUtils.radiansToDegrees(Math.PI / 3)).toBeCloseTo(60);
+      expect(geometryUtils.radiansToDegrees(2 * Math.PI / 3)).toBeCloseTo(120);
+    });
+  });
+
+  describe('computeHorizontalIntersectionAngle', () => {
+    it('computes the angle of the line formed by the two points with the x axis', () => {
+      const testCases = [
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 1, y: 4 },
+          expected: Math.PI / 2,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 1, y: -1 },
+          expected: 3 * Math.PI / 2,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 2, y: 1 + Math.sqrt(3) },
+          expected: Math.PI / 3,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 1 + Math.sqrt(3), y: 2 },
+          expected: Math.PI / 6,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 0, y: 1 + Math.sqrt(3) },
+          expected: 2 * Math.PI / 3,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 1 - Math.sqrt(3), y: 2 },
+          expected: 5 * Math.PI / 6,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 0, y: 1 - Math.sqrt(3) },
+          expected: 4 * Math.PI / 3,
+        },
+        {
+          nearPoint: { x: 1, y: 1 },
+          farPoint: { x: 1 - Math.sqrt(3), y: 0 },
+          expected: 7 * Math.PI / 6,
+        },
+      ];
+
+      testCases.forEach(({ nearPoint, farPoint, expected }) => {
+        const message = 'from: ' + JSON.stringify(nearPoint) + ' to ' + JSON.stringify(farPoint);
+        expect(geometryUtils.computeHorizontalIntersectionAngle(nearPoint, farPoint), message).toBeCloseTo(expected);
+      });
     });
   });
 

@@ -1,5 +1,4 @@
 jest.mock('geometry/Shape');
-import Ray from 'geometry/Ray';
 import Shape from 'geometry/Shape';
 import SimulatedNode from '../SimulatedNode';
 
@@ -53,18 +52,18 @@ describe('SimulatedNode', () => {
       const otherNode = new SimulatedNode({
         id: '3463132',
         shape: new Shape({
-          getCenter: jest.fn().mockReturnValue(otherCenter),
+          center: otherCenter,
         })
       });
 
       shape.getCenter.mockReturnValue(nodeCenter);
-      shape.computeRayIntersection.mockReturnValue(expectedIntersection);
+      shape.computeIntersectionWithRayFrom.mockReturnValue(expectedIntersection);
 
       expect(node.computeEdgeIntersection(otherNode)).toEqual(expectedIntersection);
 
-      expect(shape.computeRayIntersection).toHaveBeenCalledWith(new Ray(
-        otherCenter, nodeCenter
-      ));
+      expect(shape.computeIntersectionWithRayFrom).toHaveBeenCalledWith(
+        otherCenter
+      );
     });
   });
 });

@@ -14,7 +14,7 @@ export default class Shape {
     throw new Error('Subclasses must override getBoundingRadius');
   }
 
-  computeRayIntersection(ray) {
+  computeIntersectionWithRayFrom(point) {
     throw new Error('Subclasses must override computeRayIntersection');
   }
 
