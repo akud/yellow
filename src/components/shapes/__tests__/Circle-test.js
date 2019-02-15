@@ -1,13 +1,12 @@
-import Circle from 'geometry/Circle';
-import Node from '../Node';
+import Circle from '../Circle';
+import CircleShape from 'geometry/Circle';
 import React from 'react';
-import SimulatedNode from 'simulation/SimulatedNode';
 
 import { shallow } from 'enzyme';
 
-describe('Node', () => {
+describe('Circle', () => {
   it('renders with the given radius and fill color', () => {
-    const wrapper = shallow(<Node nodeId='2' radius={5} color='#442200' />);
+    const wrapper = shallow(<Circle radius={5} color='#442200' />);
     expect(wrapper.find('circle').length).toBe(1);
     expect(wrapper.find('circle').prop('r')).toBe(5);
     expect(wrapper.find('circle').prop('fill')).toBe('#442200');
@@ -15,8 +14,7 @@ describe('Node', () => {
 
   it('renders with the given position if provided', () => {
     const wrapper = shallow(
-      <Node
-        nodeId='1'
+      <Circle
         radius={5}
         color='#442200'
         position={ { x: 420, y: 69 } }
@@ -29,21 +27,17 @@ describe('Node', () => {
     expect(wrapper.find('circle').prop('cy')).toBe(69);
   });
 
-  describe('toSimulatedElement', () => {
-    it('converts the props to a simulated node', () => {
-      const result = Node.toSimulatedElement({
-        nodeId: '827',
-      });
+  describe('getShape', () => {
+    it('returns a Circle shape', () => {
+      expect(Circle.getShape({ radius: 4 })).toEqual(new CircleShape({
+        center: { x: 0, y: 0 },
+        radius: 4
+      }));
 
-      expect(result).toEqual(
-        new SimulatedNode({
-          id: '827',
-          shape: new Circle({
-            center: { x: 0, y: 0 },
-            radius: 10,
-          })
-        })
-      );
+      expect(Circle.getShape({ position: { x: 12, y: 35 } })).toEqual(new CircleShape({
+        center: { x: 12, y: 35 },
+        radius: 10
+      }));
     });
   });
 });

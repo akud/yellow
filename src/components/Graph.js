@@ -2,6 +2,7 @@ import GraphElementType from 'graph/GraphElementType';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ForceSimulation from 'simulation/d3/ForceSimulation';
+import { withExtraProps } from './component-utils';
 
 const toSimulatedElement = c => c.type.toSimulatedElement(c.props);
 const isNode = c => c.type.elementType === GraphElementType.NODE;
@@ -69,23 +70,23 @@ export default class Graph extends React.Component {
         <g className="yellow-graph">
           <g className="nodes">
             {
-              React.Children.map(nodes, child => React.cloneElement(
-                child,
-                { position: simulation.getNodePosition(child.props.nodeId) }
-              ))
+              withExtraProps(
+                nodes,
+                childProps => ({ position: simulation.getNodePosition(childProps.nodeId) })
+              )
             }
           </g>
           <g className="edges">
             {
-              React.Children.map(edges, child => React.cloneElement(
-                child,
-                {
+              withExtraProps(
+                edges,
+                childProps => ({
                   position: simulation.getEdgePosition(
-                    child.props.fromNodeId,
-                    child.props.toNodeId
+                    childProps.fromNodeId,
+                    childProps.toNodeId
                   )
-                }
-              ))
+                })
+              )
             }
           </g>
           <g className="other">
