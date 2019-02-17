@@ -1,17 +1,18 @@
 jest.mock('d3-force');
+jest.mock('simulation/d3/forces');
 jest.mock('simulation/SimulatedNode');
 jest.mock('simulation/SimulatedEdge');
 
-import * as d3 from 'd3-force';
+
 import ForceSimulation from '../ForceSimulation';
 
-import MockSimulatedNode from 'simulation/SimulatedNode';
+import * as d3 from 'd3-force';
+import * as forces from 'simulation/d3/forces';
 import MockSimulatedEdge from 'simulation/SimulatedEdge';
+import MockSimulatedNode from 'simulation/SimulatedNode';
 
 describe('ForceSimulation', () => {
   let baseSimulation;
-  let linkForce;
-  let collisionForce;
 
   beforeEach(() => {
     baseSimulation = {
@@ -21,23 +22,9 @@ describe('ForceSimulation', () => {
     baseSimulation.force.mockReturnValue(baseSimulation);
     d3.forceSimulation.mockReturnValue(baseSimulation);
 
-    linkForce = {
-      distance: jest.fn(),
-      id: jest.fn(),
-    };
-    collisionForce = {
-      radius: jest.fn(),
-    };
-
-    linkForce.distance.mockReturnValue(linkForce);
-    linkForce.id.mockReturnValue(linkForce);
-
-    collisionForce.radius.mockReturnValue(collisionForce);
-
-    d3.forceManyBody.mockReturnValue('forceManyBody');
-    d3.forceLink.mockReturnValue(linkForce);
-    d3.forceCenter.mockReturnValue('forceCenter');
-    d3.forceCollide.mockReturnValue(collisionForce);
+    forces.CollisionForce.mockClear();
+    forces.CenteringForce.mockClear();
+    forces.LinkForce.mockClear();
   });
 
   it('initializes a simulation in the constructor', () => {
@@ -50,35 +37,39 @@ describe('ForceSimulation', () => {
       new MockSimulatedEdge({ source: '1', target: '2' }),
       new MockSimulatedEdge({ source: '3', target: '2' }),
     ];
+    const extraForce = {
+      getName: jest.fn().mockReturnValue('extra'),
+      getForce: jest.fn().mockReturnValue('extraforcevalue')
+    };
+
     new ForceSimulation({
       nodes: nodes,
       edges: edges,
-      width: 100,
-      height: 200,
+      center: { x: 50, y: 100 },
+      extraForces: [ extraForce ],
     });
+
     expect(d3.forceSimulation).toHaveBeenCalledWith(nodes);
-    expect(d3.forceManyBody).toHaveBeenCalled();
-    expect(d3.forceLink).toHaveBeenCalledWith(edges);
-    expect(d3.forceCenter).toHaveBeenCalledWith(50, 100);
-    expect(d3.forceCollide).toHaveBeenCalled();
-    expect(baseSimulation.force).toHaveBeenCalledWith('charge', 'forceManyBody');
-    expect(baseSimulation.force).toHaveBeenCalledWith('link', linkForce);
-    expect(baseSimulation.force).toHaveBeenCalledWith('collision', collisionForce);
-    expect(baseSimulation.force).toHaveBeenCalledWith('center', 'forceCenter');
 
-    expect(linkForce.distance).toHaveBeenCalledWith(expect.functionThatReturns([
-      { input: { getDistance: () => 1 }, output: 1 },
-      { input: { getDistance: () => 45 }, output: 45 },
-    ]));
-    expect(linkForce.id).toHaveBeenCalledWith(expect.functionThatReturns([
-      { input: { id: 1 }, output: 1 },
-      { input: { id: 45 }, output: 45 },
-    ]));
+    expect(baseSimulation.force).toHaveBeenCalledWith(
+      forces.centeringForceName, forces.centeringForceValue
+    );
+    expect(baseSimulation.force).toHaveBeenCalledWith(
+      forces.collisionForceName, forces.collisionForceValue
+    );
+    expect(baseSimulation.force).toHaveBeenCalledWith(
+      forces.linkForceName, forces.linkForceValue
+    );
+    expect(baseSimulation.force).toHaveBeenCalledWith(
+      'extra', 'extraforcevalue'
+    );
 
-    expect(collisionForce.radius).toHaveBeenCalledWith(expect.functionThatReturns([
-      { input: new MockSimulatedNode({ radius: 1 }), output: 1 },
-      { input: new MockSimulatedNode({ radius: 45 }), output: 45 },
-    ]));
+    expect(forces.CenteringForce).toHaveBeenCalledWith({ x: 50, y: 100 });
+    expect(forces.CollisionForce).toHaveBeenCalled();
+    expect(forces.LinkForce).toHaveBeenCalledWith(edges);
+
+    expect(extraForce.getName).toHaveBeenCalled();
+    expect(extraForce.getForce).toHaveBeenCalled();
   });
 
   it('can register listeners to fire on new layouts', () => {

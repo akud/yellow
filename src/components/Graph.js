@@ -1,7 +1,7 @@
 import GraphElementType from 'graph/GraphElementType';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ForceSimulation from 'simulation/d3/ForceSimulation';
+import { createDefaultGraphSimulation } from 'simulation/d3/ForceSimulation';
 import { withExtraProps } from './component-utils';
 
 const toSimulatedElement = c => c.type.toSimulatedElement(c.props);
@@ -12,7 +12,7 @@ const isEdge = c => c.type.elementType === GraphElementType.EDGE;
 export default class Graph extends React.Component {
 
   static defaultProps = {
-    simulationCreator: options => new ForceSimulation(options),
+    simulationCreator: createDefaultGraphSimulation,
     width: 500,
     height: 500,
     border: false,

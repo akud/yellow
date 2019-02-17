@@ -1,5 +1,7 @@
 import Simulation from 'simulation/Simulation';
+
 import * as d3 from 'd3-force';
+import { RepellingForce, CenteringForce, CollisionForce, LinkForce } from './forces';
 
 export default class ForceSimulation extends Simulation {
   /**
@@ -14,26 +16,32 @@ export default class ForceSimulation extends Simulation {
    *     SimulatedEdge,
    *     ...
    *   ],
-   *   width: the width of the graph,
-   *   height: the height of the graph
+   *   center: { x: number, y: number } - the center of the simulation
+   *   extraForces: [
+   *     Force,
+   *     Force,
+   *     ...
+   *   ]
    */
   constructor(options) {
     options = Object.assign({
       nodes: [],
       edges: [],
-      width: 100,
-      height: 100,
+      center: { x: 0, y: 0 },
+      extraForces: [],
     }, options);
     super(options);
+
+    const forces = [
+      new CenteringForce(options.center),
+      new CollisionForce(),
+      new LinkForce(this.edges),
+    ].concat(options.extraForces);
+
     this.simulation = d3.forceSimulation(this.nodes)
-      .force('charge', d3.forceManyBody())
-      .force(
-        'link', d3.forceLink(this.edges)
-                  .distance(d => d.getDistance())
-                  .id(n => n.id)
-      )
-      .force('center', d3.forceCenter(options.width / 2, options.height / 2))
-      .force('collision', d3.forceCollide().radius(n => n.getCollisionRadius()));
+    forces.forEach(f => {
+      this.simulation = this.simulation.force(f.getName(), f.getForce());
+    });
   }
 
   onNewLayout(listener) {
@@ -41,3 +49,12 @@ export default class ForceSimulation extends Simulation {
     return this;
   }
 }
+
+export const createDefaultGraphSimulation = ({nodes, edges, width, height}) => new ForceSimulation({
+  nodes,
+  edges,
+  center: { x: width / 2, y: height / 2 },
+  extraForces: [
+    new RepellingForce(),
+  ],
+});
