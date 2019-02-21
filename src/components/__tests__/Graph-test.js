@@ -103,14 +103,13 @@ describe('Graph', () => {
     });
   });
 
-  it('passes positions from the simulation to child elements', () => {
+  it.only('passes positions from the simulation to child elements', () => {
     simulation.getNodePosition
       .mockReturnValueOnce({ x: 34, y: 465 })
       .mockReturnValueOnce({ x: 67, y: 712 })
       .mockReturnValueOnce({ x: 9, y: 83475 });
 
-    simulation.getEdgePosition
-      .mockReturnValueOnce({
+    simulation.getEdgePosition .mockReturnValueOnce({
         from: { x: 34, y: 465 },
         to: { x: 67, y: 712 },
       });
@@ -146,6 +145,14 @@ describe('Graph', () => {
         to: { x: 67, y: 712 },
       }
     });
+
+    expect(simulation.getNodePosition).toHaveBeenCalledWith('1');
+    expect(simulation.getNodePosition).toHaveBeenCalledWith('2');
+    expect(simulation.getNodePosition).toHaveBeenCalledWith('3');
+    expect(simulation.getNodePosition).toHaveBeenCalledTimes(3);
+
+    expect(simulation.getEdgePosition).toHaveBeenCalledWith('2', '3');
+    expect(simulation.getEdgePosition).toHaveBeenCalledOnce();
   });
 
 });

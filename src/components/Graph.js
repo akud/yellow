@@ -72,7 +72,7 @@ export default class Graph extends React.Component {
             {
               withExtraProps(
                 nodes,
-                childProps => ({ position: simulation.getNodePosition(childProps.nodeId) })
+                child => ({ position: simulation.getNodePosition(child.props.nodeId) })
               )
             }
           </g>
@@ -80,12 +80,14 @@ export default class Graph extends React.Component {
             {
               withExtraProps(
                 edges,
-                childProps => ({
-                  position: simulation.getEdgePosition(
-                    childProps.fromNodeId,
-                    childProps.toNodeId
-                  )
-                })
+                child => {
+                  return {
+                    position: simulation.getEdgePosition(
+                      child.props.fromNodeId,
+                      child.props.toNodeId
+                    )
+                  };
+                }
               )
             }
           </g>

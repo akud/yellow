@@ -2,7 +2,7 @@ import React from 'react';
 
 const withExtraProps = (children, propProvider) => React.Children.map(
   children,
-  child => React.cloneElement(child, propProvider(child.props))
+  (child, index) => React.cloneElement(child, propProvider(child, index))
 );
 
 export { withExtraProps };

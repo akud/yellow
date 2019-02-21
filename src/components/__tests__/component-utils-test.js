@@ -8,7 +8,7 @@ describe('component-utils', () => {
   describe('withExtraProps', () => {
     it('clones the children with results from the prop providing function', () => {
       const propProvider = jest.fn().mockImplementation(oldProps => ({
-        newProp: oldProps.originalProp + '-new'
+        newProp: oldProps.props.originalProp + '-new'
       }));
 
       React.cloneElement.mockImplementation(
@@ -50,9 +50,9 @@ describe('component-utils', () => {
           },
         },
       ]);
-      expect(propProvider).toHaveBeenCalledWith(children[0].props);
-      expect(propProvider).toHaveBeenCalledWith(children[1].props);
-      expect(propProvider).toHaveBeenCalledWith(children[2].props);
+      expect(propProvider).toHaveBeenCalledWith(children[0], 0);
+      expect(propProvider).toHaveBeenCalledWith(children[1], 1);
+      expect(propProvider).toHaveBeenCalledWith(children[2], 2);
       expect(propProvider.mock.calls.length).toBe(3);
 
       expect(React.Children.map).toHaveBeenCalledWith(children, expect.any(Function));
