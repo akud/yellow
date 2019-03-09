@@ -3,9 +3,9 @@ import utils from '../utils';
 describe('utils', () => {
   describe('requirePresent', () => {
     it('requires the argument to be present', () => {
-      expectThrows(utils.requirePresent, ['coolArg', undefined], 'Expected coolArg to be present; got undefined.');
-      expectThrows(utils.requirePresent, ['coolArg', null], 'Expected coolArg to be present; got null.');
-      expectReturnsArgument(utils.requirePresent, ['coolArg', 'asdf']);
+      expectThrows(utils.requirePresent, ['name', undefined], 'Expected name to be present; got undefined.');
+      expectThrows(utils.requirePresent, ['name', null], 'Expected name to be present; got null.');
+      expectReturnsArgument(utils.requirePresent, ['name', 'asdf']);
     });
 
     it('handles only one argument', () => {
@@ -35,17 +35,59 @@ describe('utils', () => {
 
   describe('requireArrayOfLength', () => {
     it('requires the argument to be an array of the specified length', () => {
-      const requireWithLengthOne = (...input) => {
-        input = input.concat([1]);
-        return utils.requireArrayOfLength(...input)
-      };
+      expectThrows(utils.requireArrayOfLength, ['name', undefined, 1], 'Expected name to be an array; got undefined.');
+      expectThrows(utils.requireArrayOfLength, ['name', 'asdf', 1], 'Expected name to be an array; got "asdf".');
+      expectThrows(utils.requireArrayOfLength, ['name', [], 1], 'Expected name to be an array of length 1; got [].');
+      expectThrows(utils.requireArrayOfLength, ['name', ['1', '2'], 1], 'Expected name to be an array of length 1; got ["1","2"].');
+      expectReturnsArgument(utils.requireArrayOfLength, ['name', ['1'], 1]);
+      expectReturnsArgument(utils.requireArrayOfLength, [['1'], 1]);
+    });
+  });
 
-      expectThrows(requireWithLengthOne, ['name', undefined], 'Expected name to be an array; got undefined.');
-      expectThrows(requireWithLengthOne, ['name', 'asdf'], 'Expected name to be an array; got "asdf".');
-      expectThrows(requireWithLengthOne, ['name', []], 'Expected name to be an array of length 1; got [].');
-      expectThrows(requireWithLengthOne, ['name', ['1', '2']], 'Expected name to be an array of length 1; got ["1","2"].');
-      expectReturnsArgument(requireWithLengthOne, ['name', ['1']]);
-      expectReturnsArgument(requireWithLengthOne, [['1']]);
+  describe('requireOneOf', () => {
+    it('requires the argument to be in the specified collection', () => {
+      const allowedValues = [ 'asdf', 'hijk' ];
+
+      expectThrows(utils.requireOneOf, [ 'asdf', ['a', 'b']], 'Expected argument to be one of ["a","b"]; got "asdf".');
+      expectReturnsArgument(utils.requireOneOf, [ 'a', ['a', 'b']]);
+    });
+  });
+
+  describe('requireInstanceOf', () => {
+    it('requires the argument to be an instance of the supplied class', () => {
+      expectThrows(utils.requireInstanceOf, ['asdf', Number]);
+      expectReturnsArgument(utils.requireInstanceOf, [new Number(34), Number]);
+    });
+  });
+
+  describe('requirePositionObject', () => {
+    it('requires the argument to be a position object', () => {
+      const allowedValues = [ 'asdf', 'hijk' ];
+
+      expectThrows(utils.requirePositionObject, [ 'asdf' ], 'Expected argument to be a position object; got "asdf".');
+      expectThrows(utils.requirePositionObject, [ { a: 'b' } ], 'Expected argument to be a position object; got {"a":"b"}.');
+      expectReturnsArgument(utils.requirePositionObject, [{ x: 45, y: 345 }]);
+    });
+  });
+
+  describe('makeArray', () => {
+    it('returns the argument if it is an array', () => {
+      expect(utils.makeArray(['a', 's', 'd', 'f'])).toEqual(['a', 's', 'd', 'f']);
+    });
+
+    it('wraps the argument if it is not an array', () => {
+      expect(utils.makeArray({'a': 's', 'd': 'f'})).toEqual([{'a': 's', 'd': 'f'}]);
+    });
+  });
+
+  describe('flatten', () => {
+    it('flattens out nested arrays', () => {
+      const input = [
+        [ '1', '2', '3' ],
+        '4',
+        '5',
+      ];
+      expect(utils.flatten(input)).toEqual(['1', '2', '3', '4', '5']);
     });
   });
 
@@ -86,8 +128,12 @@ describe('utils', () => {
       input = [input];
     }
 
-    const expected = input[input.length - 1];
+    const expected = hasNameArg(input) ? input[1] : input[0];
     const assertionErrorMessage = `Expected to return input value ${JSON.stringify(expected)} on input ${JSON.stringify(input)}`;
     expect(func(...input), assertionErrorMessage).toEqual(expected);
   };
+
+  const hasNameArg = (input) => {
+    return input.length >= 2 && input[0] === 'name';
+  }
 });

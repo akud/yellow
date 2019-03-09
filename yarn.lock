@@ -6633,6 +6633,11 @@ node-forge@0.7.5:
   resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.5.tgz#6c152c345ce11c52f465c2abd957e8639cd674df"
   integrity sha512-MmbQJ2MTESTjt3Gi/3yG1wGpIMhUfcIypUCGtTizFR9IiccFwxSpfp0vtIZlkFclEqERemxfnSdZEMR9VqqEFQ==
 
+node-inspect@^1.11.5:
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/node-inspect/-/node-inspect-1.11.5.tgz#637d1de17a77f1c15eca9acf57e759f505525e1e"
+  integrity sha512-ps6CL9AOCEjIfQzJW7PhcxuLngqVJKw5f8f2IXgOvkBPNsODYbUe6y8uGOpYJYpr2mKDvjxkFWkdQc+HkdU5Nw==
+
 node-int64@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/node-int64/-/node-int64-0.4.0.tgz#87a9065cdb355d3182d8f94ce11188b825c68a3b"

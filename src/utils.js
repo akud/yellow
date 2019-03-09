@@ -59,7 +59,6 @@ export const requireArray = function() {
 
 export const requireArrayOfLength = function() {
   const { name, value, n } = extractArgs(arguments, 'n');
-  const array = requireArray(name, value);
 
   return requireCondition(
     requireArray(value).length === n,
@@ -68,8 +67,46 @@ export const requireArrayOfLength = function() {
   );
 }
 
+export const requireOneOf = function() {
+  const { name, value, allowedValues } = extractArgs(arguments, 'allowedValues');
+  return requireCondition(
+    allowedValues.indexOf(value) !== -1,
+    value,
+    expectationMessage(name, value, 'one of ' + JSON.stringify(allowedValues))
+  );
+}
+
+export const requirePositionObject = function() {
+  const { name, value } = extractArgs(arguments);
+  requirePresent(value);
+
+  return requireCondition(
+    typeof value === 'object' && typeof value.x === 'number' && typeof value.y === 'number',
+    value,
+    expectationMessage(name, value, 'a position object')
+  );
+}
+
+export const requireInstanceOf = function() {
+  const { name, value, clazz } = extractArgs(arguments, 'clazz');
+  return requireCondition(
+    requirePresent(value) instanceof clazz,
+    value,
+    expectationMessage(name, value, 'an instance of ' + clazz)
+  );
+}
+
+export const makeArray = (array) => Array.isArray(array) ? array : [array];
+
+export const flatten = (array) => makeArray(array).map(makeArray).flatMap(e => e);
+
 export default {
   requirePresent,
   requireArray,
   requireArrayOfLength,
+  requireOneOf,
+  requirePositionObject,
+  requireInstanceOf,
+  makeArray,
+  flatten,
 }
