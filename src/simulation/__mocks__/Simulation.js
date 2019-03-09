@@ -1,9 +1,8 @@
-export default class MockSimulation {
-  constructor(opts) {
-    Object.assign(this, {
-      onNewLayout: jest.fn().mockReturnValue(this),
-      getNodePosition: jest.fn(),
-      getEdgePosition: jest.fn(),
-    }, opts);
+export class MockSimulation {
+  constructor(config) {
+    this.config = config;
   }
 }
+export const getElementData = jest.fn();
+
+export default jest.fn().mockImplementation((opts) => ({ getElementData }));

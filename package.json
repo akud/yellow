@@ -81,6 +81,7 @@
     "enzyme-adapter-react-16": "^1.7.1",
     "jest": "^23.6.0",
     "jest-expect-message": "^1.0.2",
+    "node-inspect": "^1.11.5",
     "react-test-renderer": "^16.7.0"
   },
   "jest": {

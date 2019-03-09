@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import Edge from './components/Edge';
-import Circle from './components/shapes/Circle';
-import CircleNode from './components/nodes/CircleNode';
-import PointNode from './components/nodes/PointNode';
 
-import Graph from './components/Graph';
-import Node from './components/nodes/Node';
+import Circle from './shapes/components/Circle';
+
+import Graph from './graphs/components/Graph';
+import Node from './graphs/components/Node';
+import Edge from './graphs/components/Edge';
+import CircleNode from './graphs/components/CircleNode';
+import PointNode from './graphs/components/PointNode';
+
 import logging from '@akud/logging';
 
 export default class App extends Component {
