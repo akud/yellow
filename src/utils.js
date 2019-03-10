@@ -61,7 +61,7 @@ export const requireArrayOfLength = function() {
   const { name, value, n } = extractArgs(arguments, 'n');
 
   return requireCondition(
-    requireArray(value).length === n,
+    requireArray(name, value).length === n,
     value,
     expectationMessage(name, value, 'an array of length ' + n)
   );
