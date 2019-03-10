@@ -96,6 +96,15 @@ export const requireInstanceOf = function() {
   );
 }
 
+export const requireGreaterThanZero = function() {
+  const { name, value } = extractArgs(arguments);
+  return requireCondition(
+    typeof value === 'number' && value > 0,
+    value,
+    expectationMessage(name, value, 'a number greater than zero')
+  );
+}
+
 export const makeArray = (array) => Array.isArray(array) ? array : [array];
 
 export const flatten = (array) => makeArray(array).map(makeArray).flatMap(e => e);
@@ -107,6 +116,7 @@ export default {
   requireOneOf,
   requirePositionObject,
   requireInstanceOf,
+  requireGreaterThanZero,
   makeArray,
   flatten,
 }

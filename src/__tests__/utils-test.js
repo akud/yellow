@@ -70,6 +70,16 @@ describe('utils', () => {
     });
   });
 
+  describe('requireGreaterThanZero', () => {
+    it('requires the argument to be a number greater than zero', () => {
+      expectThrows(utils.requireGreaterThanZero, [ 'asdf' ], 'Expected argument to be a number greater than zero; got "asdf".');
+      expectThrows(utils.requireGreaterThanZero, [ -42 ], 'Expected argument to be a number greater than zero; got -42.');
+      expectThrows(utils.requireGreaterThanZero, [ 0 ], 'Expected argument to be a number greater than zero; got 0.');
+      expectReturnsArgument(utils.requireGreaterThanZero, [ 12 ]);
+    });
+  });
+
+
   describe('makeArray', () => {
     it('returns the argument if it is an array', () => {
       expect(utils.makeArray(['a', 's', 'd', 'f'])).toEqual(['a', 's', 'd', 'f']);
