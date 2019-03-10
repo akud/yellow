@@ -81,4 +81,12 @@ describe('geometry utils', () => {
       expect(geometryUtils.approximatelyEqual(2.01324, 2.02259)).toBe(false);
     });
   });
+
+  describe('addVectors', () => {
+    it('adds the vectors point-wise', () => {
+      const p1 = { x: 1, y: -3 };
+      const p2 = { x: 5, y: 10 };
+      expect(geometryUtils.addVectors(p1, p2)).toEqual({ x: 6, y: 7 });
+    });
+  });
 });
