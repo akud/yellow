@@ -7,6 +7,8 @@ const computeHorizontalIntersectionAngle = (p1, p2) => {
     return p1.y < p2.y ? Math.PI / 2 : 3 * Math.PI / 2;
   } else if (p1.x > p2.x) {
     return Math.atan(slope(p1, p2)) + Math.PI;
+  } else if (p1.y > p2.y) {
+    return Math.atan(slope(p1, p2)) + 2 * Math.PI;
   } else {
     return Math.atan(slope(p1, p2));
   }

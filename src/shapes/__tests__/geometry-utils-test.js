@@ -61,6 +61,11 @@ describe('geometry utils', () => {
           farPoint: { x: 1 - Math.sqrt(3), y: 0 },
           expected: 7 * Math.PI / 6,
         },
+        {
+          nearPoint: { x: 0, y: 0 },
+          farPoint: { x: Math.sqrt(3), y: -1 },
+          expected: 11 * Math.PI / 6,
+        },
       ];
 
       testCases.forEach(({ nearPoint, farPoint, expected }) => {
