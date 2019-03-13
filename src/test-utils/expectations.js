@@ -30,6 +30,35 @@ export const toHaveBeenCalledOnce = function(mock) {
   });
 };
 
+export const toAlmostEqual = function(received, expected, precision) {
+  if (!this) { return; }
+
+  precision = precision || 4;
+
+  let pass;
+  if (typeof expected == 'number') {
+    pass = expected.toFixed(precision) === (received || 0).toFixed(precision);
+  } else if (Array.isArray(expected)) {
+    pass = expected.every(
+      (element, index) => element.toFixed(precision) === (received || [])[index].toFixed(precision)
+    );
+  } else {
+    pass = Object.keys(expected).every(
+      (key) => expected[key].toFixed(precision) === (received || {})[key].toFixed(precision)
+    );
+  }
+
+  pass = this.isNot ? !pass : pass;
+
+  return expectationResult.call(this, {
+    expected,
+    received,
+    pass,
+    name: 'toAlmostEqual',
+    description: 'almost ' + JSON.stringify(expected)
+  });
+}
+
 const expectationResult = function({ expected, received, pass, name, description }) {
   const options = {
     comment: description,
@@ -51,7 +80,7 @@ const expectationResult = function({ expected, received, pass, name, description
         this.utils.matcherHint(name, undefined, undefined, options) +
         '\n\n' +
         (difference && difference.includes('- Expect')
-          ? `Difference:\n\n${diffString}`
+          ? `Difference:\n\n${difference}`
           : `Expected: ${this.utils.printExpected(expected)}\n` +
           `Received: ${this.utils.printReceived(received)}`)
       );
@@ -64,4 +93,5 @@ const expectationResult = function({ expected, received, pass, name, description
 export default {
   toHaveBeenCalledTimes,
   toHaveBeenCalledOnce,
+  toAlmostEqual,
 }
