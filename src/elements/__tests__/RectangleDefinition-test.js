@@ -98,6 +98,4 @@ describe('RectangleDefinition', () => {
       });
     });
   });
-
-  const point = (x, y) => ({ x, y });
 });
