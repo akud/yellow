@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { withExtraProps } from 'components/component-utils';
 
-import Point from 'shapes/Point';
+import Point from 'elements/Point';
 
 import SimulationConfig from 'simulation/SimulationConfig';
 import SimulationPropTypes from 'simulation/components/SimulationPropTypes';

@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import PointNode from '../PointNode';
 
-import Point from 'shapes/Point';
+import Point from 'elements/Point';
 import SimulationConfig from 'simulation/SimulationConfig';
 
 describe('PointNode', () => {

@@ -1,5 +1,5 @@
 import Rectangle from '../Rectangle';
-import RectangleDefinition from 'shapes/RectangleDefinition';
+import RectangleDefinition from 'elements/RectangleDefinition';
 import React from 'react';
 
 import { shallow } from 'enzyme';

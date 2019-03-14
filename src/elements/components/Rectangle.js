@@ -1,5 +1,5 @@
 import React from 'react';
-import RectangleDefinition from 'shapes/RectangleDefinition';
+import RectangleDefinition from 'elements/RectangleDefinition';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'components/CustomPropTypes';
 

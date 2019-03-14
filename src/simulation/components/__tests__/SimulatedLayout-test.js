@@ -1,7 +1,7 @@
 jest.mock('simulation/Simulation');
 jest.mock('simulation/ForceDefinition');
 jest.mock('simulation/ConstraintDefinition');
-jest.mock('shapes/ShapeDefinition');
+jest.mock('elements/ShapeDefinition');
 
 import React from 'react'
 
@@ -12,7 +12,7 @@ import MockForceDefinition from 'simulation/ForceDefinition';
 import MockConstraintDefinition from 'simulation/ConstraintDefinition';
 import SimulationConfig from 'simulation/SimulationConfig';
 
-import MockShapeDefinition from 'shapes/ShapeDefinition';
+import MockShapeDefinition from 'elements/ShapeDefinition';
 
 import utils from 'utils';
 import { withExtraProps } from 'components/component-utils';

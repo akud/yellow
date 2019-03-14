@@ -1,5 +1,5 @@
 import Circle from '../Circle';
-import CircleDefinition from 'shapes/CircleDefinition';
+import CircleDefinition from 'elements/CircleDefinition';
 import React from 'react';
 
 import { shallow } from 'enzyme';

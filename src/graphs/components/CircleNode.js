@@ -2,7 +2,7 @@ import React, { createRef } from 'react';
 import PropTypes from 'prop-types';
 
 import Node from './Node';
-import Circle from 'shapes/components/Circle';
+import Circle from 'elements/components/Circle';
 
 import SimulationPropTypes from 'simulation/components/SimulationPropTypes';
 

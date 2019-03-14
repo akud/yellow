@@ -1,11 +1,11 @@
-jest.mock('shapes/ShapeDefinition');
+jest.mock('elements/ShapeDefinition');
 
 import Node from '../Node';
 
 import SimulationConfig from 'simulation/SimulationConfig';
 import { PreventCollisionsConstraintDefinition } from 'simulation/ConstraintDefinition';
 
-import MockShapeDefinition from 'shapes/ShapeDefinition';
+import MockShapeDefinition from 'elements/ShapeDefinition';
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';

@@ -1,4 +1,4 @@
-import Circle from 'shapes/components/Circle';
+import Circle from 'elements/components/Circle';
 import CircleNode from '../CircleNode';
 import React from 'react';
 

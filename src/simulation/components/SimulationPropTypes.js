@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import ShapeDefinition from 'shapes/ShapeDefinition';
+import ShapeDefinition from 'elements/ShapeDefinition';
 import CustomPropTypes from 'components/CustomPropTypes';
 
 export default {

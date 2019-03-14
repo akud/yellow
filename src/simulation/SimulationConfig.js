@@ -1,5 +1,5 @@
 import logging from '@akud/logging';
-import Point from 'shapes/Point';
+import Point from 'elements/Point';
 
 const LOGGER = new logging.Logger('SimulationConfig');
 

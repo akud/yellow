@@ -1,9 +1,9 @@
-jest.mock('shapes/ShapeDefinition');
+jest.mock('elements/ShapeDefinition');
 
 import SimulationConfig from '../SimulationConfig';
 
-import MockShapeDefinition from 'shapes/ShapeDefinition';
-import Point from 'shapes/Point';
+import MockShapeDefinition from 'elements/ShapeDefinition';
+import Point from 'elements/Point';
 
 describe('SimulationConfig', () => {
   describe('getElementIds', () => {

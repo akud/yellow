@@ -1,4 +1,4 @@
-import geometryUtils from 'shapes/geometry-utils';
+import geometryUtils from 'elements/geometry-utils';
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from 'components/CustomPropTypes';

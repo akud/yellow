@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Circle from './shapes/components/Circle';
-import Rectangle from './shapes/components/Rectangle';
+import Circle from './elements/components/Circle';
+import Rectangle from './elements/components/Rectangle';
 
 import Graph from './graphs/components/Graph';
 import Node from './graphs/components/Node';

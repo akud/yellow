@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CircleDefinition from 'shapes/CircleDefinition';
+import CircleDefinition from 'elements/CircleDefinition';
 import CustomPropTypes from 'components/CustomPropTypes';
 
 export default class Circle extends React.Component {

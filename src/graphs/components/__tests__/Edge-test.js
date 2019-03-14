@@ -1,12 +1,12 @@
-jest.mock('shapes/geometry-utils');
-jest.mock('shapes/ShapeDefinition');
+jest.mock('elements/geometry-utils');
+jest.mock('elements/ShapeDefinition');
 
 import React from 'react';
 
 import Edge from '../Edge';
 
-import geometryUtils from 'shapes/geometry-utils';
-import MockShapeDefinition from 'shapes/ShapeDefinition';
+import geometryUtils from 'elements/geometry-utils';
+import MockShapeDefinition from 'elements/ShapeDefinition';
 
 
 import { FixedDistanceConstraintDefinition } from 'simulation/ConstraintDefinition';
