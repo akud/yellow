@@ -107,7 +107,15 @@ export const requireGreaterThanZero = function() {
 
 export const makeArray = (array) => Array.isArray(array) ? array : [array];
 
-export const flatten = (array) => makeArray(array).map(makeArray).flatMap(e => e);
+export const flatten = (array) => {
+  const result = [];
+  makeArray(array).forEach(element => {
+    makeArray(element).forEach(sub => {
+      result.push(sub);
+    });
+  });
+  return result;
+};
 
 export default {
   requirePresent,

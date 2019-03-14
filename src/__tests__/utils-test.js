@@ -91,7 +91,7 @@ describe('utils', () => {
   });
 
   describe('flatten', () => {
-    it('flattens out nested arrays', () => {
+    it.only('flattens out nested arrays', () => {
       const input = [
         [ '1', '2', '3' ],
         '4',
