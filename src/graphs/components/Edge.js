@@ -2,7 +2,7 @@ import geometryUtils from 'elements/geometry-utils';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Arrow from './Arrow';
+import Arrow from 'elements/components/Arrow';
 
 import { FixedDistanceConstraintDefinition }  from 'simulation/ConstraintDefinition';
 import SimulationPropTypes from 'simulation/components/SimulationPropTypes';
