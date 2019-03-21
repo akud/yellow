@@ -35,6 +35,7 @@ const constructElementIndex = (config) => {
 const constructForces = (config) => {
   const d3Forces = [];
   config.getForces()
+    .filter(f => f.type != ForceType.DIRECTIONAL)
     .map(mapForce)
     .forEach((force) => {
       d3Forces.push(force);

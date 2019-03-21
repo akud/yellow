@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Circle from './elements/components/Circle';
 import Rectangle from './elements/components/Rectangle';
+import Label from './elements/components/Label';
+import Orientation from './elements/Orientation';
 
 import Graph from './graphs/components/Graph';
 import Node from './graphs/components/Node';
@@ -18,6 +20,7 @@ export default class App extends Component {
   }
 
   render() {
+          //<Label text="Big node" orientation={Orientation.TOP_LEFT} />
     return (
       <Graph width={1000} height={500} border={true} zoom={1.0}>
         <Node nodeId="1">
@@ -27,7 +30,9 @@ export default class App extends Component {
         <CircleNode nodeId="3" />
         <PointNode nodeId="4" />
         <PointNode nodeId="5" />
-        <PointNode nodeId="6" />
+        <Node nodeId="6">
+          <Label text="Label Node" />
+        </Node>
         <Node nodeId="7">
           <Rectangle width={85} height={30} />
         </Node>
@@ -38,6 +43,8 @@ export default class App extends Component {
         <Edge fromNodeId="6" toNodeId="7" directed={true} />
         <Edge fromNodeId="5" toNodeId="7" directed={true} />
         <Edge fromNodeId="7" toNodeId="2" directed={true} />
+        <Edge fromNodeId="1" toNodeId="6" directed={true} />
+        <Edge fromNodeId="3" toNodeId="6" directed={true} />
       </Graph>
     );
   }
