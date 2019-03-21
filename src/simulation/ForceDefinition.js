@@ -9,6 +9,7 @@ export default class ForceDefinition {
 export const ForceType = {
   CENTERING: Symbol('Centering Force'),
   REPELLING: Symbol('Repelling Force'),
+  DIRECTIONAL: Symbol('Directional Force'),
 };
 
 export class CenteringForceDefinition extends ForceDefinition {
@@ -21,5 +22,12 @@ export class CenteringForceDefinition extends ForceDefinition {
 export class RepellingForceDefinition extends ForceDefinition {
   constructor() {
     super(ForceType.REPELLING);
+  }
+}
+
+export class DirectionalForceDefinition extends ForceDefinition {
+  constructor(elementId, directions) {
+    super(ForceType.DIRECTIONAL);
+    this.directions = utils.makeArray(directions);
   }
 }

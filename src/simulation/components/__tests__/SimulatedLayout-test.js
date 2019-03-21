@@ -29,7 +29,7 @@ describe('SimulatedLayout', () => {
     });
   });
 
-  it('initializes a simulation from children', () => {
+  it('initializes a simulation from children', async () => {
     const force1 = new MockForceDefinition();
     const force2 = new MockForceDefinition();
     const constraint1 = new MockConstraintDefinition();
@@ -39,7 +39,7 @@ describe('SimulatedLayout', () => {
     const shape3 = new MockShapeDefinition();
     const shape4 = new MockShapeDefinition();
 
-    const wrapper = mount(
+    const wrapper = await render(
       <SimulatedLayout SimulationClass={MockSimulation}>
         <DummyConfigProvider
           elementIds={['1']}
@@ -58,7 +58,8 @@ describe('SimulatedLayout', () => {
           constraints={[constraint2]}
         />
       </SimulatedLayout>
-    ).update();
+    );
+
     expect(MockSimulation).toHaveBeenCalledWith(new SimulationConfig({
       elementIds: [ '1', '2', '3', '4' ],
       elementShapes: {
@@ -73,7 +74,7 @@ describe('SimulatedLayout', () => {
     }));
   });
 
-  it('Passes the correct element data to children', () => {
+  it('Passes the correct element data to children', async () => {
     const shape1 = new MockShapeDefinition();
     const shape2 = new MockShapeDefinition();
     const shape3 = new MockShapeDefinition();
@@ -89,7 +90,7 @@ describe('SimulatedLayout', () => {
     const constraint1 = new MockConstraintDefinition();
     const constraint2 = new MockConstraintDefinition();
 
-    const wrapper = mount(
+    const wrapper = await render(
       <SimulatedLayout SimulationClass={MockSimulation}>
         <DummyConfigProvider
           elementIds={['1']}
@@ -103,7 +104,8 @@ describe('SimulatedLayout', () => {
           constraints={[constraint2]}
         />
       </SimulatedLayout>
-    ).update();
+    );
+
     expect(wrapper.find('DummyConfigProvider').length).toBe(3);
     expect(wrapper.find('DummyConfigProvider').at(0).prop('simulatedElements')).toEqual({
       '1': { position: { x: 2341, y: 478 }, shape: shape1 }
@@ -123,7 +125,7 @@ describe('SimulatedLayout', () => {
     expect(getElementData).toHaveBeenCalledTimes(4);
   });
 
-  it('Handles multiple children in a single child from React', () => {
+  it('Handles multiple children in a single child from React', async () => {
     const shape1 = new MockShapeDefinition();
     const shape2 = new MockShapeDefinition();
     const shape3 = new MockShapeDefinition();
@@ -139,7 +141,7 @@ describe('SimulatedLayout', () => {
     const constraint1 = new MockConstraintDefinition();
     const constraint2 = new MockConstraintDefinition();
 
-    const wrapper = mount(
+    const wrapper = await render(
       <SimulatedLayout SimulationClass={MockSimulation}>
         {[
           <DummyConfigProvider
@@ -156,7 +158,8 @@ describe('SimulatedLayout', () => {
           constraints={[constraint2]}
         />
       </SimulatedLayout>
-    ).update();
+    );
+
     expect(wrapper.find('DummyConfigProvider').length).toBe(3);
     expect(wrapper.find('DummyConfigProvider').at(0).prop('simulatedElements')).toEqual({
       '1': { position: { x: 2341, y: 478 }, shape: shape1 }
@@ -184,11 +187,13 @@ class DummyConfigProvider extends React.Component {
   }
 
   getSimulationConfig() {
-    return new SimulationConfig({
-      elementIds: this.props.elementIds,
-      elementShapes: this.props.elementShapes,
-      forces: this.props.forces,
-      constraints: this.props.constraints,
-    });
+    return Promise.resolve(
+      new SimulationConfig({
+        elementIds: this.props.elementIds,
+        elementShapes: this.props.elementShapes,
+        forces: this.props.forces,
+        constraints: this.props.constraints,
+      })
+    );
   }
 }

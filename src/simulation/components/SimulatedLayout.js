@@ -20,40 +20,46 @@ export default class SimulatedLayout extends React.Component {
 
   constructor(props) {
     super(props);
+    this.childRefs = utils.flatten(props.children).map(createRef);
+
     this.state = {
       simulation: null,
-      refs: utils.flatten(props.children).map(createRef),
+      simulationConfigs: [],
     };
   }
 
   componentDidMount() {
     const { SimulationClass } = this.props;
-    const { refs } = this.state;
+    const { childRefs } = this;
 
-    const aggregateConfig = refs.map(getSimulationConfig).reduce(
-      (aggregate, current) => aggregate.combinedWith(current),
-      SimulationConfig.EMPTY,
-    );
+    Promise.all(childRefs.map(getSimulationConfig)).then(configs => {
+      const aggregateConfig = configs.reduce(
+        (aggregate, current) => aggregate.combinedWith(current),
+        SimulationConfig.EMPTY,
+      );
 
-    this.setState({
-      simulation: new SimulationClass(
-        aggregateConfig.withNewLayoutListener((simulation) => this.setState({ simulation }))
-      )
+      this.setState({
+        simulation: new SimulationClass(
+          aggregateConfig.withNewLayoutListener(simulation => this.setState({ simulation }))
+        ),
+        simulationConfigs: configs,
+      });
     });
   }
 
   render() {
     const { children } = this.props;
-    const { refs } = this.state;
+    const { childRefs } = this;
+    const { simulation, simulationConfigs } = this.state;
 
     return withExtraProps(children, (child, index) => {
-      const ref = refs[index];
-      const simulationConfig = getSimulationConfig(ref);
-      if(simulationConfig.hasDefinitions()) {
+      const ref = childRefs[index];
+      const simulationConfig = simulationConfigs[index];
+      if(simulation && simulationConfig && simulationConfig.hasDefinitions()) {
         return {
           ref,
           simulatedElements: simulationConfig.getElementIds().reduce((obj, id) => {
-            obj[id] = this.getElementData(id);
+            obj[id] = simulation.getElementData(id);
             return obj;
           }, {}),
         };
@@ -62,17 +68,12 @@ export default class SimulatedLayout extends React.Component {
       }
     });
   }
-
-  getElementData(elementId) {
-    const { simulation } = this.state;
-    return simulation && simulation.getElementData(elementId);
-  }
 }
 
-const getSimulationConfig = (ref) => {
+const getSimulationConfig = ref => {
   if (ref.current && typeof ref.current.getSimulationConfig === 'function') {
-    return ref.current.getSimulationConfig() || SimulationConfig.EMPTY;
+    return ref.current.getSimulationConfig() || Promise.resolve(SimulationConfig.EMPTY);
   } else {
-    return SimulationConfig.EMPTY;
+    return Promise.resolve(SimulationConfig.EMPTY);
   }
 };

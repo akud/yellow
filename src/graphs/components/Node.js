@@ -54,13 +54,12 @@ export default class Node extends React.Component {
   }
 
   getSimulationConfig() {
-    const elementShapes = this.getElementShapes();
-    return new SimulationConfig({
+    return this.getElementShapesPromise().then(elementShapes => new SimulationConfig({
       elementIds: this.elements.map(e => e.id),
       elementShapes,
       constraints: this.getConstraints(elementShapes),
       forces: this.getForces(),
-    });
+    }));
   }
 
   positionAt(index) {
@@ -69,16 +68,20 @@ export default class Node extends React.Component {
     return simulatedElements ? simulatedElements[elementId].position : null;
   }
 
-  getElementShapes() {
-    return this.childRefs.reduce((obj, ref, index) => {
-      const elementId = this.elements[index].id;
+  getElementShapesPromise() {
+    const shapePromises = this.childRefs.map(ref => {
       if (ref.current && ref.current.getShapeDefinition) {
-        obj[elementId] = ref.current.getShapeDefinition();
+        return ref.current.getShapeDefinition();
       } else {
-        obj[elementId] = new Point();
+        return Promise.resolve(new Point());
       }
+    });
+
+    return Promise.all(shapePromises).then(shapes => shapes.reduce((obj, shape, index) => {
+      const elementId = this.elements[index].id;
+      obj[elementId] = shape;
       return obj;
-    }, {});
+    }, {}));
   }
 
   getConstraints(elementShapes) {

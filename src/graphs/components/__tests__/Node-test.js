@@ -31,13 +31,13 @@ describe('Node', () => {
     return obj;
   }, {});
 
-  it('can render without breaking with no simulated elements', () => {
-    render(<Node nodeId='2'><p>Hello!</p></Node>);
+  it('can render without breaking with no simulated elements', async () => {
+    await render(<Node nodeId='2'><p>Hello!</p></Node>);
   });
 
-  it('renders children with position', () => {
+  it('renders children with position', async () => {
     const element = newSimulatedElement('2');
-    const wrapper = shallow(
+    const wrapper = await render(
       <Node nodeId='2' simulatedElements={elementIndexOf(element)}>
         <p>Hello!</p>
       </Node>
@@ -47,12 +47,12 @@ describe('Node', () => {
   });
 
   describe('with multiple children', () => {
-    it('assigns positions to elements by their orientation', () => {
+    it('assigns positions to elements by their orientation', async () => {
       const primaryElement = newSimulatedElement('2');
       const subElement1 = newSimulatedElement('2-1');
       const subElement2 = newSimulatedElement('2-2');
 
-      const wrapper = render(
+      const wrapper = await render(
         <Node
           nodeId='2'
           simulatedElements={
@@ -75,12 +75,12 @@ describe('Node', () => {
       expect( wrapper.find('p').at(2).prop('position')).toEqual(subElement2.position);
     });
 
-    it('can infer the primary element', () => {
+    it('can infer the primary element', async () => {
       const primaryElement = newSimulatedElement('2-0');
       const subElement1 = newSimulatedElement('2');
       const subElement2 = newSimulatedElement('2-2');
 
-      const wrapper = render(
+      const wrapper = await render(
         <Node
           nodeId='2'
           simulatedElements={
@@ -105,15 +105,19 @@ describe('Node', () => {
   });
 
   describe('getSimulationConfig', () => {
-    it('returns the node id and a PreventCollisionsConstraintDefinition', () => {
+    it('returns the node id and a PreventCollisionsConstraintDefinition', async () => {
       const shape = new MockShapeDefinition();
-      const wrapper = render(
+      const wrapper = await render(
         <Node nodeId='2' simulatedElements={
           elementIndexOf(newSimulatedElement('2', shape))}>
           <DummyShapeProvider shape={ shape } />
         </Node>
       );
-      expect(wrapper.instance().getSimulationConfig()).toEqual(new SimulationConfig({
+
+      const simulationConfig = await wrapper.instance().getSimulationConfig();
+
+
+      expect(simulationConfig).toEqual(new SimulationConfig({
         elementIds: ['2'],
         elementShapes: {
           '2': shape,
@@ -126,14 +130,17 @@ describe('Node', () => {
       }));
     });
 
-    it('can work before simulated elements have been passed down', () => {
+    it('can work before simulated elements have been passed down', async () => {
       const shape = new MockShapeDefinition();
-      const wrapper = render(
+      const wrapper = await render(
         <Node nodeId='2'>
           <DummyShapeProvider shape={ shape } />
         </Node>
       );
-      expect(wrapper.instance().getSimulationConfig()).toEqual(new SimulationConfig({
+
+      const simulationConfig = await wrapper.instance().getSimulationConfig();
+
+      expect(simulationConfig).toEqual(new SimulationConfig({
         elementIds: ['2'],
         elementShapes: {
           '2': shape,
@@ -146,19 +153,20 @@ describe('Node', () => {
       }));
     });
 
-    it('applies forces and constraints for multiple elements', () => {
+    it('applies forces and constraints for multiple elements', async () => {
       const shape1 = new MockShapeDefinition();
       const shape2 = new MockShapeDefinition();
       const shape3 = new MockShapeDefinition();
-      const wrapper = render(
+      const wrapper = await render(
         <Node nodeId='2'>
           <DummyShapeProvider shape={ shape1 } />
           <DummyShapeProvider shape={ shape2 } orientation={Orientation.TOP_LEFT} />
           <DummyShapeProvider shape={ shape3 } orientation={Orientation.TOP_RIGHT} />
         </Node>
       );
+      const simulationConfig = await wrapper.instance().getSimulationConfig();
 
-      expect(wrapper.instance().getSimulationConfig()).toEqual(new SimulationConfig({
+      expect(simulationConfig).toEqual(new SimulationConfig({
         elementIds: ['2', '2-1', '2-2'],
         elementShapes: {
           '2': shape1,
@@ -195,6 +203,6 @@ class DummyShapeProvider extends React.Component {
   }
 
   getShapeDefinition() {
-    return this.props.shape;
+    return Promise.resolve(this.props.shape);
   }
 }
