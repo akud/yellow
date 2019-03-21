@@ -24,6 +24,7 @@ export default class App extends Component {
     return (
       <Graph width={1000} height={500} border={true} zoom={1.0}>
         <Node nodeId="1">
+          <Label text='Node 1' orientation={Orientation.TOP_LEFT} />
           <Circle />
         </Node>
         <CircleNode nodeId="2" radius={20}/>
@@ -40,11 +41,11 @@ export default class App extends Component {
         <Edge fromNodeId="2" toNodeId="3" distance={150} bidirectional={true}/>
         <Edge fromNodeId="4" toNodeId="2" directed={true} />
         <Edge fromNodeId="5" toNodeId="2" directed={true} />
-        <Edge fromNodeId="label-node" toNodeId="7" directed={true} />
         <Edge fromNodeId="5" toNodeId="7" directed={true} />
         <Edge fromNodeId="7" toNodeId="2" directed={true} />
-        <Edge fromNodeId="1" toNodeId="label-node" directed={true} />
-        <Edge fromNodeId="3" toNodeId="label-node" directed={true} />
+        <Edge fromNodeId="label-node" toNodeId="7" distance={120} directed={true} />
+        <Edge fromNodeId="1" toNodeId="label-node" distance={120} directed={true} />
+        <Edge fromNodeId="3" toNodeId="label-node" distance={120} directed={true} />
       </Graph>
     );
   }
