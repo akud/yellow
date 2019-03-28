@@ -7,12 +7,6 @@ export const newPosition = () => ({
 });
 
 
-export const render = async jsx => {
-  const wrapper = mount(jsx).update();
-  await Promise.resolve();
-  return wrapper.update();
-};
-
 let oldBoundingClientRect;
 
 export const registerBoundingClientRectMock = () => {
@@ -30,7 +24,6 @@ export const unregisterBoundingClientRectMock = () => {
 
 export default {
   point,
-  render,
   newPosition,
   registerBoundingClientRectMock,
   unregisterBoundingClientRectMock,
