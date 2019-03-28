@@ -9,6 +9,7 @@ package-lock.json
 
 # production
 /build
+/distribution
 
 
 npm-debug.log*

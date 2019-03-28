@@ -2,8 +2,9 @@
   "name": "@akud/yellow-client",
   "version": "0.0.7",
   "description": "Client side React components for Yellow applications",
-  "main": "index.js",
+  "main": "distribution/index.js",
   "scripts": {
+    "prepublish": "NODE_PATH=\"$NODE_PATH:./src/\" babel src --out-dir distribution",
     "start": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/start.js",
     "build": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/build.js",
     "test": "NODE_PATH=\"$NODE_PATH:./src/\" jest",
@@ -88,6 +89,7 @@
     "workbox-webpack-plugin": "3.6.3"
   },
   "devDependencies": {
+    "@babel/cli": "7",
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
     "@babel/preset-env": "^7.3.1",
