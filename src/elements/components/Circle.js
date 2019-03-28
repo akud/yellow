@@ -1,13 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CircleDefinition from 'elements/CircleDefinition';
-import CustomPropTypes from 'components/CustomPropTypes';
+import ElementPropTypes from './ElementPropTypes';
+
+import logging from '@akud/logging';
+
+const LOGGER = new logging.Logger('Circle');
 
 export default class Circle extends React.Component {
   static propTypes = {
-    position: CustomPropTypes.position,
     color: PropTypes.string,
     radius: PropTypes.number,
+    config: ElementPropTypes.config,
   }
 
   static defaultProps = {
@@ -15,17 +19,30 @@ export default class Circle extends React.Component {
     radius: 10,
   }
 
-  render() {
-    const { color, radius, position } = this.props;
-    if (position) {
-      return <circle r={radius} fill={color} cx={position.x} cy={position.y} />
+  componentDidMount() {
+    const { config, radius } = this.props;
+    if (config) {
+      config.postRender(new CircleDefinition({ radius }));
     } else {
-      return null;
+      LOGGER.warn('No element config passed for render');
     }
   }
 
-  getShapeDefinition() {
-    const { radius } = this.props;
-    return new CircleDefinition({ radius });
+  render() {
+    const { color, radius, config } = this.props;
+    if (config) {
+      const { position, id } = config;
+      return (
+        <circle
+          r={radius}
+          fill={color}
+          cx={position.x}
+          cy={position.y}
+          data-element-id={id}
+        />
+      );
+    } else {
+      return null;
+    }
   }
 }

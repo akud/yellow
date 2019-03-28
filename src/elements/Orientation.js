@@ -17,6 +17,10 @@ class Orientation {
   getName() {
     return this.name;
   }
+
+  hasDirections() {
+    return !!this.directions.length;
+  }
 }
 
 class PrimaryOrientation extends Orientation {
@@ -38,5 +42,6 @@ export default {
   BOTTOM: new Orientation('BOTTOM', [Direction.DOWN]),
   BOTTOM_LEFT: new Orientation('BOTTOM_LEFT', [Direction.DOWN, Direction.LEFT]),
   LEFT: new Orientation('BOTTOM_LEFT', [Direction.LEFT]),
+  UNSPECIFIED: new Orientation('UNSPECIFIED', []),
   PRIMARY: new PrimaryOrientation(),
 }

@@ -1,9 +1,10 @@
 import React from 'react';
 import CustomPropTypes from 'components/CustomPropTypes';
 import { CenteringForceDefinition, RepellingForceDefinition } from 'simulation/ForceDefinition';
-import SimulationConfig from 'simulation/SimulationConfig';
+import SimulationContext from './SimulationContext';
 
 export class CenteringForce extends React.Component {
+  static contextType = SimulationContext
   static propTypes = {
     center: CustomPropTypes.position,
   }
@@ -12,37 +13,26 @@ export class CenteringForce extends React.Component {
     center: { x: 0, y: 0 },
   }
 
-  constructor(props) {
-    super(props);
-    this.force = new CenteringForceDefinition(this.props.center);
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerForce(new CenteringForceDefinition(this.props.center));
   }
 
   render() {
     return null;
-  }
-
-  getSimulationConfig() {
-    return new SimulationConfig({
-      forces: [ this.force ]
-    })
   }
 }
 
 export class RepellingForce extends React.Component {
+  static contextType = SimulationContext
 
-  constructor(props) {
-    super(props);
-    this.force = new RepellingForceDefinition();
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerForce(new RepellingForceDefinition());
   }
 
   render() {
     return null;
-  }
-
-  getSimulationConfig() {
-    return new SimulationConfig({
-      forces: [ this.force ],
-    });
   }
 }
 

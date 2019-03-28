@@ -1,16 +1,23 @@
 jest.mock('elements/ShapeDefinition');
+jest.mock('simulation/Simulation');
 
 import Node from '../Node';
 
 import Orientation from 'elements/Orientation';
 
-import SimulationConfig from 'simulation/SimulationConfig';
 import {
   FixedDistanceConstraintDefinition,
-  PreventCollisionsConstraintDefinition
 } from 'simulation/ConstraintDefinition';
 import { DirectionalForceDefinition } from 'simulation/ForceDefinition';
 import Direction from 'simulation/Direction';
+import MockSimulation, {
+  getElementData,
+  registerElement,
+  registerForce,
+  registerConstraint,
+  resetMockSimulation,
+} from 'simulation/Simulation'
+import SimulationContext from 'simulation/components/SimulationContext';
 
 import MockShapeDefinition from 'elements/ShapeDefinition';
 
@@ -20,189 +27,160 @@ import { shallow, mount } from 'enzyme';
 import utils from 'utils';
 
 describe('Node', () => {
-  const newSimulatedElement = (elementId, shape) => ({
+
+  const newSimulatedElement = elementId => ({
     id: elementId || '1',
     position: newPosition(),
-    shape: shape || new MockShapeDefinition()
+    shape: new MockShapeDefinition(),
   });
 
-  const elementIndexOf = simulatedElements => utils.makeArray(simulatedElements).reduce((obj, el) => {
-    obj[el.id] = el;
-    return obj;
-  }, {});
+  const selectElementFrom = (...elements) => elementId => {
+    return elements.find(e => e.id === elementId);
+  };
 
-  it('can render without breaking with no simulated elements', async () => {
-    await render(<Node nodeId='2'><p>Hello!</p></Node>);
+  beforeEach(() => {
+    resetMockSimulation();
   });
 
-  it('renders children with position', async () => {
-    const element = newSimulatedElement('2');
-    const wrapper = await render(
-      <Node nodeId='2' simulatedElements={elementIndexOf(element)}>
-        <p>Hello!</p>
-      </Node>
+  it('renders children with position from the simulation', () => {
+    const element = newSimulatedElement();
+
+    getElementData.mockReturnValueOnce(element);
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Node nodeId='2'>
+          <p>Hello!</p>
+        </Node>
+      </SimulationContext.Provider>
     );
     expect(wrapper.find('p').length).toBe(1);
-    expect(wrapper.find('p').prop('position')).toEqual(element.position);
+    expect(wrapper.find('p').prop('config').position).toEqual(element.position);
+    expect(wrapper.find('p').prop('config').id).toEqual('2');
+    expect(getElementData).toHaveBeenCalledWith('2');
+    expect(getElementData).toHaveBeenCalledTimes(1);
   });
 
-  describe('with multiple children', () => {
-    it('assigns positions to elements by their orientation', async () => {
-      const primaryElement = newSimulatedElement('2');
-      const subElement1 = newSimulatedElement('2-1');
-      const subElement2 = newSimulatedElement('2-2');
+  it('assigns positions and ids to elements by their orientation', () => {
+    const primaryElement = newSimulatedElement('2');
+    const subElement1 = newSimulatedElement('2-0');
+    const subElement2 = newSimulatedElement('2-2');
 
-      const wrapper = await render(
-        <Node
-          nodeId='2'
-          simulatedElements={
-            elementIndexOf([
-              primaryElement,
-              subElement1,
-              subElement2,
-            ])
-          }
-        >
-          <p orientation={Orientation.PRIMARY}>Primary!</p>
+    getElementData.mockImplementation(selectElementFrom(
+      primaryElement,
+      subElement1,
+      subElement2
+    ));
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Node nodeId='2'>
           <p orientation={Orientation.TOP_LEFT}>Hello!</p>
+          <p orientation={Orientation.PRIMARY}>Primary!</p>
           <p orientation={Orientation.TOP_RIGHT}>World!</p>
         </Node>
-      );
+      </SimulationContext.Provider>
+    );
 
-      expect(wrapper.find('p').length).toBe(3);
-      expect( wrapper.find('p').at(0).prop('position')).toEqual(primaryElement.position);
-      expect( wrapper.find('p').at(1).prop('position')).toEqual(subElement1.position);
-      expect( wrapper.find('p').at(2).prop('position')).toEqual(subElement2.position);
-    });
+    expect(wrapper.find('p').length).toBe(3);
+    expect(wrapper.find('p').at(0).prop('config').position).toEqual(subElement1.position);
+    expect(wrapper.find('p').at(1).prop('config').position).toEqual(primaryElement.position);
+    expect(wrapper.find('p').at(2).prop('config').position).toEqual(subElement2.position);
 
-    it('can infer the primary element', async () => {
-      const primaryElement = newSimulatedElement('2-0');
-      const subElement1 = newSimulatedElement('2');
-      const subElement2 = newSimulatedElement('2-2');
+    expect(wrapper.find('p').at(0).prop('config').id).toEqual('2-0');
+    expect(wrapper.find('p').at(1).prop('config').id).toEqual('2');
+    expect(wrapper.find('p').at(2).prop('config').id).toEqual('2-2');
 
-      const wrapper = await render(
-        <Node
-          nodeId='2'
-          simulatedElements={
-            elementIndexOf([
-              primaryElement,
-              subElement1,
-              subElement2,
-            ])
-          }
-        >
+    expect(getElementData).toHaveBeenCalledWith('2-0');
+    expect(getElementData).toHaveBeenCalledWith('2');
+    expect(getElementData).toHaveBeenCalledWith('2-2');
+    expect(getElementData).toHaveBeenCalledTimes(3);
+  });
+
+  it('can infer the primary element', () => {
+    const primaryElement = newSimulatedElement('2');
+    const subElement1 = newSimulatedElement('2-0');
+    const subElement2 = newSimulatedElement('2-2');
+
+    getElementData.mockImplementation(selectElementFrom(
+      primaryElement,
+      subElement1,
+      subElement2
+    ));
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Node nodeId='2'>
           <p orientation={Orientation.TOP_LEFT}>Hello!</p>
           <p>Primary!</p>
           <p orientation={Orientation.TOP_RIGHT}>World!</p>
         </Node>
-      );
+      </SimulationContext.Provider>
+    );
 
-      expect(wrapper.find('p').length).toBe(3);
-      expect( wrapper.find('p').at(0).prop('position')).toEqual(primaryElement.position);
-      expect( wrapper.find('p').at(1).prop('position')).toEqual(subElement1.position);
-      expect( wrapper.find('p').at(2).prop('position')).toEqual(subElement2.position);
-    });
+    expect(wrapper.find('p').length).toBe(3);
+    expect(wrapper.find('p').at(0).prop('config').position).toEqual(subElement1.position);
+    expect(wrapper.find('p').at(1).prop('config').position).toEqual(primaryElement.position);
+    expect(wrapper.find('p').at(2).prop('config').position).toEqual(subElement2.position);
+
+    expect(wrapper.find('p').at(0).prop('config').id).toEqual('2-0');
+    expect(wrapper.find('p').at(1).prop('config').id).toEqual('2');
+    expect(wrapper.find('p').at(2).prop('config').id).toEqual('2-2');
+
+    expect(getElementData).toHaveBeenCalledWith('2-0');
+    expect(getElementData).toHaveBeenCalledWith('2');
+    expect(getElementData).toHaveBeenCalledWith('2-2');
+    expect(getElementData).toHaveBeenCalledTimes(3);
   });
 
-  describe('getSimulationConfig', () => {
-    it('returns the node id and a PreventCollisionsConstraintDefinition', async () => {
-      const shape = new MockShapeDefinition();
-      const wrapper = await render(
-        <Node nodeId='2' simulatedElements={
-          elementIndexOf(newSimulatedElement('2', shape))}>
-          <DummyShapeProvider shape={ shape } />
-        </Node>
-      );
+  it('registers data with the simulation based on element orientations', () => {
+    const primaryShape = new MockShapeDefinition({ radius: 3 });
+    const subElementShape1 = new MockShapeDefinition({ radius: 4 });
+    const subElementShape2 = new MockShapeDefinition({ radius: 5 });
+    const subElementShape3 = new MockShapeDefinition({ radius: 6 });
 
-      const simulationConfig = await wrapper.instance().getSimulationConfig();
-
-
-      expect(simulationConfig).toEqual(new SimulationConfig({
-        elementIds: ['2'],
-        elementShapes: {
-          '2': shape,
-        },
-        constraints: [
-          new PreventCollisionsConstraintDefinition({
-            elementId: '2',
-          }),
-        ]
-      }));
-    });
-
-    it('can work before simulated elements have been passed down', async () => {
-      const shape = new MockShapeDefinition();
-      const wrapper = await render(
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
         <Node nodeId='2'>
-          <DummyShapeProvider shape={ shape } />
+          <p orientation={Orientation.TOP_LEFT}>Hello!</p>
+          <p>Primary!</p>
+          <p orientation={Orientation.TOP_RIGHT}>World!</p>
+          <p>Unspecified</p>
         </Node>
-      );
+      </SimulationContext.Provider>
+    );
 
-      const simulationConfig = await wrapper.instance().getSimulationConfig();
+    expect(wrapper.find('p').length).toBe(4);
+    expect(wrapper.find('p').at(0).prop('config').postRender).toBeInstanceOf(Function);
+    expect(wrapper.find('p').at(1).prop('config').postRender).toBeInstanceOf(Function);
+    expect(wrapper.find('p').at(2).prop('config').postRender).toBeInstanceOf(Function);
+    expect(wrapper.find('p').at(3).prop('config').postRender).toBeInstanceOf(Function);
 
-      expect(simulationConfig).toEqual(new SimulationConfig({
-        elementIds: ['2'],
-        elementShapes: {
-          '2': shape,
-        },
-        constraints: [
-          new PreventCollisionsConstraintDefinition({
-            elementId: '2',
-          }),
-        ]
-      }));
-    });
+    wrapper.find('p').at(0).prop('config').postRender(subElementShape1);
+    wrapper.find('p').at(1).prop('config').postRender(primaryShape);
+    wrapper.find('p').at(2).prop('config').postRender(subElementShape2);
+    wrapper.find('p').at(3).prop('config').postRender(subElementShape3);
 
-    it('applies forces and constraints for multiple elements', async () => {
-      const shape1 = new MockShapeDefinition();
-      const shape2 = new MockShapeDefinition();
-      const shape3 = new MockShapeDefinition();
-      const wrapper = await render(
-        <Node nodeId='2'>
-          <DummyShapeProvider shape={ shape1 } />
-          <DummyShapeProvider shape={ shape2 } orientation={Orientation.TOP_LEFT} />
-          <DummyShapeProvider shape={ shape3 } orientation={Orientation.TOP_RIGHT} />
-        </Node>
-      );
-      const simulationConfig = await wrapper.instance().getSimulationConfig();
+    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+      between: ['2', '2-0'],
+      distance: 7,
+    }));
+    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+      between: ['2', '2-2'],
+      distance: 8,
+    }));
+    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+      between: ['2', '2-3'],
+      distance: 9,
+    }));
+    expect(registerConstraint).toHaveBeenCalledTimes(3);
 
-      expect(simulationConfig).toEqual(new SimulationConfig({
-        elementIds: ['2', '2-1', '2-2'],
-        elementShapes: {
-          '2': shape1,
-          '2-1': shape2,
-          '2-2': shape3,
-        },
-        constraints: [
-          new PreventCollisionsConstraintDefinition({ elementId: '2' }),
-
-          new PreventCollisionsConstraintDefinition({ elementId: '2-1' }),
-          new FixedDistanceConstraintDefinition({
-            between: ['2', '2-1'],
-            distance: shape1.getBoundingRadius() + shape2.getBoundingRadius(),
-          }),
-
-          new PreventCollisionsConstraintDefinition({ elementId: '2-2' }),
-          new FixedDistanceConstraintDefinition({
-            between: ['2', '2-2'],
-            distance: shape1.getBoundingRadius() + shape3.getBoundingRadius(),
-          }),
-        ],
-        forces: [
-          new DirectionalForceDefinition('2-1', [Direction.UP, Direction.LEFT]),
-          new DirectionalForceDefinition('2-2', [Direction.UP, Direction.RIGHT]),
-        ],
-      }));
-    });
+    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition(
+      '2-0', Orientation.TOP_LEFT.getDirections()
+    ));
+    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition(
+      '2-2', Orientation.TOP_RIGHT.getDirections()
+    ));
+    expect(registerForce).toHaveBeenCalledTimes(2)
   });
 });
-
-class DummyShapeProvider extends React.Component {
-  render() {
-    return null;
-  }
-
-  getShapeDefinition() {
-    return Promise.resolve(this.props.shape);
-  }
-}

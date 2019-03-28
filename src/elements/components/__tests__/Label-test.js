@@ -5,62 +5,73 @@ import RectangleDefinition from 'elements/RectangleDefinition';
 import { mount } from 'enzyme';
 
 describe('Label', () => {
-  let oldBoundingClientRect;
   let mockBoundingClientRect;
 
+  const newElementConfig = opts => Object.assign({
+    id: '123',
+    position: newPosition(),
+    postRender: () => {},
+  }, opts);
+
   beforeEach(() => {
-    oldBoundingClientRect = Element.prototype.getBoundingClientRect;
-    Element.prototype.getBoundingClientRect = mockBoundingClientRect = jest.fn()
-      .mockReturnValue({ width: 10, height: 10 });
+    mockBoundingClientRect = registerBoundingClientRectMock();
   });
 
   afterEach(() => {
-    Element.prototype.getBoundingClientRect = oldBoundingClientRect;
+    unregisterBoundingClientRectMock();
   });
 
-  it('renders the provided text', async () => {
-    const wrapper = await render(
-      <Label text="Hello World!" position={point(10, 56)} />
-    );
+  it('renders the provided text without element config', () => {
+    const wrapper = mount(<Label text="Hello World!" />);
 
     expect(wrapper.find('text').length).toBe(1);
     expect(wrapper.find('text').text()).toEqual('Hello World!');
   });
 
-  it('does not render a border by default', async () => {
-    const wrapper = await render(
-      <Label text="Hello World!" position={point(10, 56)} />
+  it('passes the correct element id to the g element', () => {
+    const wrapper = mount(
+      <Label text="Hello World!" config={newElementConfig({ id: '124' })} />
     );
+
+    expect(wrapper.find('g').length).toBe(1);
+    expect(wrapper.find('g').prop('data-element-id')).toEqual('124');
+  });
+
+  it('does not render a border by default', () => {
+    const wrapper = mount(<Label text="Hello World!" />);
 
     expect(wrapper.find('rect').length).toBe(0);
   });
 
-  it('positions the text based on actual width and height', async () => {
+  it('positions the text based on actual width and height', () => {
     mockBoundingClientRect.mockReturnValue({
       width: 42,
       height: 24
     });
-    const wrapper = await render(
-      <Label text="Hello World!" position={point(10, 56)} />
-    );
+    const wrapper = mount(
+      <Label
+        text="Hello World!"
+        config={newElementConfig({ position: point(10, 56) })}
+      />
+    ).update();
 
     expect(wrapper.find('text').prop('x')).toEqual(-11);
-    expect(wrapper.find('text').prop('y')).toEqual(44);
+    expect(wrapper.find('text').prop('y')).toEqual(62);
   });
 
-  it('renders a border with padding if specified', async () => {
+  it('renders a border with padding if specified', () => {
     mockBoundingClientRect.mockReturnValue({
       width: 44,
       height: 24
     });
-    const wrapper = await render(
+    const wrapper = mount(
       <Label
         text="Hello World!"
-        position={point(10, 56)}
         border={true}
         padding={12}
+        config={newElementConfig({ position: point(10, 56) })}
       />
-    );
+    ).update();
 
     expect(wrapper.find('rect').length).toBe(1);
     expect(wrapper.find('rect').at(0).props()).toEqual({
@@ -69,23 +80,25 @@ describe('Label', () => {
       width: 56,
       height: 36,
       stroke: 'black',
-      'fill-opacity': 0,
+      fillOpacity: 0,
     });
   });
 
-  describe('getShapeDefinition', () => {
-    it('returns a rectangle defined by actual size and padding', async () => {
-      mockBoundingClientRect.mockReturnValue({
-        width: 100,
-        height: 29
-      });
-      const wrapper = await render(
-        <Label text="Hello World!" position={point(10, 56) padding={5}} />
-      );
-      const shapeDefinition = await wrapper.instance().getShapeDefinition();
-      expect(shapeDefinition).toEqual(
-        new RectangleDefinition({ width: 105, height: 34 })
-      );
+  it('registers a rectangle defined by actual size and padding', () => {
+    mockBoundingClientRect.mockReturnValue({
+      width: 100,
+      height: 29
     });
+    const postRender = jest.fn();
+    const wrapper = mount(
+      <Label
+        text="Hello World!"
+        padding={5}
+        config={newElementConfig({ postRender })}
+      />
+    );
+    expect(postRender).toHaveBeenCalledOnceWith(
+      new RectangleDefinition({ width: 105, height: 34 })
+    );
   });
 });

@@ -13,8 +13,25 @@ export const render = async jsx => {
   return wrapper.update();
 };
 
+let oldBoundingClientRect;
+
+export const registerBoundingClientRectMock = () => {
+  oldBoundingClientRect = Element.prototype.getBoundingClientRect;
+  let mockBoundingClientRect;
+  Element.prototype.getBoundingClientRect = mockBoundingClientRect = jest.fn()
+    .mockReturnValue({ width: 10, height: 10 });
+  return mockBoundingClientRect;
+}
+
+export const unregisterBoundingClientRectMock = () => {
+  Element.prototype.getBoundingClientRect = oldBoundingClientRect;
+}
+
+
 export default {
   point,
   render,
   newPosition,
+  registerBoundingClientRectMock,
+  unregisterBoundingClientRectMock,
 };
