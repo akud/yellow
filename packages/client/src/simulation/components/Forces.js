@@ -1,6 +1,6 @@
 import React from 'react';
-import CustomPropTypes from 'components/CustomPropTypes';
-import { CenteringForceDefinition, RepellingForceDefinition } from 'simulation/ForceDefinition';
+import CustomPropTypes from '../../components/CustomPropTypes';
+import { CenteringForceDefinition, RepellingForceDefinition } from '../ForceDefinition';
 import SimulationContext from './SimulationContext';
 
 export class CenteringForce extends React.Component {

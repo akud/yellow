@@ -1,4 +1,4 @@
-import PointDefinition from 'elements/PointDefinition';
+import PointDefinition from '../../elements/PointDefinition';
 
 export const getElementData = jest.fn();
 export const registerElement = jest.fn();

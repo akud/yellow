@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import D3ForceSimulation from 'simulation/d3/ForceSimulation';
+import D3ForceSimulation from '../d3/ForceSimulation';
 
 import SimulationContext from './SimulationContext';
 

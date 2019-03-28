@@ -1,23 +1,23 @@
-jest.mock('elements/geometry-utils');
-jest.mock('elements/ShapeDefinition');
-jest.mock('simulation/Simulation');
+jest.mock('../../../elements/geometry-utils');
+jest.mock('../../../elements/ShapeDefinition');
+jest.mock('../../../simulation/Simulation');
 
 import React from 'react';
 
 import Edge from '../Edge';
 
-import geometryUtils from 'elements/geometry-utils';
-import MockShapeDefinition from 'elements/ShapeDefinition';
+import geometryUtils from '../../../elements/geometry-utils';
+import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
 import MockSimulation, {
   getElementData,
   registerConstraint,
   resetMockSimulation
-} from 'simulation/Simulation';
+} from '../../../simulation/Simulation';
 
 
-import { FixedDistanceConstraintDefinition } from 'simulation/ConstraintDefinition';
-import SimulationContext from 'simulation/components/SimulationContext';
+import { FixedDistanceConstraintDefinition } from '../../../simulation/ConstraintDefinition';
+import SimulationContext from '../../../simulation/components/SimulationContext';
 
 import { mount } from 'enzyme';
 

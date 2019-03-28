@@ -1,9 +1,9 @@
-import Simulation from 'simulation/Simulation';
+import Simulation from '../Simulation';
 
 import * as d3 from 'd3-force';
 import { ForceType } from '../ForceDefinition';
 import { ConstraintType } from '../ConstraintDefinition';
-import PointDefinition from 'elements/PointDefinition';
+import PointDefinition from '../../elements/PointDefinition';
 import logging from '@akud/logging';
 
 const LOGGER = new logging.Logger('d3ForceSimulation');

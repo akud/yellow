@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import CustomPropTypes from 'components/CustomPropTypes';
+import CustomPropTypes from '../../components/CustomPropTypes';
 
 export default {
   config: PropTypes.shape({

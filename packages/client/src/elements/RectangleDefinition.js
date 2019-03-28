@@ -1,6 +1,6 @@
 import ShapeDefinition from './ShapeDefinition';
 
-import utils from 'utils';
+import utils from '../utils';
 import { computeHorizontalIntersectionAngle, addVectors } from './geometry-utils';
 
 const TOP_RIGHT = Symbol('TOP_RIGHT');

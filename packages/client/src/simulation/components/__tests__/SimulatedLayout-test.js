@@ -1,4 +1,4 @@
-jest.mock('simulation/Simulation');
+jest.mock('../../Simulation');
 
 import React from 'react'
 
@@ -12,9 +12,9 @@ import MockSimulation, {
   registerConstraint,
   onNewLayout,
   resetMockSimulation
-} from 'simulation/Simulation';
+} from '../../Simulation';
 
-import utils from 'utils';
+import utils from '../../../utils';
 
 import { mount } from 'enzyme';
 

@@ -1,30 +1,30 @@
-jest.mock('elements/ShapeDefinition');
-jest.mock('simulation/Simulation');
+jest.mock('../../../elements/ShapeDefinition');
+jest.mock('../../../simulation/Simulation');
 
 import Node from '../Node';
 
-import Orientation from 'elements/Orientation';
+import Orientation from '../../../elements/Orientation';
 
 import {
   FixedDistanceConstraintDefinition,
-} from 'simulation/ConstraintDefinition';
-import { DirectionalForceDefinition } from 'simulation/ForceDefinition';
-import Direction from 'simulation/Direction';
+} from '../../../simulation/ConstraintDefinition';
+import { DirectionalForceDefinition } from '../../../simulation/ForceDefinition';
+import Direction from '../../../simulation/Direction';
 import MockSimulation, {
   getElementData,
   registerElement,
   registerForce,
   registerConstraint,
   resetMockSimulation,
-} from 'simulation/Simulation'
-import SimulationContext from 'simulation/components/SimulationContext';
+} from '../../../simulation/Simulation'
+import SimulationContext from '../../../simulation/components/SimulationContext';
 
-import MockShapeDefinition from 'elements/ShapeDefinition';
+import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
 import React from 'react';
 import { shallow, mount } from 'enzyme';
 
-import utils from 'utils';
+import utils from '../../../utils';
 
 describe('Node', () => {
 

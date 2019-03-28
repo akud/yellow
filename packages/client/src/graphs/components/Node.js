@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withExtraProps } from 'components/component-utils';
+import { withExtraProps } from '../../components/component-utils';
 
-import Orientation from 'elements/Orientation';
+import Orientation from '../../elements/Orientation';
 
-import SimulationContext from 'simulation/components/SimulationContext';
-import { FixedDistanceConstraintDefinition } from 'simulation/ConstraintDefinition';
-import { DirectionalForceDefinition } from 'simulation/ForceDefinition';
+import SimulationContext from '../../simulation/components/SimulationContext';
+import { FixedDistanceConstraintDefinition } from '../../simulation/ConstraintDefinition';
+import { DirectionalForceDefinition } from '../../simulation/ForceDefinition';
 
-import utils from 'utils';
+import utils from '../../utils';
 
 import logging from '@akud/logging';
 

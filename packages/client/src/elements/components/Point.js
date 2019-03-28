@@ -1,5 +1,5 @@
 import React from 'react';
-import PointDefinition from 'elements/PointDefinition';
+import PointDefinition from '../PointDefinition';
 import ElementPropTypes from './ElementPropTypes';
 
 import logging from '@akud/logging';

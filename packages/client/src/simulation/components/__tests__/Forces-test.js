@@ -1,12 +1,12 @@
-jest.mock('simulation/Simulation');
+jest.mock('../../Simulation');
 
 import React from 'react';
 
-import MockSimulation, { registerForce, resetMockSimulation } from 'simulation/Simulation';
+import MockSimulation, { registerForce, resetMockSimulation } from '../../Simulation';
 import { CenteringForce, RepellingForce } from '../Forces';
 
 import SimulationContext from '../SimulationContext';
-import { CenteringForceDefinition, RepellingForceDefinition } from 'simulation/ForceDefinition';
+import { CenteringForceDefinition, RepellingForceDefinition } from '../../ForceDefinition';
 
 import { mount } from 'enzyme';
 

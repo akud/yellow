@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Node from './Node';
-import Circle from 'elements/components/Circle';
+import Circle from '../../elements/components/Circle';
 
 export default class CircleNode extends React.Component {
   static propTypes = {

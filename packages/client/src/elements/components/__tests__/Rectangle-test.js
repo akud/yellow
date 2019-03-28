@@ -1,5 +1,5 @@
 import Rectangle from '../Rectangle';
-import RectangleDefinition from 'elements/RectangleDefinition';
+import RectangleDefinition from '../../RectangleDefinition';
 import React from 'react';
 
 import { mount } from 'enzyme';

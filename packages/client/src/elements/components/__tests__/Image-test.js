@@ -1,6 +1,6 @@
 import React from 'react';
 
-import RectangleDefinition from 'elements/RectangleDefinition';
+import RectangleDefinition from '../../RectangleDefinition';
 import Image from '../Image';
 
 import { mount } from 'enzyme';

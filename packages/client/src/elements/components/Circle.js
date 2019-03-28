@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CircleDefinition from 'elements/CircleDefinition';
+import CircleDefinition from '../CircleDefinition';
 import ElementPropTypes from './ElementPropTypes';
 
 import logging from '@akud/logging';

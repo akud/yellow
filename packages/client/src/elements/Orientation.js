@@ -1,4 +1,4 @@
-import Direction from 'simulation/Direction';
+import Direction from '../simulation/Direction';
 
 class Orientation {
   constructor(name, directions) {

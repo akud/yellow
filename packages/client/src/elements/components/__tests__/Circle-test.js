@@ -1,5 +1,5 @@
 import Circle from '../Circle';
-import CircleDefinition from 'elements/CircleDefinition';
+import CircleDefinition from '../../CircleDefinition';
 import React from 'react';
 
 import { mount } from 'enzyme';

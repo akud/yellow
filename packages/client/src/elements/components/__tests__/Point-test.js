@@ -1,5 +1,5 @@
 import Point from '../Point';
-import PointDefinition from 'elements/PointDefinition';
+import PointDefinition from '../../PointDefinition';
 import React from 'react';
 
 import { mount } from 'enzyme';

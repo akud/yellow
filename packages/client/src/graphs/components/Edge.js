@@ -1,11 +1,11 @@
-import geometryUtils from 'elements/geometry-utils';
+import geometryUtils from '../../elements/geometry-utils';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Arrow from 'elements/components/Arrow';
+import Arrow from '../../elements/components/Arrow';
 
-import { FixedDistanceConstraintDefinition }  from 'simulation/ConstraintDefinition';
-import SimulationContext from 'simulation/components/SimulationContext';
+import { FixedDistanceConstraintDefinition }  from '../../simulation/ConstraintDefinition';
+import SimulationContext from '../../simulation/components/SimulationContext';
 
 export default class Edge extends React.Component {
   static contextType = SimulationContext

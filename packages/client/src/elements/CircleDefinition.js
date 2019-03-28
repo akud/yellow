@@ -1,4 +1,4 @@
-import utils from 'utils';
+import utils from '../utils';
 import geometryUtils from './geometry-utils';
 import ShapeDefinition from './ShapeDefinition';
 

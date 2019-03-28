@@ -1,7 +1,7 @@
-import geometryUtils from 'elements/geometry-utils';
+import geometryUtils from '../geometry-utils';
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPropTypes from 'components/CustomPropTypes';
+import CustomPropTypes from '../../components/CustomPropTypes';
 
 export default class Arrow extends React.Component {
   static propTypes = {

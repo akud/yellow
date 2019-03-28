@@ -1,5 +1,5 @@
 jest.mock('d3-force');
-jest.mock('elements/ShapeDefinition');
+jest.mock('../../../elements/ShapeDefinition');
 
 import ForceSimulation from '../ForceSimulation';
 
@@ -8,14 +8,14 @@ import {
   ForceType,
   CenteringForceDefinition,
   RepellingForceDefinition
-} from 'simulation/ForceDefinition';
+} from '../../ForceDefinition';
 
 import {
   ConstraintType,
   FixedDistanceConstraintDefinition,
-} from 'simulation/ConstraintDefinition';
+} from '../../ConstraintDefinition';
 
-import MockShapeDefinition from 'elements/ShapeDefinition';
+import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
 describe('ForceSimulation', () => {
   let baseSimulation;
