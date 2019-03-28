@@ -1,6 +1,6 @@
 {
   "name": "@akud/yellow-client",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Client side React components for Yellow applications",
   "scripts": {
     "start": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/start.js",
@@ -138,5 +138,6 @@
       ],
       "@babel/preset-react"
     ]
-  }
+  },
+  "gitHead": "daffd921a1fa21cd61f717c5af187aab5addb43f"
 }
