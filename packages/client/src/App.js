@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Circle from './elements/components/Circle';
+import Image from './elements/components/Image';
 import Rectangle from './elements/components/Rectangle';
 import Label from './elements/components/Label';
 import Orientation from './elements/Orientation';
