@@ -4,11 +4,11 @@
   "description": "Client side React components for Yellow applications",
   "main": "distribution/index.js",
   "scripts": {
-    "prepublish": "NODE_PATH=\"$NODE_PATH:./src/\" babel src --out-dir distribution",
-    "start": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/start.js",
-    "build": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/build.js",
-    "test": "NODE_PATH=\"$NODE_PATH:./src/\" jest",
-    "test:debug": "NODE_PATH=\"$NODE_PATH:./src/\" node-inspect $(npm bin)/jest"
+    "prepublish": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/App.js\"",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
+    "test": "jest",
+    "test:debug": "node-inspect $(npm bin)/jest"
   },
   "repository": {
     "type": "git",
