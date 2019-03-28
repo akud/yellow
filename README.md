@@ -7,7 +7,7 @@ pages. Yellow provides react components to easily render a graph. For
 example, the above graph could be rendered by:
 
 ```
-import { Graph, CircleNode, Edge } from 'yellow-client';
+import { Graph, CircleNode, Edge } from '@akud/yellow-client';
 
 <Graph>
   <CircleNode nodeId="red-node-1" color="#fc2f38" />
@@ -31,3 +31,5 @@ import { Graph, CircleNode, Edge } from 'yellow-client';
 
 Yellow is still in its infancy. It will grow over time. Expect to see
 it used on my blog, [/alexkudlick.com/blog](http//alexkudlick.com/blog).
+
+[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
