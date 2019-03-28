@@ -1,13 +1,30 @@
 {
   "name": "@akud/yellow-client",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Client side React components for Yellow applications",
+  "main": "index.js",
   "scripts": {
     "start": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/start.js",
     "build": "NODE_PATH=\"$NODE_PATH:./src/\" node scripts/build.js",
     "test": "NODE_PATH=\"$NODE_PATH:./src/\" jest",
     "test:debug": "NODE_PATH=\"$NODE_PATH:./src/\" node-inspect $(npm bin)/jest"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/akud/yellow.git"
+  },
+  "keywords": [
+    "graphs",
+    "react",
+    "network",
+    "diagrams"
+  ],
+  "author": "Alex Kudlick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akud/yellow/issues"
+  },
+  "homepage": "https://github.com/akud/yellow#readme",
   "browserslist": [
     ">0.2%",
     "not dead",

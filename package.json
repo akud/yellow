@@ -7,5 +7,21 @@
     "jest-expect-message": "^1.0.2",
     "lerna": "^3.13.1",
     "node-inspect": "^1.11.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/akud/yellow.git"
+  },
+  "keywords": [
+    "graphs",
+    "react",
+    "network",
+    "diagrams"
+  ],
+  "author": "Alex Kudlick",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/akud/yellow/issues"
+  },
+  "homepage": "https://github.com/akud/yellow#readme"
 }
