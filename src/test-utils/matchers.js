@@ -40,8 +40,6 @@ class FunctionSideEffectMatcher extends AsymmetricMatcher {
   toAsymmetricMatcher(){
     return 'Function with side effects';
   }
-
-
 }
 
 export default {

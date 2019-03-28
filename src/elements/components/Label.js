@@ -1,14 +1,18 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import RectangleDefinition from 'elements/RectangleDefinition';
 import PropTypes from 'prop-types';
-import CustomPropTypes from 'components/CustomPropTypes';
+import ElementPropTypes from './ElementPropTypes';
+
+import logging from '@akud/logging';
+
+const LOGGER = new logging.Logger('Label');
 
 export default class Label extends React.Component {
   static propTypes = {
     text: PropTypes.string.isRequired,
-    position: CustomPropTypes.position,
     padding: PropTypes.number,
     border: PropTypes.bool,
+    config: ElementPropTypes.config,
   }
 
   static defaultProps = {
@@ -18,18 +22,22 @@ export default class Label extends React.Component {
 
   refCallback = element => {
     if (element) {
+      const { config, padding } = this.props;
       const rect = element.getBoundingClientRect();
       this.setState({ width: rect.width, height: rect.height });
-      this.resolveShapePromise(new RectangleDefinition({
-        width: rect.width + this.props.padding,
-        height: rect.height + this.props.padding,
-      }));
+      if (config) {
+        config.postRender(new RectangleDefinition({
+          width: rect.width + padding,
+          height: rect.height + padding,
+        }));
+      } else {
+        LOGGER.warn('No element config passed for render');
+      }
     }
   }
 
   constructor(props) {
     super(props);
-    this.shapePromise = new Promise(resolve => { this.resolveShapePromise = resolve; });
     this.state = {
       width: 0,
       height: 0,
@@ -37,15 +45,16 @@ export default class Label extends React.Component {
   }
 
   render() {
-    const { border, position, text, padding } = this.props;
+    const { border, config, text, padding } = this.props;
     const { width, height } = this.state;
-    if (position) {
+    if (config) {
+      const { position, id } = config;
       const x = position.x - width / 2;
       const y = position.y + height / 4;
       return (
-        <g className="label">
+        <g className="label" data-element-id={id}>
           { border && this.renderBorder({ position, width, height, padding }) }
-          <text x={x} y={y}>{text}</text>
+          <text x={x} y={y} ref={this.refCallback}>{text}</text>
         </g>
       );
     } else {
@@ -58,10 +67,6 @@ export default class Label extends React.Component {
     height = height + padding;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
-    return <rect x={x} y={y} width={width} height={height} stroke="black" fill-opacity={0} />;
-  }
-
-  getShapeDefinition() {
-    return this.shapePromise;
+    return <rect x={x} y={y} width={width} height={height} stroke="black" fillOpacity={0} />;
   }
 }

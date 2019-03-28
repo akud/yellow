@@ -30,6 +30,30 @@ export const toHaveBeenCalledOnce = function(mock) {
   });
 };
 
+export const toHaveBeenCalledOnceWith = function(mock, ...expectedArgs) {
+  if (!this) { return; }
+  const callCount = mock.mock.calls.length;
+  if (callCount !== 1) {
+    return expectationResult.call(this, {
+      expected: 1,
+      received: callCount,
+      pass: this.isNot ? true : false,
+      name: 'toHaveBeenCalledOnceWith',
+      description: 'one call with ' + this.utils.stringify(expectedArgs),
+    });
+  }
+
+  const actualArgs = mock.mock.calls[0];
+
+  return expectationResult.call(this, {
+    expected: expectedArgs,
+    received: actualArgs,
+    pass: this.equals(expectedArgs, actualArgs),
+    name: 'toHaveBeenCalledOnceWith',
+    description: 'one call with ' + this.utils.stringify(expectedArgs),
+  });
+};
+
 export const toAlmostEqual = function(received, expected, precision) {
   if (!this) { return; }
 
@@ -93,5 +117,6 @@ const expectationResult = function({ expected, received, pass, name, description
 export default {
   toHaveBeenCalledTimes,
   toHaveBeenCalledOnce,
+  toHaveBeenCalledOnceWith,
   toAlmostEqual,
 }

@@ -1,9 +1,9 @@
-import PropTypes from 'prop-types';
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import Point from 'elements/Point';
+import Point from 'elements/components/Point';
 
-import SimulationConfig from 'simulation/SimulationConfig';
+import Node from './Node';
 
 export default class PointNode extends React.Component {
   static propTypes = {
@@ -11,17 +11,11 @@ export default class PointNode extends React.Component {
   };
 
   render() {
-    return null;
-  }
-
-  getSimulationConfig() {
-    const elementId = this.props.nodeId;
-    const elementShapes = {};
-    elementShapes[elementId] = new Point();
-
-    return new SimulationConfig({
-      elementIds: [ elementId ],
-      elementShapes,
-    });
+    const { nodeId } = this.props;
+    return (
+      <Node nodeId={nodeId}>
+        <Point />
+      </Node>
+    );
   }
 }

@@ -1,13 +1,9 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import D3ForceSimulation from 'simulation/d3/ForceSimulation';
 
-import SimulationConfig from 'simulation/SimulationConfig';
-
-import { withExtraProps } from 'components/component-utils';
-
-import utils from 'utils';
+import SimulationContext from './SimulationContext';
 
 export default class SimulatedLayout extends React.Component {
   static propTypes = {
@@ -20,60 +16,32 @@ export default class SimulatedLayout extends React.Component {
 
   constructor(props) {
     super(props);
-    this.childRefs = utils.flatten(props.children).map(createRef);
+
+    const simulation = new props.SimulationClass().onNewLayout(
+      s => this.setState({ contextValue: this.wrapSimulation(s) })
+    );
 
     this.state = {
-      simulation: null,
-      simulationConfigs: [],
+      contextValue: this.wrapSimulation(simulation)
     };
-  }
-
-  componentDidMount() {
-    const { SimulationClass } = this.props;
-    const { childRefs } = this;
-
-    Promise.all(childRefs.map(getSimulationConfig)).then(configs => {
-      const aggregateConfig = configs.reduce(
-        (aggregate, current) => aggregate.combinedWith(current),
-        SimulationConfig.EMPTY,
-      );
-
-      this.setState({
-        simulation: new SimulationClass(
-          aggregateConfig.withNewLayoutListener(simulation => this.setState({ simulation }))
-        ),
-        simulationConfigs: configs,
-      });
-    });
   }
 
   render() {
     const { children } = this.props;
-    const { childRefs } = this;
-    const { simulation, simulationConfigs } = this.state;
+    const { contextValue } = this.state;
+    return (
+      <SimulationContext.Provider value={contextValue}>
+        {children}
+      </SimulationContext.Provider>
+    );
+  }
 
-    return withExtraProps(children, (child, index) => {
-      const ref = childRefs[index];
-      const simulationConfig = simulationConfigs[index];
-      if(simulation && simulationConfig && simulationConfig.hasDefinitions()) {
-        return {
-          ref,
-          simulatedElements: simulationConfig.getElementIds().reduce((obj, id) => {
-            obj[id] = simulation.getElementData(id);
-            return obj;
-          }, {}),
-        };
-      } else {
-        return { ref };
-      }
-    });
+  wrapSimulation(simulation) {
+    return {
+      registerElement: (elementId, shape) => simulation.registerElement(elementId, shape),
+      getElementData: elementId => simulation.getElementData(elementId),
+      registerForce: force => simulation.registerForce(force),
+      registerConstraint: constraint => simulation.registerConstraint(constraint),
+    };
   }
 }
-
-const getSimulationConfig = ref => {
-  if (ref.current && typeof ref.current.getSimulationConfig === 'function') {
-    return ref.current.getSimulationConfig() || Promise.resolve(SimulationConfig.EMPTY);
-  } else {
-    return Promise.resolve(SimulationConfig.EMPTY);
-  }
-};

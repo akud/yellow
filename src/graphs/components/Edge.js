@@ -5,14 +5,14 @@ import React from 'react';
 import Arrow from 'elements/components/Arrow';
 
 import { FixedDistanceConstraintDefinition }  from 'simulation/ConstraintDefinition';
-import SimulationPropTypes from 'simulation/components/SimulationPropTypes';
-import SimulationConfig from 'simulation/SimulationConfig';
+import SimulationContext from 'simulation/components/SimulationContext';
 
 export default class Edge extends React.Component {
+  static contextType = SimulationContext
+
   static propTypes = {
     fromNodeId: PropTypes.string.isRequired,
     toNodeId: PropTypes.string.isRequired,
-    simulatedElements: SimulationPropTypes.simulatedElements,
     color: PropTypes.string,
     thickness: PropTypes.number,
     distance: PropTypes.number,
@@ -28,88 +28,85 @@ export default class Edge extends React.Component {
     bidirectional: false,
   }
 
+  componentDidMount() {
+    const { fromNodeId, toNodeId, distance } = this.props;
+    const simulation = this.context;
+    simulation.registerConstraint(
+      new FixedDistanceConstraintDefinition({
+        between: [ fromNodeId, toNodeId ],
+        distance: distance
+      })
+    );
+  }
+
   render() {
     const {
+      fromNodeId,
+      toNodeId,
       color,
       thickness,
       directed,
       bidirectional,
-      simulatedElements,
     } = this.props;
 
-    if (simulatedElements) {
-      const sourcePosition = this.getSourcePosition();
-      const targetPosition = this.getTargetPosition();
-      return (
-        <g className="edge">
-          {
-            bidirectional &&
-              <Arrow
-                to={sourcePosition}
-                color={color}
-                thickness={thickness}
-                angle={
-                  geometryUtils.computeHorizontalIntersectionAngle(
-                    targetPosition, sourcePosition
-                  )
-                }
-              />
-          }
-          <line
-            x1={sourcePosition.x}
-            y1={sourcePosition.y}
-            x2={targetPosition.x}
-            y2={targetPosition.y}
-            stroke={color}
-            strokeWidth={thickness}
-          />
-          {
-            (bidirectional || directed) &&
-              <Arrow
-                to={targetPosition}
-                color={color}
-                thickness={thickness}
-                angle={
-                  geometryUtils.computeHorizontalIntersectionAngle(
-                    sourcePosition, targetPosition
-                  )
-                }
-              />
-          }
-        </g>
-      );
-    } else {
-      return null;
-    }
-  }
-
-  getSimulationConfig() {
-    const { fromNodeId, toNodeId, distance } = this.props;
-    return new SimulationConfig({
-      elementIds: [ fromNodeId, toNodeId ],
-      constraints: [
-        new FixedDistanceConstraintDefinition({
-          between: [ fromNodeId, toNodeId ],
-          distance: distance
-        }),
-      ],
-    });
+    const sourcePosition = this.getSourcePosition();
+    const targetPosition = this.getTargetPosition();
+    return (
+      <g className="edge" data-from-element-id={fromNodeId} data-to-element-id={toNodeId}>
+        {
+          bidirectional &&
+            <Arrow
+              to={sourcePosition}
+              color={color}
+              thickness={thickness}
+              angle={
+                geometryUtils.computeHorizontalIntersectionAngle(
+                  targetPosition, sourcePosition
+                )
+              }
+            />
+        }
+        <line
+          x1={sourcePosition.x}
+          y1={sourcePosition.y}
+          x2={targetPosition.x}
+          y2={targetPosition.y}
+          stroke={color}
+          strokeWidth={thickness}
+        />
+        {
+          (bidirectional || directed) &&
+            <Arrow
+              to={targetPosition}
+              color={color}
+              thickness={thickness}
+              angle={
+                geometryUtils.computeHorizontalIntersectionAngle(
+                  sourcePosition, targetPosition
+                )
+              }
+            />
+        }
+      </g>
+    );
   }
 
   getSourcePosition() {
-    const { fromNodeId, toNodeId, simulatedElements } = this.props;
-    const sourceNodeCenter = simulatedElements[fromNodeId].position;
-    const targetNodeCenter = simulatedElements[toNodeId].position;
-    const sourceNodeShape = simulatedElements[fromNodeId].shape;
+    const { fromNodeId, toNodeId } = this.props;
+    const simulation = this.context;
+    const sourceNodeCenter = simulation.getElementData(fromNodeId).position;
+    const targetNodeCenter = simulation.getElementData(toNodeId).position;
+    const sourceNodeShape = simulation.getElementData(fromNodeId).shape;
 
     return sourceNodeShape.computeIntersectionWithRay(sourceNodeCenter, targetNodeCenter);
   }
 
   getTargetPosition() {
-    const { fromNodeId, toNodeId, simulatedElements } = this.props;
-    const sourceNodeCenter = simulatedElements[fromNodeId].position;
-    const targetNodeCenter = simulatedElements[toNodeId].position;
-    const targetNodeShape = simulatedElements[toNodeId].shape;
+    const { fromNodeId, toNodeId } = this.props;
+    const simulation = this.context;
+    const sourceNodeCenter = simulation.getElementData(fromNodeId).position;
+    const targetNodeCenter = simulation.getElementData(toNodeId).position;
+    const targetNodeShape = simulation.getElementData(toNodeId).shape;
 
     return targetNodeShape.computeIntersectionWithRay(targetNodeCenter, sourceNodeCenter);
   }

@@ -1,5 +1,6 @@
 jest.mock('elements/geometry-utils');
 jest.mock('elements/ShapeDefinition');
+jest.mock('simulation/Simulation');
 
 import React from 'react';
 
@@ -8,27 +9,50 @@ import Edge from '../Edge';
 import geometryUtils from 'elements/geometry-utils';
 import MockShapeDefinition from 'elements/ShapeDefinition';
 
+import MockSimulation, {
+  getElementData,
+  registerConstraint,
+  resetMockSimulation
+} from 'simulation/Simulation';
+
 
 import { FixedDistanceConstraintDefinition } from 'simulation/ConstraintDefinition';
-import SimulationConfig from 'simulation/SimulationConfig';
+import SimulationContext from 'simulation/components/SimulationContext';
 
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 describe('Edge', () => {
+
+  const newSimulatedElement = opts => Object.assign({
+    id: '1',
+    position: newPosition(),
+    shape: new MockShapeDefinition(),
+  }, opts);
+
+  const selectElementFrom = (...elements) => id => elements.find(e => e.id === id);
+
+  beforeEach(() => {
+    resetMockSimulation();
+  });
+
   it('renders a line between the provided points', () => {
     const shape1 = new MockShapeDefinition({ intersectionPoint: { x: 45, y: 87 } });
     const shape2 = new MockShapeDefinition({ intersectionPoint: { x: 123, y: 56 } });
-    const wrapper = shallow(
-      <Edge
-        fromNodeId='1'
-        toNodeId='2'
-        color='#442200'
-        thickness={3}
-        simulatedElements={{
-          '1': { position: { x: 1, y: 2 }, shape: shape1 },
-          '2': { position: { x: 3, y: 4 }, shape: shape2 },
-        }}
-      />
+
+    getElementData.mockImplementation(selectElementFrom(
+      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
+      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
+    ));
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Edge
+          fromNodeId='1'
+          toNodeId='2'
+          color='#442200'
+          thickness={3}
+        />
+      </SimulationContext.Provider>
     );
     expect(wrapper.find('line').length).toBe(1);
     expect(wrapper.find('Arrow').length).toBe(0);
@@ -45,18 +69,6 @@ describe('Edge', () => {
     expect(shape2.computeIntersectionWithRay).toHaveBeenCalledWith({ x: 3, y: 4 }, { x: 1, y: 2 });
   });
 
-  it('Does not render anything if no simulated elements are passed', () => {
-    const wrapper = shallow(
-      <Edge
-        fromNodeId='1'
-        toNodeId='2'
-        color='#442200'
-        thickness={3}
-      />
-    );
-    expect(wrapper.find('line').length).toBe(0);
-  });
-
   it('renders an arrow at the target if directed=true', () => {
     const shape1 = new MockShapeDefinition({ intersectionPoint: { x: 45, y: 87 } });
     const shape2 = new MockShapeDefinition({ intersectionPoint: { x: 123, y: 56 } });
@@ -64,18 +76,21 @@ describe('Edge', () => {
       Math.PI / 3
     );
 
-    const wrapper = shallow(
-      <Edge
-        fromNodeId='1'
-        toNodeId='2'
-        color='#442200'
-        thickness={45}
-        simulatedElements={{
-          '1': { position: { x: 1, y: 2 }, shape: shape1 },
-          '2': { position: { x: 3, y: 4 }, shape: shape2 },
-        }}
-        directed={true}
-      />
+    getElementData.mockImplementation(selectElementFrom(
+      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
+      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
+    ));
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Edge
+          fromNodeId='1'
+          toNodeId='2'
+          color='#442200'
+          thickness={45}
+          directed={true}
+        />
+      </SimulationContext.Provider>
     );
     expect(wrapper.find('Arrow').length).toBe(1);
     expect(wrapper.find('Arrow').prop('to')).toEqual({ x: 123, y: 56 });
@@ -96,18 +111,21 @@ describe('Edge', () => {
       .mockReturnValueOnce(Math.PI / 3)
       .mockReturnValueOnce(Math.PI / 4);
 
-    const wrapper = shallow(
-      <Edge
-        fromNodeId='1'
-        toNodeId='2'
-        color='#442200'
-        thickness={45}
-        simulatedElements={{
-          '1': { position: { x: 1, y: 2 }, shape: shape1 },
-          '2': { position: { x: 3, y: 4 }, shape: shape2 },
-        }}
-        bidirectional={true}
-      />
+    getElementData.mockImplementation(selectElementFrom(
+      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
+      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
+    ));
+
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Edge
+          fromNodeId='1'
+          toNodeId='2'
+          color='#442200'
+          thickness={45}
+          bidirectional={true}
+        />
+      </SimulationContext.Provider>
     );
     expect(wrapper.find('Arrow').length).toBe(2);
 
@@ -131,21 +149,21 @@ describe('Edge', () => {
     );
   });
 
-
-  describe('getSimulationConfig', () => {
-    it('returns node ids as elements and a fixed distance constraint', () => {
-      const wrapper = shallow(
-        <Edge fromNodeId='1' toNodeId='2' distance={150} />
-      );
-      expect(wrapper.instance().getSimulationConfig()).toEqual(new SimulationConfig({
-        elementIds: ['1', '2'],
-        constraints: [
-          new FixedDistanceConstraintDefinition({
-            between: ['1', '2'],
-            distance: 150
-          }),
-        ],
-      }));
-    });
+  it('registers a fixed distance constraint with the simulation', () => {
+    const wrapper = mount(
+      <SimulationContext.Provider value={new MockSimulation()}>
+        <Edge
+          fromNodeId='123'
+          toNodeId='456'
+          distance={324}
+        />
+      </SimulationContext.Provider>
+    );
+    expect(registerConstraint).toHaveBeenCalledOnceWith(
+      new FixedDistanceConstraintDefinition({
+        between: ['123', '456'],
+        distance: 324,
+      })
+    );
   });
 });

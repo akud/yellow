@@ -8,7 +8,6 @@ export default class ConstraintDefinition {
 
 export const ConstraintType = {
   FIXED_DISTANCE: Symbol('Fixed Distance Constraint'),
-  PREVENT_COLLISIONS: Symbol('Collision Constraint'),
 }
 
 export class FixedDistanceConstraintDefinition extends ConstraintDefinition {
@@ -16,12 +15,5 @@ export class FixedDistanceConstraintDefinition extends ConstraintDefinition {
     super(ConstraintType.FIXED_DISTANCE);
     this.between = utils.requireArrayOfLength(between, 2);
     this.distance = distance;
-  }
-}
-
-export class PreventCollisionsConstraintDefinition extends ConstraintDefinition {
-  constructor({ elementId }) {
-    super(ConstraintType.PREVENT_COLLISIONS);
-    this.elementId = utils.requirePresent(elementId);
   }
 }

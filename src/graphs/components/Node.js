@@ -1,113 +1,116 @@
-import React, { createRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withExtraProps } from 'components/component-utils';
 
-import Point from 'elements/Point';
 import Orientation from 'elements/Orientation';
 
-
-import SimulationConfig from 'simulation/SimulationConfig';
-import SimulationPropTypes from 'simulation/components/SimulationPropTypes';
-import {
-  FixedDistanceConstraintDefinition,
-  PreventCollisionsConstraintDefinition
-} from 'simulation/ConstraintDefinition';
+import SimulationContext from 'simulation/components/SimulationContext';
+import { FixedDistanceConstraintDefinition } from 'simulation/ConstraintDefinition';
 import { DirectionalForceDefinition } from 'simulation/ForceDefinition';
 
 import utils from 'utils';
 
+import logging from '@akud/logging';
+
+const LOGGER = new logging.Logger('Node');
+
 export default class Node extends React.Component {
+  static contextType = SimulationContext
+
   static propTypes = {
     nodeId: PropTypes.string.isRequired,
-    simulatedElements: SimulationPropTypes.simulatedElements,
   }
 
   constructor(props) {
     super(props);
     const { nodeId } = props;
 
-    this.childRefs = utils.makeArray(props.children).map(createRef);
+    this.primaryElement = null;
+
     this.elements = utils.makeArray(props.children).map((c, i) => {
-      const orientation = c.props.orientation || Orientation.PRIMARY;
+      const orientation = c.props.orientation || (
+        !this.primaryElement ? Orientation.PRIMARY : Orientation.UNSPECIFIED
+      );
       const id = orientation.isPrimary() ? nodeId : `${nodeId}-${i}`;
-      return { id, orientation };
+      const element = { id, orientation };
+      if (element.orientation.isPrimary()) {
+        this.primaryElement = element;
+      }
+      return element;
     });
+    this.shapes = {};
   };
 
   render() {
+    const simulation = this.context;
+    const { elements } = this;
     const { children } = this.props;
-    const { childRefs } = this;
     return (
       <g className="node">
         {
           withExtraProps(
             children,
-            (child, index) => ({
-              ref: childRefs[index],
-              position: this.positionAt(index)
-            })
+            (child, index) => {
+              const element = elements[index];
+              return {
+                config: {
+                  id: element.id,
+                  position: simulation.getElementData(element.id).position,
+                  postRender: shape => {
+                    this.registerShape(element, shape);
+                    this.registerDirectionalForces(element);
+                  }
+                }
+              };
+            }
           )
         }
       </g>
     );
   }
 
-  getSimulationConfig() {
-    return this.getElementShapesPromise().then(elementShapes => new SimulationConfig({
-      elementIds: this.elements.map(e => e.id),
-      elementShapes,
-      constraints: this.getConstraints(elementShapes),
-      forces: this.getForces(),
-    }));
+  registerShape(element, shape) {
+    const simulation = this.context;
+    const { primaryElement, elements, shapes } = this;
+
+    simulation.registerElement(element.id, shape);
+    this.shapes[element.id] = shape;
+    if (this.hasRegisteredAllShapes()) {
+      LOGGER.debug(
+        'Registered {} shapes, adding fixed distance constraints',
+        Object.values(shapes).length
+      );
+      const primaryElementRadius = shapes[primaryElement.id].getBoundingRadius();
+
+      elements.forEach(e => {
+        if (!e.orientation.isPrimary()) {
+          const distance = primaryElementRadius + shapes[e.id].getBoundingRadius();
+          simulation.registerConstraint(new FixedDistanceConstraintDefinition({
+            between: [primaryElement.id, e.id],
+            distance,
+          }));
+          LOGGER.debug(
+            'Set distance between {} and {} to {}',
+            primaryElement.id,
+            e.id,
+            distance
+          );
+        }
+      });
+    }
   }
 
-  positionAt(index) {
-    const { simulatedElements } = this.props;
-    const elementId = this.elements[index].id;
-    return simulatedElements ? simulatedElements[elementId].position : null;
+  registerDirectionalForces(element) {
+    const simulation = this.context;
+    if (element.orientation.hasDirections()) {
+      simulation.registerForce(
+        new DirectionalForceDefinition(element.id, element.orientation.getDirections())
+      );
+    }
   }
 
-  getElementShapesPromise() {
-    const shapePromises = this.childRefs.map(ref => {
-      if (ref.current && ref.current.getShapeDefinition) {
-        return ref.current.getShapeDefinition();
-      } else {
-        return Promise.resolve(new Point());
-      }
-    });
-
-    return Promise.all(shapePromises).then(shapes => shapes.reduce((obj, shape, index) => {
-      const elementId = this.elements[index].id;
-      obj[elementId] = shape;
-      return obj;
-    }, {}));
-  }
-
-  getConstraints(elementShapes) {
-    const constraints = [];
-    const primaryElement = this.elements.find(e => e.orientation.isPrimary());
-    const primaryElementRadius = elementShapes[primaryElement.id].getBoundingRadius();
-
-    this.elements.forEach(e => {
-      constraints.push(new PreventCollisionsConstraintDefinition({ elementId: e.id }));
-      if (!e.orientation.isPrimary()) {
-        constraints.push(new FixedDistanceConstraintDefinition({
-          between: [primaryElement.id, e.id],
-          distance: primaryElementRadius + elementShapes[e.id].getBoundingRadius(),
-        }));
-      }
-    });
-    return constraints;
-  }
-
-  getForces() {
-    const forces = [];
-    this.elements.forEach(e => {
-      if (!e.orientation.isPrimary()) {
-        forces.push(new DirectionalForceDefinition(e.id, e.orientation.directions));
-      }
-    });
-    return forces;
+  hasRegisteredAllShapes() {
+    return Object.values(this.shapes).length === this.elements.length;
   }
 }
