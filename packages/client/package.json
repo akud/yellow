@@ -1,6 +1,6 @@
 {
   "name": "@akud/yellow-client",
-  "version": "0.0.3",
+  "version": "0.0.2",
   "description": "Client side React components for Yellow applications",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,6 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "license": "MIT",
   "eslintConfig": {
     "extends": "react-app"
   },
