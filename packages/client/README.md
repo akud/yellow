@@ -1,6 +1,6 @@
 # Yellow
 
-![yellow-main](./yellow-main.png)
+![yellow-main](https://raw.githubusercontent.com/akud/yellow/master/packages/client/yellow-main.png)
 
 Welcome to Yellow! Yellow is a project for rendering graphs in web
 pages. Yellow provides react components to easily render a graph. For
