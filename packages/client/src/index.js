@@ -1,46 +1,24 @@
-import Arrow from './elements/components/Arrow';
-import Circle from './elements/components/Circle';
-import Image from './elements/components/Image';
-import Label from './elements/components/Label';
-import Point from './elements/components/Point';
-import Rectangle from './elements/components/Rectangle';
-import Orientation from './elements/Orientation';
-import PointDefinition from './elements/PointDefinition';
-import RectangleDefinition from './elements/RectangleDefinition';
-import ShapeDefinition from './elements/ShapeDefinition';
-import CircleNode from './graphs/components/CircleNode';
-import Edge from './graphs/components/Edge';
-import Graph from './graphs/components/Graph';
-import ImageNode from './graphs/components/ImageNode';
-import Node from './graphs/components/Node';
-import PointNode from './graphs/components/PointNode';
-import Forces from './simulation/components/Forces';
-import SimulatedLayout from './simulation/components/SimulatedLayout';
-import SimulationContext from './simulation/components/SimulationContext';
-import ConstraintDefinition from './simulation/ConstraintDefinition';
-import ForceDefinition from './simulation/ForceDefinition';
-
-export Arrow
-export Circle
-export Image
-export Label
-export Point
-export Rectangle
-export Orientation
-export PointDefinition
-export RectangleDefinition
-export ShapeDefinition
-export CircleNode
-export Edge
-export Graph
-export ImageNode
-export Node
-export PointNode
-export Forces
-export SimulatedLayout
-export SimulationContext
-export ConstraintDefinition
-export ForceDefinition
+export const Arrow = require('./elements/components/Arrow');
+export const Circle = require('./elements/components/Circle');
+export const Image = require('./elements/components/Image');
+export const Label = require('./elements/components/Label');
+export const Point = require('./elements/components/Point');
+export const Rectangle = require('./elements/components/Rectangle');
+export const Orientation = require('./elements/Orientation');
+export const PointDefinition = require('./elements/PointDefinition');
+export const RectangleDefinition = require('./elements/RectangleDefinition');
+export const ShapeDefinition = require('./elements/ShapeDefinition');
+export const CircleNode = require('./graphs/components/CircleNode');
+export const Edge = require('./graphs/components/Edge');
+export const Graph = require('./graphs/components/Graph');
+export const ImageNode = require('./graphs/components/ImageNode');
+export const Node = require('./graphs/components/Node');
+export const PointNode = require('./graphs/components/PointNode');
+export const Forces = require('./simulation/components/Forces');
+export const SimulatedLayout = require('./simulation/components/SimulatedLayout');
+export const SimulationContext = require('./simulation/components/SimulationContext');
+export const ConstraintDefinition = require('./simulation/ConstraintDefinition');
+export const ForceDefinition = require('./simulation/ForceDefinition');
 
 export default {
   Arrow,
