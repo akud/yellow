@@ -30,6 +30,6 @@ import { Graph, CircleNode, Edge } from '@akud/yellow-client';
 ```
 
 Yellow is still in its infancy. It will grow over time. Expect to see
-it used on my blog, [/alexkudlick.com/blog](http//alexkudlick.com/blog).
+it used on my blog, [alexkudlick.com/blog](http://alexkudlick.com/blog).
 
 [![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lernajs.io/)
