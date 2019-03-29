@@ -1,6 +1,6 @@
 {
   "name": "@akud/yellow-client",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Client side React components for Yellow applications",
   "main": "distribution/export.js",
   "scripts": {
