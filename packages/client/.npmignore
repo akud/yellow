@@ -1,1 +1,4 @@
 /src/
+/build/
+/scripts/
+yarn-error.log
