@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SimulatedLayout from '../../simulation/components/SimulatedLayout';
-import { CenteringForce, RepellingForce } from '../../simulation/components/Forces';
+import { CenteringForce } from '../../simulation/components/Forces';
 
 export default class Graph extends React.Component {
 
@@ -39,7 +39,6 @@ export default class Graph extends React.Component {
           <SimulatedLayout>
             {children}
             <CenteringForce center={{ x: realWidth / 2, y: realHeight / 2 }} />
-            <RepellingForce />
           </SimulatedLayout>
         </g>
       </svg>

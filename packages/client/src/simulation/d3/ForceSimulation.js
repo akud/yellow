@@ -62,7 +62,11 @@ export default class ForceSimulation extends Simulation {
         );
         break;
       case ForceType.REPELLING:
-        this.simulation.force('repelling', d3.forceManyBody());
+        this.simulation.force(
+          'repelling',
+          d3.forceManyBody()
+          .strength(() => -force.strengthMultiplier * 30)
+        );
         break;
       default:
         LOGGER.warn('unrecognized force {}', force);

@@ -20,8 +20,9 @@ export class CenteringForceDefinition extends ForceDefinition {
 }
 
 export class RepellingForceDefinition extends ForceDefinition {
-  constructor() {
+  constructor({ strengthMultiplier=1.0 }) {
     super(ForceType.REPELLING);
+    this.strengthMultiplier = strengthMultiplier;
   }
 }
 

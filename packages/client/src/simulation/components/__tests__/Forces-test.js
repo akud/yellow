@@ -32,10 +32,10 @@ describe('Forces', () => {
     it('registers a RepellingForceDefinition with the simulation', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={new MockSimulation()}>
-          <RepellingForce />
+          <RepellingForce strengthMultiplier={2.5}/>
         </SimulationContext.Provider>
       );
-      expect(registerForce).toHaveBeenCalledOnceWith(new RepellingForceDefinition());
+      expect(registerForce).toHaveBeenCalledOnceWith(new RepellingForceDefinition({ strengthMultiplier: 2.5 }));
     });
   });
 });

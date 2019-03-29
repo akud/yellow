@@ -48,7 +48,11 @@ describe('ForceSimulation', () => {
     d3ForceCenter = { id: 'center'};
     d3.forceCenter.mockReturnValue(d3ForceCenter);
 
-    d3ForceManyBody = { id: 'manyBody' };
+    d3ForceManyBody = {
+      id: 'manyBody',
+      strength: jest.fn()
+    };
+    d3ForceManyBody.strength.mockReturnValue(d3ForceManyBody);
     d3.forceManyBody.mockReturnValue(d3ForceManyBody);
 
     d3ForceCollide = {
@@ -124,9 +128,12 @@ describe('ForceSimulation', () => {
 
     it('constructs repelling forces', () => {
       new ForceSimulation()
-        .registerForce(new RepellingForceDefinition());
+        .registerForce(new RepellingForceDefinition({ strengthMultiplier: 5.0 }));
       expect(baseSimulation.force).toHaveBeenCalledWith('repelling', d3ForceManyBody);
       expect(d3.forceManyBody).toHaveBeenCalled();
+      expect(d3ForceManyBody.strength).toHaveBeenCalledWith(expect.functionThatReturns([
+        {input: 'foo', output: -150.0}
+      ]));
     });
   });
 

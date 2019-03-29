@@ -17,7 +17,6 @@ describe('Graph', () => {
     expect(simulatedLayout.find('p').length).toBe(1);
 
     expect(simulatedLayout.find('CenteringForce').length).toBe(1);
-    expect(simulatedLayout.find('RepellingForce').length).toBe(1);
   });
 
 
