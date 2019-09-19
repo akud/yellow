@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import SimulatedLayout from '../../simulation/components/SimulatedLayout';
-import { CenteringForce } from '../../simulation/components/Forces';
+import { CenteringForce, RepellingForce } from '../../simulation/components/Forces';
 
 export default class Graph extends React.Component {
 
@@ -11,6 +11,7 @@ export default class Graph extends React.Component {
     height: 500,
     border: false,
     zoom: 1.0,
+    repellingForceStrengthMultiplier: 1.0,
   }
 
   static propTypes = {
@@ -18,11 +19,18 @@ export default class Graph extends React.Component {
     height: PropTypes.number,
     border: PropTypes.bool,
     zoom: PropTypes.number,
+    repellingForceStrengthMulitiplier: PropTypes.number
   }
 
   render() {
-    const { width, height, border, zoom } = this.props;
-    const { children } = this.props;
+    const {
+      width,
+      height,
+      border,
+      zoom,
+      repellingForceStrengthMultiplier,
+      children,
+    } = this.props;
 
     const realWidth = width / zoom;
     const realHeight = height / zoom;
@@ -39,6 +47,7 @@ export default class Graph extends React.Component {
           <SimulatedLayout>
             {children}
             <CenteringForce center={{ x: realWidth / 2, y: realHeight / 2 }} />
+            <RepellingForce strengthMultiplier={repellingForceStrengthMultiplier} />
           </SimulatedLayout>
         </g>
       </svg>

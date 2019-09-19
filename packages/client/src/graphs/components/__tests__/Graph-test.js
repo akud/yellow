@@ -50,6 +50,16 @@ describe('Graph', () => {
     });
   });
 
+  it('renders a repelling force by default', () => {
+    const wrapper = shallow(<Graph />);
+    expect(wrapper.find('RepellingForce').prop('strengthMultiplier')).toBe(1.0);
+  });
+
+  it('passes the provided repelling force strength to a repelling force', () => {
+    const wrapper = shallow(<Graph repellingForceStrengthMultiplier={0.5} />);
+    expect(wrapper.find('RepellingForce').prop('strengthMultiplier')).toBe(0.5);
+  });
+
   it('does not render a boder by default', () => {
     const wrapper = shallow(<Graph />);
     expect(wrapper.find('svg').length).toBe(1);
