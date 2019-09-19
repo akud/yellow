@@ -4,13 +4,11 @@ package-lock.json
 /.pnp
 .pnp.js
 
+build/*
+distribution/*
+
 # testing
 /coverage
-
-# production
-/build
-/distribution
-
 
 npm-debug.log*
 yarn-debug.log*
