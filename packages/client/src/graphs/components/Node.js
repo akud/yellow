@@ -105,7 +105,10 @@ export default class Node extends React.Component {
     const simulation = this.context;
     if (element.orientation.hasDirections()) {
       simulation.registerForce(
-        new DirectionalForceDefinition(element.id, element.orientation.getDirections())
+        new DirectionalForceDefinition({
+          elementId: element.id,
+          directions: element.orientation.getDirections()
+        })
       );
     }
   }

@@ -1,5 +1,6 @@
 jest.mock('d3-force');
 jest.mock('../../../elements/ShapeDefinition');
+jest.mock('../DirectionalForce');
 
 import ForceSimulation from '../ForceSimulation';
 
@@ -7,13 +8,18 @@ import * as d3 from 'd3-force';
 import {
   ForceType,
   CenteringForceDefinition,
-  RepellingForceDefinition
+  RepellingForceDefinition,
+  DirectionalForceDefinition,
 } from '../../ForceDefinition';
 
 import {
   ConstraintType,
   FixedDistanceConstraintDefinition,
 } from '../../ConstraintDefinition';
+
+import Direction from '../../Direction';
+
+import MockDirectionalForce from '../DirectionalForce';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
@@ -134,6 +140,37 @@ describe('ForceSimulation', () => {
       expect(d3ForceManyBody.strength).toHaveBeenCalledWith(expect.functionThatReturns([
         {input: 'foo', output: -150.0}
       ]));
+    });
+
+    it('constructs directional forces', () => {
+      const upwardsForce = { id: '134241' };
+      const rightwardsForce = { id: '346437' };
+
+      MockDirectionalForce.create
+        .mockReturnValueOnce(upwardsForce)
+        .mockReturnValueOnce(rightwardsForce);
+
+      new ForceSimulation().registerForce(
+        new DirectionalForceDefinition({
+          elementId: 'asdf',
+          directions: [
+            Direction.UP,
+            Direction.RIGHT,
+          ]
+        })
+      );
+      expect(baseSimulation.force).toHaveBeenCalledWith('asdf-UP', upwardsForce);
+      expect(baseSimulation.force).toHaveBeenCalledWith('asdf-RIGHT', rightwardsForce);
+      expect(MockDirectionalForce.create).toHaveBeenCalledWith({
+        elementId: 'asdf',
+        direction: Direction.UP,
+        strengthMultiplier: 1,
+      });
+      expect(MockDirectionalForce.create).toHaveBeenCalledWith({
+        elementId: 'asdf',
+        direction: Direction.RIGHT,
+        strengthMultiplier: 1,
+      });
     });
   });
 

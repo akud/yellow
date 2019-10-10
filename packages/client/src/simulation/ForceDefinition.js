@@ -27,9 +27,10 @@ export class RepellingForceDefinition extends ForceDefinition {
 }
 
 export class DirectionalForceDefinition extends ForceDefinition {
-  constructor(elementId, directions) {
+  constructor({elementId, directions, strengthMultiplier=1.0}) {
     super(ForceType.DIRECTIONAL);
     this.elementId = utils.requirePresent(elementId);
-    this.directions = utils.makeArray(directions);
+    this.directions = utils.requireArray(directions);
+    this.strengthMultiplier = strengthMultiplier;
   }
 }

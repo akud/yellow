@@ -4,6 +4,8 @@ import * as d3 from 'd3-force';
 import { ForceType } from '../ForceDefinition';
 import { ConstraintType } from '../ConstraintDefinition';
 import PointDefinition from '../../elements/PointDefinition';
+import DirectionalForce from './DirectionalForce';
+import Direction from '../Direction';
 import logging from '@akud/logging';
 
 const LOGGER = new logging.Logger('d3ForceSimulation');
@@ -68,6 +70,16 @@ export default class ForceSimulation extends Simulation {
           .strength(() => -force.strengthMultiplier * 30)
         );
         break;
+      case ForceType.DIRECTIONAL:
+        force.directions.forEach(direction => this.simulation.force(
+          force.elementId + '-' + Direction.stringify(direction),
+          DirectionalForce.create({
+            elementId: force.elementId,
+            direction,
+            strengthMultiplier: force.strengthMultiplier,
+          })
+        ));
+        break;
       default:
         LOGGER.warn('unrecognized force {}', force);
     }
@@ -93,4 +105,5 @@ export default class ForceSimulation extends Simulation {
   fireListeners() {
     this.listeners.forEach(l => l(this));
   }
+
 }

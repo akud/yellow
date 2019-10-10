@@ -175,12 +175,14 @@ describe('Node', () => {
     }));
     expect(registerConstraint).toHaveBeenCalledTimes(3);
 
-    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition(
-      '2-0', Orientation.TOP_LEFT.getDirections()
-    ));
-    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition(
-      '2-2', Orientation.TOP_RIGHT.getDirections()
-    ));
+    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition({
+      elementId: '2-0',
+      directions: Orientation.TOP_LEFT.getDirections(),
+    }));
+    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition({
+      elementId: '2-2',
+      directions: Orientation.TOP_RIGHT.getDirections(),
+    }));
     expect(registerForce).toHaveBeenCalledTimes(2)
   });
 });
