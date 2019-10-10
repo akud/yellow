@@ -1,6 +1,7 @@
 jest.mock('d3-force');
 jest.mock('../../../elements/ShapeDefinition');
 jest.mock('../DirectionalForce');
+jest.mock('../FixedPositionConstraint');
 
 import ForceSimulation from '../ForceSimulation';
 
@@ -15,11 +16,13 @@ import {
 import {
   ConstraintType,
   FixedDistanceConstraintDefinition,
+  FixedPositionConstraintDefinition,
 } from '../../ConstraintDefinition';
 
 import Direction from '../../Direction';
 
 import MockDirectionalForce from '../DirectionalForce';
+import MockFixedPositionConstraint from '../FixedPositionConstraint';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
@@ -212,6 +215,29 @@ describe('ForceSimulation', () => {
         ],
       ]);
       expect(d3ForceLink.links).toHaveBeenCalledTimes(3);
+    });
+
+    it('registers fixed position constraints', () => {
+      const force = { id: 3462435 };
+      MockFixedPositionConstraint.create.mockReturnValue(force);
+
+      new ForceSimulation().registerConstraint(
+        new FixedPositionConstraintDefinition({
+          elementId: 't35234',
+          x: 68,
+          y: 1923,
+        })
+      );
+
+      expect(baseSimulation.force).toHaveBeenCalledWith(
+        't35234-fixed-position',
+        force
+      );
+      expect(MockFixedPositionConstraint.create).toHaveBeenCalledWith({
+          elementId: 't35234',
+          x: 68,
+          y: 1923,
+      });
     });
   });
 

@@ -5,6 +5,7 @@ import { ForceType } from '../ForceDefinition';
 import { ConstraintType } from '../ConstraintDefinition';
 import PointDefinition from '../../elements/PointDefinition';
 import DirectionalForce from './DirectionalForce';
+import FixedPositionConstraint from './FixedPositionConstraint';
 import Direction from '../Direction';
 import logging from '@akud/logging';
 
@@ -95,6 +96,16 @@ export default class ForceSimulation extends Simulation {
           distance: constraint.distance,
         });
         this.linkForce.links(this.links);
+        break;
+      case ConstraintType.FIXED_POSITION:
+        this.simulation.force(
+          constraint.elementId + '-fixed-position',
+          FixedPositionConstraint.create({
+            elementId: constraint.elementId,
+            x: constraint.x,
+            y: constraint.y,
+          })
+        );
         break;
       default:
         LOGGER.warn('unrecognized constraint {}', constraint);
