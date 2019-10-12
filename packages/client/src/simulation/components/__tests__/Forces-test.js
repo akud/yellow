@@ -3,10 +3,19 @@ jest.mock('../../Simulation');
 import React from 'react';
 
 import MockSimulation, { registerForce, resetMockSimulation } from '../../Simulation';
-import { CenteringForce, RepellingForce } from '../Forces';
+import {
+  CenteringForce,
+  DirectionalForce,
+  RepellingForce
+} from '../Forces';
 
 import SimulationContext from '../SimulationContext';
-import { CenteringForceDefinition, RepellingForceDefinition } from '../../ForceDefinition';
+import {
+  CenteringForceDefinition,
+  DirectionalForceDefinition,
+  RepellingForceDefinition
+} from '../../ForceDefinition';
+import Direction from '../../Direction';
 
 import { mount } from 'enzyme';
 
@@ -24,6 +33,30 @@ describe('Forces', () => {
       );
       expect(registerForce).toHaveBeenCalledOnceWith(
         new CenteringForceDefinition({ x: 45, y: 91 })
+      );
+    });
+  });
+
+  describe('DirectionalForce', () => {
+    it('registers a DirectionalForce with the simulation', () => {
+      const wrapper = mount(
+        <SimulationContext.Provider value={new MockSimulation()}>
+          <DirectionalForce
+            nodeId='node-134'
+            directions={[
+              Direction.UP,
+              Direction.RIGHT,
+            ]}
+            strengthMultiplier={2.5}
+          />
+        </SimulationContext.Provider>
+      );
+      expect(registerForce).toHaveBeenCalledOnceWith(
+        new DirectionalForceDefinition({
+          elementId: 'node-134',
+          directions: [ Direction.UP, Direction.RIGHT ],
+          strengthMultiplier: 2.5,
+        })
       );
     });
   });
