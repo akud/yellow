@@ -7,7 +7,7 @@ import SimulationContext from './SimulationContext';
 export class FixedPositionConstraint extends React.Component {
   static contextType = SimulationContext
   static propTypes = {
-    nodeId: PropTypes.string,
+    nodeId: PropTypes.string.isRequired,
     position: CustomPropTypes.position,
   }
 
