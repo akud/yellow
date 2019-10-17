@@ -2,10 +2,10 @@ import geometryUtils from '../../elements/geometry-utils';
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import Arrow from '../../elements/components/Arrow';
+import Arrow from '../../elements/representations/Arrow';
 
 import { DistanceSettingRuleDefinition }  from '../../simulation/RuleDefinition';
-import SimulationContext from '../../simulation/components/SimulationContext';
+import SimulationContext from '../../simulation/representations/SimulationContext';
 
 export default class Edge extends React.Component {
   static contextType = SimulationContext

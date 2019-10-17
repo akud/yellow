@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { withExtraProps } from '../../components/component-utils';
+import { withExtraProps } from '../../representations/component-utils';
 
 import Orientation from '../../elements/Orientation';
 
-import SimulationContext from '../../simulation/components/SimulationContext';
+import SimulationContext from '../../simulation/representations/SimulationContext';
 import { DistanceSettingRuleDefinition } from '../../simulation/RuleDefinition';
 import { DirectionalForceDefinition } from '../../simulation/ForceDefinition';
 

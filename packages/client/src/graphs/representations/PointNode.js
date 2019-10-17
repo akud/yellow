@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Point from '../../elements/components/Point';
+import Point from '../../elements/representations/Point';
 
 import Node from './Node';
 

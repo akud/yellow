@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import SimulatedLayout from '../../simulation/components/SimulatedLayout';
-import { CenteringForce, RepellingForce } from '../../simulation/components/Forces';
+import SimulatedLayout from '../../simulation/representations/SimulatedLayout';
+import { CenteringForce, RepellingForce } from '../../simulation/representations/Forces';
 
 export default class Graph extends React.Component {
 

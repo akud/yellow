@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomPropTypes from '../../components/CustomPropTypes';
+import CustomPropTypes from '../../representations/CustomPropTypes';
 import { PositioningRuleDefinition } from '../RuleDefinition';
 import SimulationContext from './SimulationContext';
 

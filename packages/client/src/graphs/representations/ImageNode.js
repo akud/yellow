@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Node from './Node';
-import Image from '../../elements/components/Image';
+import Image from '../../elements/representations/Image';
 
 export default class ImageNode extends React.Component {
   static propTypes = {

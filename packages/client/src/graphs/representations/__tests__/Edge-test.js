@@ -17,7 +17,7 @@ import MockSimulation, {
 
 
 import { DistanceSettingRuleDefinition } from '../../../simulation/RuleDefinition';
-import SimulationContext from '../../../simulation/components/SimulationContext';
+import SimulationContext from '../../../simulation/representations/SimulationContext';
 
 import { mount } from 'enzyme';
 

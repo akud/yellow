@@ -1,15 +1,15 @@
 import React from 'react';
-import Circle from '../elements/components/Circle';
-import Rectangle from '../elements/components/Rectangle';
-import Label from '../elements/components/Label';
+import Circle from '../elements/representations/Circle';
+import Rectangle from '../elements/representations/Rectangle';
+import Label from '../elements/representations/Label';
 import Orientation from '../elements/Orientation';
 
-import Graph from '../graphs/components/Graph';
-import Node from '../graphs/components/Node';
-import Edge from '../graphs/components/Edge';
-import CircleNode from '../graphs/components/CircleNode';
-import ImageNode from '../graphs/components/ImageNode';
-import PointNode from '../graphs/components/PointNode';
+import Graph from '../graphs/representations/Graph';
+import Node from '../graphs/representations/Node';
+import Edge from '../graphs/representations/Edge';
+import CircleNode from '../graphs/representations/CircleNode';
+import ImageNode from '../graphs/representations/ImageNode';
+import PointNode from '../graphs/representations/PointNode';
 
 export default () => (
   <Graph width={1000} height={500} border={true} zoom={1.0}>

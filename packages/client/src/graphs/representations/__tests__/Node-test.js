@@ -17,7 +17,7 @@ import MockSimulation, {
   registerRule,
   resetMockSimulation,
 } from '../../../simulation/Simulation'
-import SimulationContext from '../../../simulation/components/SimulationContext';
+import SimulationContext from '../../../simulation/representations/SimulationContext';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
