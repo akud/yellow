@@ -41,7 +41,7 @@ export default class SimulatedLayout extends React.Component {
       registerElement: (elementId, shape) => simulation.registerElement(elementId, shape),
       getElementData: elementId => simulation.getElementData(elementId),
       registerForce: force => simulation.registerForce(force),
-      registerConstraint: constraint => simulation.registerConstraint(constraint),
+      registerRule: rule => simulation.registerRule(rule),
     };
   }
 }

@@ -34,9 +34,9 @@ export default class Simulation {
   }
 
   /**
-   * Register a new constraint in the simulation
+   * Register a new rule in the simulation
    */
-  registerConstraint(constraint) {
-    throw new Error('Subclasses must override registerConstraint');
+  registerRule(rule) {
+    throw new Error('Subclasses must override registerRule');
   }
 }

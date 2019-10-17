@@ -6,7 +6,7 @@ import { withExtraProps } from '../../components/component-utils';
 import Orientation from '../../elements/Orientation';
 
 import SimulationContext from '../../simulation/components/SimulationContext';
-import { FixedDistanceConstraintDefinition } from '../../simulation/ConstraintDefinition';
+import { DistanceSettingRuleDefinition } from '../../simulation/RuleDefinition';
 import { DirectionalForceDefinition } from '../../simulation/ForceDefinition';
 
 import utils from '../../utils';
@@ -78,7 +78,7 @@ export default class Node extends React.Component {
     this.shapes[element.id] = shape;
     if (this.hasRegisteredAllShapes()) {
       LOGGER.debug(
-        'Registered {} shapes, adding fixed distance constraints',
+        'Registered {} shapes, adding distance setting rules',
         Object.values(shapes).length
       );
       const primaryElementRadius = shapes[primaryElement.id].getBoundingRadius();
@@ -86,7 +86,7 @@ export default class Node extends React.Component {
       elements.forEach(e => {
         if (!e.orientation.isPrimary()) {
           const distance = primaryElementRadius + shapes[e.id].getBoundingRadius();
-          simulation.registerConstraint(new FixedDistanceConstraintDefinition({
+          simulation.registerRule(new DistanceSettingRuleDefinition({
             between: [primaryElement.id, e.id],
             distance,
             strengthMultiplier: 2.5,

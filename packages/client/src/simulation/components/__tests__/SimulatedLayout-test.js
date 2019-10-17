@@ -9,7 +9,7 @@ import MockSimulation, {
   getElementData,
   registerElement,
   registerForce,
-  registerConstraint,
+  registerRule,
   onNewLayout,
   resetMockSimulation
 } from '../../Simulation';
@@ -38,7 +38,7 @@ describe('SimulatedLayout', () => {
     expect(onNewLayout).toHaveBeenCalled();
     expect(registerElement).not.toHaveBeenCalled();
     expect(registerForce).not.toHaveBeenCalled();
-    expect(registerConstraint).not.toHaveBeenCalled();
+    expect(registerRule).not.toHaveBeenCalled();
 
     expect(contextValue).toBeDefined();
 
@@ -48,8 +48,8 @@ describe('SimulatedLayout', () => {
     contextValue.registerForce();
     expect(registerForce).toHaveBeenCalled();
 
-    contextValue.registerConstraint();
-    expect(registerConstraint).toHaveBeenCalled();
+    contextValue.registerRule();
+    expect(registerRule).toHaveBeenCalled();
   });
 
   it('Passes a new instance to the context on every simulation update', () => {

@@ -4,7 +4,7 @@ import React from 'react';
 
 import Arrow from '../../elements/components/Arrow';
 
-import { FixedDistanceConstraintDefinition }  from '../../simulation/ConstraintDefinition';
+import { DistanceSettingRuleDefinition }  from '../../simulation/RuleDefinition';
 import SimulationContext from '../../simulation/components/SimulationContext';
 
 export default class Edge extends React.Component {
@@ -31,8 +31,8 @@ export default class Edge extends React.Component {
   componentDidMount() {
     const { fromNodeId, toNodeId, distance } = this.props;
     const simulation = this.context;
-    simulation.registerConstraint(
-      new FixedDistanceConstraintDefinition({
+    simulation.registerRule(
+      new DistanceSettingRuleDefinition({
         between: [ fromNodeId, toNodeId ],
         distance: distance
       })

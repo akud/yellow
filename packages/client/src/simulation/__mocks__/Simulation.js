@@ -3,7 +3,7 @@ import PointDefinition from '../../elements/PointDefinition';
 export const getElementData = jest.fn();
 export const registerElement = jest.fn();
 export const registerForce = jest.fn();
-export const registerConstraint = jest.fn();
+export const registerRule = jest.fn();
 export const onNewLayout = jest.fn();
 
 export const resetMockSimulation = () => {
@@ -13,7 +13,7 @@ export const resetMockSimulation = () => {
   });
   registerElement.mockClear();
   registerForce.mockClear();
-  registerConstraint.mockClear();
+  registerRule.mockClear();
   onNewLayout.mockClear();
   MockSimulation.mockClear();
 };
@@ -23,7 +23,7 @@ const MockSimulation = jest.fn().mockImplementation(() => {
     getElementData,
     registerElement,
     registerForce,
-    registerConstraint,
+    registerRule,
     onNewLayout,
   };
   onNewLayout.mockReturnValue(instance);

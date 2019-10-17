@@ -1,6 +1,6 @@
-import FixedPositionConstraint from '../FixedPositionConstraint';
+import PositioningRule from '../PositioningRule';
 
-describe('FixedPositionConstraint', () => {
+describe('PositioningRule', () => {
 
   var elementId;
   var element;
@@ -40,20 +40,20 @@ describe('FixedPositionConstraint', () => {
   });
 
 
-  const createConstraint = ({ x, y }) => {
-    const constraint = FixedPositionConstraint.create({
+  const createRule = ({ x, y }) => {
+    const rule = PositioningRule.create({
       elementId,
       x,
       y,
     });
-    constraint.initialize(elements);
-    return constraint;
+    rule.initialize(elements);
+    return rule;
   };
 
   it('sets the element\'s position to the specified position', () => {
-    const constraint = createConstraint({ x: 34, y: 81 });
+    const rule = createRule({ x: 34, y: 81 });
 
-    constraint();
+    rule();
 
     expect(element.x).toBe(34);
     expect(element.y).toBe(81);

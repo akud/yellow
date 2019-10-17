@@ -1,7 +1,7 @@
 jest.mock('d3-force');
 jest.mock('../../../elements/ShapeDefinition');
 jest.mock('../DirectionalForce');
-jest.mock('../FixedPositionConstraint');
+jest.mock('../PositioningRule');
 
 import ForceSimulation from '../ForceSimulation';
 
@@ -14,15 +14,15 @@ import {
 } from '../../ForceDefinition';
 
 import {
-  ConstraintType,
-  FixedDistanceConstraintDefinition,
-  FixedPositionConstraintDefinition,
-} from '../../ConstraintDefinition';
+  RuleType,
+  DistanceSettingRuleDefinition,
+  PositioningRuleDefinition,
+} from '../../RuleDefinition';
 
 import Direction from '../../Direction';
 
 import MockDirectionalForce from '../DirectionalForce';
-import MockFixedPositionConstraint from '../FixedPositionConstraint';
+import MockPositioningRule from '../PositioningRule';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
@@ -188,26 +188,26 @@ describe('ForceSimulation', () => {
     });
   });
 
-  describe('registerConstraint', () => {
-    it('aggregates fixed distance constraints into one link force', () => {
+  describe('registerRule', () => {
+    it('aggregates distance setting rules into one link force', () => {
       const links = [];
       d3ForceLink.links.mockImplementation(l => links.push(l.slice()));
       new ForceSimulation()
-        .registerConstraint(
-          new FixedDistanceConstraintDefinition({
+        .registerRule(
+          new DistanceSettingRuleDefinition({
             between: ['1', '2'],
             distance: 10
           })
         )
-        .registerConstraint(
-          new FixedDistanceConstraintDefinition({
+        .registerRule(
+          new DistanceSettingRuleDefinition({
             between: ['2', '4'],
             distance: 50,
             strengthMultiplier: 2.5,
           })
         )
-        .registerConstraint(
-          new FixedDistanceConstraintDefinition({
+        .registerRule(
+          new DistanceSettingRuleDefinition({
             between: ['3', '4'],
             distance: 15,
             strengthMultiplier: 1.5,
@@ -261,12 +261,12 @@ describe('ForceSimulation', () => {
       ]));
     });
 
-    it('registers fixed position constraints', () => {
+    it('registers positioning rules', () => {
       const force = { id: 3462435 };
-      MockFixedPositionConstraint.create.mockReturnValue(force);
+      MockPositioningRule.create.mockReturnValue(force);
 
-      new ForceSimulation().registerConstraint(
-        new FixedPositionConstraintDefinition({
+      new ForceSimulation().registerRule(
+        new PositioningRuleDefinition({
           elementId: 't35234',
           x: 68,
           y: 1923,
@@ -277,7 +277,7 @@ describe('ForceSimulation', () => {
         't35234-fixed-position',
         force
       );
-      expect(MockFixedPositionConstraint.create).toHaveBeenCalledWith({
+      expect(MockPositioningRule.create).toHaveBeenCalledWith({
           elementId: 't35234',
           x: 68,
           y: 1923,

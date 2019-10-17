@@ -2,10 +2,10 @@ import Simulation from '../Simulation';
 
 import * as d3 from 'd3-force';
 import { ForceType } from '../ForceDefinition';
-import { ConstraintType } from '../ConstraintDefinition';
+import { RuleType } from '../RuleDefinition';
 import PointDefinition from '../../elements/PointDefinition';
 import DirectionalForce from './DirectionalForce';
-import FixedPositionConstraint from './FixedPositionConstraint';
+import PositioningRule from './PositioningRule';
 import Direction from '../Direction';
 import logging from '@akud/logging';
 
@@ -84,29 +84,29 @@ export default class ForceSimulation extends Simulation {
     return this;
   }
 
-  registerConstraint(constraint) {
-    switch(constraint.type) {
-      case ConstraintType.FIXED_DISTANCE:
+  registerRule(rule) {
+    switch(rule.type) {
+      case RuleType.DISTANCE_SETTING:
         this.links.push({
-          source: constraint.between[0],
-          target: constraint.between[1],
-          distance: constraint.distance,
-          strengthMultiplier: constraint.strengthMultiplier,
+          source: rule.between[0],
+          target: rule.between[1],
+          distance: rule.distance,
+          strengthMultiplier: rule.strengthMultiplier,
         });
         this.linkForce.links(this.links);
         break;
-      case ConstraintType.FIXED_POSITION:
+      case RuleType.POSITIONING:
         this.simulation.force(
-          constraint.elementId + '-fixed-position',
-          FixedPositionConstraint.create({
-            elementId: constraint.elementId,
-            x: constraint.x,
-            y: constraint.y,
+          rule.elementId + '-fixed-position',
+          PositioningRule.create({
+            elementId: rule.elementId,
+            x: rule.x,
+            y: rule.y,
           })
         );
         break;
       default:
-        LOGGER.warn('unrecognized constraint {}', constraint);
+        LOGGER.warn('unrecognized rule {}', rule);
     }
     return this;
   }

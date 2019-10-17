@@ -17,7 +17,7 @@ import PointNode from './graphs/components/PointNode'
 import Forces from './simulation/components/Forces'
 import SimulatedLayout from './simulation/components/SimulatedLayout'
 import SimulationContext from './simulation/components/SimulationContext'
-import ConstraintDefinition from './simulation/ConstraintDefinition'
+import RuleDefinition from './simulation/RuleDefinition'
 import ForceDefinition from './simulation/ForceDefinition'
 
 export Arrow from './elements/components/Arrow'
@@ -30,8 +30,8 @@ export Orientation from './elements/Orientation'
 export PointDefinition from './elements/PointDefinition'
 export RectangleDefinition from './elements/RectangleDefinition'
 export ShapeDefinition from './elements/ShapeDefinition'
-export CircleNode from './graphs/components/CircleNode'
 export Edge from './graphs/components/Edge'
+export CircleNode from './graphs/components/CircleNode'
 export Graph from './graphs/components/Graph'
 export ImageNode from './graphs/components/ImageNode'
 export Node from './graphs/components/Node'
@@ -39,7 +39,7 @@ export PointNode from './graphs/components/PointNode'
 export Forces from './simulation/components/Forces'
 export SimulatedLayout from './simulation/components/SimulatedLayout'
 export SimulationContext from './simulation/components/SimulationContext'
-export ConstraintDefinition from './simulation/ConstraintDefinition'
+export RuleDefinition from './simulation/RuleDefinition'
 export ForceDefinition from './simulation/ForceDefinition'
 
 export default {
@@ -62,6 +62,6 @@ export default {
   Forces,
   SimulatedLayout,
   SimulationContext,
-  ConstraintDefinition,
+  RuleDefinition,
   ForceDefinition,
 }

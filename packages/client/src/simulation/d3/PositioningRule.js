@@ -1,9 +1,9 @@
 import utils from '../../utils';
 import logging from '@akud/logging';
 
-const LOGGER = new logging.Logger('FixedPositionConstraint');
+const LOGGER = new logging.Logger('PositioningRule');
 
-export const createFixedPositionConstraint = ({elementId, x, y}) => {
+export const createPositioningRule = ({elementId, x, y}) => {
   utils.requirePresent(elementId);
 
   var element;
@@ -31,5 +31,5 @@ export const createFixedPositionConstraint = ({elementId, x, y}) => {
 };
 
 export default {
-  create: createFixedPositionConstraint,
+  create: createPositioningRule,
 };

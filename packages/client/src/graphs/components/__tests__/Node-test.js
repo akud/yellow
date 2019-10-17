@@ -6,15 +6,15 @@ import Node from '../Node';
 import Orientation from '../../../elements/Orientation';
 
 import {
-  FixedDistanceConstraintDefinition,
-} from '../../../simulation/ConstraintDefinition';
+  DistanceSettingRuleDefinition,
+} from '../../../simulation/RuleDefinition';
 import { DirectionalForceDefinition } from '../../../simulation/ForceDefinition';
 import Direction from '../../../simulation/Direction';
 import MockSimulation, {
   getElementData,
   registerElement,
   registerForce,
-  registerConstraint,
+  registerRule,
   resetMockSimulation,
 } from '../../../simulation/Simulation'
 import SimulationContext from '../../../simulation/components/SimulationContext';
@@ -161,22 +161,22 @@ describe('Node', () => {
     wrapper.find('p').at(2).prop('config').postRender(subElementShape2);
     wrapper.find('p').at(3).prop('config').postRender(subElementShape3);
 
-    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
       between: ['2', '2-0'],
       distance: 7,
       strengthMultiplier: 2.5,
     }));
-    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
       between: ['2', '2-2'],
       distance: 8,
       strengthMultiplier: 2.5,
     }));
-    expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
+    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
       between: ['2', '2-3'],
       distance: 9,
       strengthMultiplier: 2.5,
     }));
-    expect(registerConstraint).toHaveBeenCalledTimes(3);
+    expect(registerRule).toHaveBeenCalledTimes(3);
 
     expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition({
       elementId: '2-0',

@@ -11,12 +11,12 @@ import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
 import MockSimulation, {
   getElementData,
-  registerConstraint,
+  registerRule,
   resetMockSimulation
 } from '../../../simulation/Simulation';
 
 
-import { FixedDistanceConstraintDefinition } from '../../../simulation/ConstraintDefinition';
+import { DistanceSettingRuleDefinition } from '../../../simulation/RuleDefinition';
 import SimulationContext from '../../../simulation/components/SimulationContext';
 
 import { mount } from 'enzyme';
@@ -149,7 +149,7 @@ describe('Edge', () => {
     );
   });
 
-  it('registers a fixed distance constraint with the simulation', () => {
+  it('registers a distance setting rule with the simulation', () => {
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
         <Edge
@@ -159,8 +159,8 @@ describe('Edge', () => {
         />
       </SimulationContext.Provider>
     );
-    expect(registerConstraint).toHaveBeenCalledOnceWith(
-      new FixedDistanceConstraintDefinition({
+    expect(registerRule).toHaveBeenCalledOnceWith(
+      new DistanceSettingRuleDefinition({
         between: ['123', '456'],
         distance: 324,
       })
