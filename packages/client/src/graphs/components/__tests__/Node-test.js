@@ -164,14 +164,17 @@ describe('Node', () => {
     expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
       between: ['2', '2-0'],
       distance: 7,
+      strengthMultiplier: 2.5,
     }));
     expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
       between: ['2', '2-2'],
       distance: 8,
+      strengthMultiplier: 2.5,
     }));
     expect(registerConstraint).toHaveBeenCalledWith(new FixedDistanceConstraintDefinition({
       between: ['2', '2-3'],
       distance: 9,
+      strengthMultiplier: 2.5,
     }));
     expect(registerConstraint).toHaveBeenCalledTimes(3);
 

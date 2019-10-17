@@ -12,10 +12,11 @@ export const ConstraintType = {
 }
 
 export class FixedDistanceConstraintDefinition extends ConstraintDefinition {
-  constructor({ between, distance=10 }) {
+  constructor({ between, distance=10, strengthMultiplier=1.0 }) {
     super(ConstraintType.FIXED_DISTANCE);
     this.between = utils.requireArrayOfLength(between, 2);
     this.distance = distance;
+    this.strengthMultiplier = strengthMultiplier;
   }
 }
 

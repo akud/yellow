@@ -22,10 +22,7 @@ export default class ForceSimulation extends Simulation {
     this.elements = {};
     this.listeners = [];
     this.links = [];
-    this.linkForce = d3.forceLink(this.links)
-      .id(n => n.id)
-      .distance(l => l.distance);
-
+    this.linkForce = createLinkForce(this.links);
     this.simulation = d3.forceSimulation()
       .force('preventCollisions', d3.forceCollide().radius(n => n.shape.getBoundingRadius()))
       .force('link', this.linkForce)
@@ -94,6 +91,7 @@ export default class ForceSimulation extends Simulation {
           source: constraint.between[0],
           target: constraint.between[1],
           distance: constraint.distance,
+          strengthMultiplier: constraint.strengthMultiplier,
         });
         this.linkForce.links(this.links);
         break;
@@ -116,5 +114,20 @@ export default class ForceSimulation extends Simulation {
   fireListeners() {
     this.listeners.forEach(l => l(this));
   }
-
 }
+
+const createLinkForce = (links) => {
+  const linkForce = d3.forceLink(links)
+    .id(n => n.id)
+    .distance(l => l.distance);
+
+  const defaultLinkForceStrength = linkForce.strength();
+
+  return linkForce.strength(function() {
+    const link = arguments[0];
+    const result = link.strengthMultiplier * defaultLinkForceStrength.apply(null, arguments)
+    LOGGER.debug('strength between {} and {}: {}', link.source.id, link.target.id, result);
+    return result;
+  });
+}
+

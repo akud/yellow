@@ -89,6 +89,7 @@ export default class Node extends React.Component {
           simulation.registerConstraint(new FixedDistanceConstraintDefinition({
             between: [primaryElement.id, e.id],
             distance,
+            strengthMultiplier: 2.5,
           }));
           LOGGER.debug(
             'Set distance between {} and {} to {}',

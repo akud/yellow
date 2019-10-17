@@ -32,6 +32,7 @@ describe('ForceSimulation', () => {
   let d3ForceCenter;
   let d3ForceManyBody;
   let d3ForceCollide;
+  let d3DefaultLinkStrength;
 
   beforeEach(() => {
     baseSimulation = {
@@ -44,14 +45,24 @@ describe('ForceSimulation', () => {
     baseSimulation.on.mockReturnValue(baseSimulation);
     d3.forceSimulation.mockReturnValue(baseSimulation);
 
+    d3DefaultLinkStrength = jest.fn();
     d3ForceLink = {
       id: jest.fn(),
       distance: jest.fn(),
       links: jest.fn(),
+      strength: jest.fn(),
     };
     d3ForceLink.id.mockReturnValue(d3ForceLink);
     d3ForceLink.distance.mockReturnValue(d3ForceLink);
     d3ForceLink.links.mockReturnValue(d3ForceLink);
+    d3ForceLink.strength.mockImplementation(function() {
+      if (arguments.length) {
+        return d3ForceLink;
+      } else {
+        return d3DefaultLinkStrength;
+      }
+    });
+
     d3.forceLink.mockReturnValue(d3ForceLink);
 
     d3ForceCenter = { id: 'center'};
@@ -191,30 +202,63 @@ describe('ForceSimulation', () => {
         .registerConstraint(
           new FixedDistanceConstraintDefinition({
             between: ['2', '4'],
-            distance: 50
+            distance: 50,
+            strengthMultiplier: 2.5,
           })
         )
         .registerConstraint(
           new FixedDistanceConstraintDefinition({
             between: ['3', '4'],
-            distance: 15
+            distance: 15,
+            strengthMultiplier: 1.5,
           })
         );
+
+      const expectedLink1 = {
+        source: '1',
+        target: '2',
+        distance: 10,
+        strengthMultiplier: 1.0,
+      };
+      const expectedLink2 = {
+        source: '2',
+        target: '4',
+        distance: 50,
+        strengthMultiplier: 2.5,
+      };
+      const expectedLink3 = {
+        source: '3',
+        target: '4',
+        distance: 15,
+        strengthMultiplier: 1.5,
+      };
+
       expect(links).toEqual([
         [
-          { source: '1', target: '2', distance: 10 }
+          expectedLink1,
         ],
         [
-          { source: '1', target: '2', distance: 10 },
-          { source: '2', target: '4', distance: 50 },
+          expectedLink1,
+          expectedLink2,
         ],
         [
-          { source: '1', target: '2', distance: 10 },
-          { source: '2', target: '4', distance: 50 },
-          { source: '3', target: '4', distance: 15 },
+          expectedLink1,
+          expectedLink2,
+          expectedLink3,
         ],
       ]);
       expect(d3ForceLink.links).toHaveBeenCalledTimes(3);
+
+      d3DefaultLinkStrength.mockReturnValue(3.14);
+      expect(d3DefaultLinkStrength).not.toHaveBeenCalled();
+
+      expect(d3ForceLink.strength).toHaveBeenCalledTimes(2);
+      expect(d3ForceLink.strength).toHaveBeenCalledWith();
+      expect(d3ForceLink.strength).toHaveBeenCalledWith(expect.functionThatReturns([
+        { input: expectedLink1, output: 3.14 },
+        { input: expectedLink2, output: 2.5 * 3.14 },
+        { input: expectedLink3, output: 1.5 * 3.14 },
+      ]));
     });
 
     it('registers fixed position constraints', () => {
