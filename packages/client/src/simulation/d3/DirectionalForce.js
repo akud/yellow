@@ -6,6 +6,30 @@ const LOGGER = new logging.Logger('DirectionalForce');
 
 const BASE_STEP_SIZE = 5;
 
+export const apply = ({ element, direction, alpha, strengthMultiplier=1.0 }) => {
+  const stepSize = BASE_STEP_SIZE * strengthMultiplier * alpha;
+  switch(direction) {
+    case Direction.UP:
+      LOGGER.trace('subtracting {} from element {}\'s vertical velocity ({})', stepSize, element.id, element.vy);
+      element.vy -= stepSize;
+      break;
+    case Direction.DOWN:
+      LOGGER.trace('adding {} to element {}\'s vertical velocity ({})', stepSize, element.id, element.vy);
+      element.vy += stepSize;
+      break;
+    case Direction.LEFT:
+      LOGGER.trace('subtracting {} from element {}\'s horizontal velocity ({})', stepSize, element.id, element.vx);
+      element.vx -= stepSize;
+      break;
+    case Direction.RIGHT:
+      LOGGER.trace('adding {} to element {}\'s horizontal velocity ({})', stepSize, element.id, element.vx);
+      element.vx += stepSize;
+      break;
+    default:
+      LOGGER.warn('Unknown direction {}', direction);
+  }
+}
+
 export const createDirectionalForce = ({elementId, direction, strengthMultiplier=1.0}) => {
   utils.requirePresent(elementId);
   utils.requireOneOf(direction, Object.values(Direction));
@@ -13,28 +37,8 @@ export const createDirectionalForce = ({elementId, direction, strengthMultiplier
   var element;
 
   function force(alpha) {
-    const stepSize = BASE_STEP_SIZE * strengthMultiplier * alpha;
     if (element) {
-      switch(direction) {
-        case Direction.UP:
-          LOGGER.trace('subtracting {} from element {}\'s vertical velocity ({})', stepSize, elementId, element.vy);
-          element.vy -= stepSize;
-          break;
-        case Direction.DOWN:
-          LOGGER.trace('adding {} to element {}\'s vertical velocity ({})', stepSize, elementId, element.vy);
-          element.vy += stepSize;
-          break;
-        case Direction.LEFT:
-          LOGGER.trace('subtracting {} from element {}\'s horizontal velocity ({})', stepSize, elementId, element.vx);
-          element.vx -= stepSize;
-          break;
-        case Direction.RIGHT:
-          LOGGER.trace('adding {} to element {}\'s horizontal velocity ({})', stepSize, elementId, element.vx);
-          element.vx += stepSize;
-          break;
-        default:
-          LOGGER.warn('Unknown direction {}', direction);
-      }
+      apply({ element, direction, strengthMultiplier, alpha });
     } else {
       LOGGER.debug('Doing nothing as no element matched id {}', elementId);
     }
@@ -54,5 +58,6 @@ export const createDirectionalForce = ({elementId, direction, strengthMultiplier
 };
 
 export default {
+  apply,
   create: createDirectionalForce,
 };
