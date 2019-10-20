@@ -117,6 +117,8 @@ export const flatten = (array) => {
   return result;
 };
 
+export const isWithin = (num1, num2, tolerance) => Math.abs(num1 - num2) < tolerance;
+
 export default {
   requirePresent,
   requireArray,
@@ -127,4 +129,5 @@ export default {
   requireGreaterThanZero,
   makeArray,
   flatten,
+  isWithin,
 }

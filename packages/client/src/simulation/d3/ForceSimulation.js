@@ -6,6 +6,7 @@ import { RuleType } from '../RuleDefinition';
 import PointDefinition from '../../elements/PointDefinition';
 import DirectionalForce from './DirectionalForce';
 import PositioningRule from './PositioningRule';
+import RelativePositioningRule from './RelativePositioningRule';
 import Direction from '../Direction';
 import logging from '@akud/logging';
 
@@ -102,6 +103,17 @@ export default class ForceSimulation extends Simulation {
             elementId: rule.elementId,
             x: rule.x,
             y: rule.y,
+          })
+        );
+        break;
+      case RuleType.RELATIVE_POSITIONING:
+        this.simulation.force(
+          rule.baseElementId + '-' + rule.targetElementId + '-relative-position',
+          RelativePositioningRule.create({
+            baseElementId: rule.baseElementId,
+            targetElementId: rule.targetElementId,
+            directions: rule.directions,
+            strengthMultiplier: rule.strengthMultiplier,
           })
         );
         break;

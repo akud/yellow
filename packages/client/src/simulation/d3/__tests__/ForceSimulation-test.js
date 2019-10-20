@@ -2,6 +2,7 @@ jest.mock('d3-force');
 jest.mock('../../../elements/ShapeDefinition');
 jest.mock('../DirectionalForce');
 jest.mock('../PositioningRule');
+jest.mock('../RelativePositioningRule');
 
 import ForceSimulation from '../ForceSimulation';
 
@@ -17,12 +18,14 @@ import {
   RuleType,
   DistanceSettingRuleDefinition,
   PositioningRuleDefinition,
+  RelativePositioningRuleDefinition,
 } from '../../RuleDefinition';
 
 import Direction from '../../Direction';
 
 import MockDirectionalForce from '../DirectionalForce';
 import MockPositioningRule from '../PositioningRule';
+import MockRelativePositioningRule from '../RelativePositioningRule';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
@@ -144,6 +147,7 @@ describe('ForceSimulation', () => {
         .registerForce(new CenteringForceDefinition({ x: 34, y: 91 }));
       expect(baseSimulation.force).toHaveBeenCalledWith('center', d3ForceCenter);
       expect(d3.forceCenter).toHaveBeenCalledWith(34, 91);
+      expect(baseSimulation.force).toHaveBeenCalledTimes(3);
     });
 
     it('constructs repelling forces', () => {
@@ -154,6 +158,7 @@ describe('ForceSimulation', () => {
       expect(d3ForceManyBody.strength).toHaveBeenCalledWith(expect.functionThatReturns([
         {input: 'foo', output: -150.0}
       ]));
+      expect(baseSimulation.force).toHaveBeenCalledTimes(3);
     });
 
     it('constructs directional forces', () => {
@@ -185,6 +190,7 @@ describe('ForceSimulation', () => {
         direction: Direction.RIGHT,
         strengthMultiplier: 1,
       });
+      expect(baseSimulation.force).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -259,6 +265,7 @@ describe('ForceSimulation', () => {
         { input: expectedLink2, output: 2.5 * 3.14 },
         { input: expectedLink3, output: 1.5 * 3.14 },
       ]));
+      expect(baseSimulation.force).toHaveBeenCalledTimes(2);
     });
 
     it('registers positioning rules', () => {
@@ -282,6 +289,33 @@ describe('ForceSimulation', () => {
           x: 68,
           y: 1923,
       });
+      expect(baseSimulation.force).toHaveBeenCalledTimes(3);
+    });
+
+    it('registers relative positioning rules', () => {
+      const force = { id: 3462435 };
+      MockRelativePositioningRule.create.mockReturnValue(force);
+
+      new ForceSimulation().registerRule(
+        new RelativePositioningRuleDefinition({
+          baseElementId: 't72gwr',
+          targetElementId: 'el632',
+          directions: [ Direction.RIGHT, Direction.DOWN ],
+          strengthMultiplier: 1.5,
+        })
+      );
+
+      expect(baseSimulation.force).toHaveBeenCalledWith(
+        't72gwr-el632-relative-position',
+        force
+      );
+      expect(MockRelativePositioningRule.create).toHaveBeenCalledWith({
+          baseElementId: 't72gwr',
+          targetElementId: 'el632',
+          directions: [ Direction.RIGHT, Direction.DOWN ],
+          strengthMultiplier: 1.5,
+      });
+      expect(baseSimulation.force).toHaveBeenCalledTimes(3);
     });
   });
 

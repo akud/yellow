@@ -9,6 +9,7 @@ export default class RuleDefinition {
 export const RuleType = {
   DISTANCE_SETTING: Symbol('DISTANCE_SETTING'),
   POSITIONING: Symbol('POSITIONING'),
+  RELATIVE_POSITIONING: Symbol('RELATIVE_POSITIONING'),
 }
 
 export class DistanceSettingRuleDefinition extends RuleDefinition {
@@ -26,5 +27,15 @@ export class PositioningRuleDefinition extends RuleDefinition {
     this.elementId = utils.requirePresent(elementId);
     this.x = x;
     this.y = y;
+  }
+}
+
+export class RelativePositioningRuleDefinition extends RuleDefinition {
+  constructor({ baseElementId, targetElementId, directions, strengthMultiplier=1.0 }) {
+    super(RuleType.RELATIVE_POSITIONING);
+    this.baseElementId = utils.requirePresent(baseElementId);
+    this.targetElementId = utils.requirePresent(targetElementId);
+    this.directions = utils.requireArray(directions);
+    this.strengthMultiplier = strengthMultiplier;
   }
 }

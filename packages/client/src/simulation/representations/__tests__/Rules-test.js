@@ -3,10 +3,17 @@ jest.mock('../../Simulation');
 import React from 'react';
 
 import MockSimulation, { registerRule, resetMockSimulation } from '../../Simulation';
-import { PositioningRule } from '../Rules';
+import Direction from '../../Direction';
+import {
+  PositioningRule,
+  RelativePositioningRule,
+} from '../Rules';
 
 import SimulationContext from '../SimulationContext';
-import { PositioningRuleDefinition } from '../../RuleDefinition';
+import {
+  PositioningRuleDefinition,
+  RelativePositioningRuleDefinition,
+} from '../../RuleDefinition';
 
 import { mount } from 'enzyme';
 
@@ -31,4 +38,28 @@ describe('Rules', () => {
       );
     });
   });
+
+  describe('RelativePositioningRule', () => {
+    it('registers a RelativePositioningRule with the simulation', () => {
+      const wrapper = mount(
+        <SimulationContext.Provider value={new MockSimulation()}>
+          <RelativePositioningRule
+            baseNodeId='node-43'
+            targetNodeId='node-56'
+            directions={[Direction.UP, Direction.LEFT]}
+            strengthMultiplier={1.5}
+          />
+        </SimulationContext.Provider>
+      );
+      expect(registerRule).toHaveBeenCalledOnceWith(
+        new RelativePositioningRuleDefinition({
+          baseElementId: 'node-43',
+          targetElementId: 'node-56',
+          directions: [Direction.UP, Direction.LEFT],
+          strengthMultiplier: 1.5,
+        })
+      );
+    });
+  });
+
 });

@@ -91,13 +91,23 @@ describe('utils', () => {
   });
 
   describe('flatten', () => {
-    it.only('flattens out nested arrays', () => {
+    it('flattens out nested arrays', () => {
       const input = [
         [ '1', '2', '3' ],
         '4',
         '5',
       ];
       expect(utils.flatten(input)).toEqual(['1', '2', '3', '4', '5']);
+    });
+  });
+
+  describe('isWithin', () => {
+    it('indicates if the two arguments are within the tolerance threshold of each other', () => {
+      expect(utils.isWithin(4.5, 5.1, 0.75)).toBe(true);
+      expect(utils.isWithin(5.1, 4.5, 0.75)).toBe(true);
+
+      expect(utils.isWithin(4.5, 5.1, 0.5)).toBe(false);
+      expect(utils.isWithin(5.1, 4.5, 0.5)).toBe(false);
     });
   });
 

@@ -7,13 +7,12 @@ import Orientation from '../../../elements/Orientation';
 
 import {
   DistanceSettingRuleDefinition,
+  RelativePositioningRuleDefinition,
 } from '../../../simulation/RuleDefinition';
-import { DirectionalForceDefinition } from '../../../simulation/ForceDefinition';
 import Direction from '../../../simulation/Direction';
 import MockSimulation, {
   getElementData,
   registerElement,
-  registerForce,
   registerRule,
   resetMockSimulation,
 } from '../../../simulation/Simulation'
@@ -176,16 +175,16 @@ describe('Node', () => {
       distance: 9,
       strengthMultiplier: 2.5,
     }));
-    expect(registerRule).toHaveBeenCalledTimes(3);
-
-    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition({
-      elementId: '2-0',
+    expect(registerRule).toHaveBeenCalledWith(new RelativePositioningRuleDefinition({
+      baseElementId: '2',
+      targetElementId: '2-0',
       directions: Orientation.TOP_LEFT.getDirections(),
     }));
-    expect(registerForce).toHaveBeenCalledWith(new DirectionalForceDefinition({
-      elementId: '2-2',
+    expect(registerRule).toHaveBeenCalledWith(new RelativePositioningRuleDefinition({
+      baseElementId: '2',
+      targetElementId: '2-2',
       directions: Orientation.TOP_RIGHT.getDirections(),
     }));
-    expect(registerForce).toHaveBeenCalledTimes(2)
+    expect(registerRule).toHaveBeenCalledTimes(5)
   });
 });

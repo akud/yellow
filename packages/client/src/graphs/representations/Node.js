@@ -7,7 +7,7 @@ import Orientation from '../../elements/Orientation';
 
 import SimulationContext from '../../simulation/representations/SimulationContext';
 import { DistanceSettingRuleDefinition } from '../../simulation/RuleDefinition';
-import { DirectionalForceDefinition } from '../../simulation/ForceDefinition';
+import { RelativePositioningRuleDefinition } from '../../simulation/RuleDefinition';
 
 import utils from '../../utils';
 
@@ -59,7 +59,7 @@ export default class Node extends React.Component {
                   position: simulation.getElementData(element.id).position,
                   postRender: shape => {
                     this.registerShape(element, shape);
-                    this.registerDirectionalForces(element);
+                    this.registerRelativePositioningRules(element);
                   }
                 }
               };
@@ -102,12 +102,14 @@ export default class Node extends React.Component {
     }
   }
 
-  registerDirectionalForces(element) {
+  registerRelativePositioningRules(element) {
+    const { nodeId } = this.props;
     const simulation = this.context;
     if (element.orientation.hasDirections()) {
-      simulation.registerForce(
-        new DirectionalForceDefinition({
-          elementId: element.id,
+      simulation.registerRule(
+        new RelativePositioningRuleDefinition({
+          baseElementId: nodeId,
+          targetElementId: element.id,
           directions: element.orientation.getDirections()
         })
       );
