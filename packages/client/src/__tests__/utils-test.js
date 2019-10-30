@@ -1,6 +1,16 @@
 import utils from '../utils';
 
 describe('utils', () => {
+  describe('requireCondition', () => {
+    it('throws if the condition is not met', () => {
+      expectThrows(utils.requireCondition, [false, 'message'], 'message');
+    });
+
+    it('does nothing if the condition is met', () => {
+      utils.requireCondition(true, 'hello');
+    });
+  });
+
   describe('requirePresent', () => {
     it('requires the argument to be present', () => {
       expectThrows(utils.requirePresent, ['name', undefined], 'Expected name to be present; got undefined.');
@@ -13,6 +23,24 @@ describe('utils', () => {
         { input: undefined, isValid: false},
         { input: null, isValid: false},
         { input: 'asdf', isValid: true},
+      ]);
+    });
+  });
+
+  describe('requireFunction', () => {
+    it('requires the argument to be a function', () => {
+      expectThrows(utils.requireFunction, ['name', undefined], 'Expected name to be a function; got undefined.');
+      expectThrows(utils.requireFunction, ['name', null], 'Expected name to be a function; got null.');
+      expectThrows(utils.requireFunction, ['name', 'asdf'], 'Expected name to be a function; got "asdf".');
+      expectReturnsArgument(utils.requireFunction, ['name', function() {}]);
+    });
+
+    it('handles only one argument', () => {
+      expectHandlesOnlyOneArgument(utils.requireFunction, [
+        { input: undefined, isValid: false},
+        { input: null, isValid: false},
+        { input: 'asdf', isValid: false},
+        { input: function() {}, isValid: true},
       ]);
     });
   });
@@ -79,6 +107,25 @@ describe('utils', () => {
     });
   });
 
+  describe('requireNonNegative', () => {
+    it('requires the argument to be a number greater than or equal to zero', () => {
+      expectThrows(utils.requireNonNegative, [ 'asdf' ], 'Expected argument to be a number greater than or equal to zero; got "asdf".');
+      expectThrows(utils.requireNonNegative, [ -42 ], 'Expected argument to be a number greater than or equal to zero; got -42.');
+      expectReturnsArgument(utils.requireNonNegative, [ 0 ]);
+      expectReturnsArgument(utils.requireNonNegative, [ 12 ]);
+    });
+  });
+
+  describe('requireBetween', () => {
+    it('requires the argument to be a number in the specified range', () => {
+      expectThrows(utils.requireBetween, [ 'asdf', 0, 5], 'Expected argument to be a number between 0 and 5; got "asdf".');
+      expectThrows(utils.requireBetween, [ -42, 0, 10 ], 'Expected argument to be a number between 0 and 10; got -42.');
+      expectReturnsArgument(utils.requireBetween, [ 1, 1, 10 ]);
+      expectReturnsArgument(utils.requireBetween, [ 5, 1, 10 ]);
+      expectReturnsArgument(utils.requireBetween, [ 10, 1, 10 ]);
+      expectThrows(utils.requireBetween, [ 11, 0, 10 ], 'Expected argument to be a number between 0 and 10; got 11.');
+    });
+  });
 
   describe('makeArray', () => {
     it('returns the argument if it is an array', () => {

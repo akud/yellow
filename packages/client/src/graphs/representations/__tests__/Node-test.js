@@ -1,21 +1,20 @@
 jest.mock('../../../elements/ShapeDefinition');
-jest.mock('../../../simulation/Simulation');
+jest.mock('../../../simulation/ForceSimulation');
+jest.mock('../../../simulation/PositioningRules');
+jest.mock('../../../simulation/LinkingRules');
 
 import Node from '../Node';
 
 import Orientation from '../../../elements/Orientation';
 
-import {
-  DistanceSettingRuleDefinition,
-  RelativePositioningRuleDefinition,
-} from '../../../simulation/RuleDefinition';
-import Direction from '../../../simulation/Direction';
+import { createRelativePositioningRule } from '../../../simulation/PositioningRules';
+import { createLinkingRule } from '../../../simulation/LinkingRules';
 import MockSimulation, {
   getElementData,
   registerElement,
   registerRule,
   resetMockSimulation,
-} from '../../../simulation/Simulation'
+} from '../../../simulation/ForceSimulation'
 import SimulationContext from '../../../simulation/representations/SimulationContext';
 
 import MockShapeDefinition from '../../../elements/ShapeDefinition';
@@ -39,6 +38,8 @@ describe('Node', () => {
 
   beforeEach(() => {
     resetMockSimulation();
+    createRelativePositioningRule.mockReset();
+    createLinkingRule.mockReset();
   });
 
   it('renders children with position from the simulation', () => {
@@ -132,7 +133,7 @@ describe('Node', () => {
     expect(getElementData).toHaveBeenCalledTimes(3);
   });
 
-  it('registers data with the simulation based on element orientations', () => {
+  it('registers rules with the simulation based on element orientations', () => {
     const primaryShape = new MockShapeDefinition({ radius: 3 });
     const subElementShape1 = new MockShapeDefinition({ radius: 4 });
     const subElementShape2 = new MockShapeDefinition({ radius: 5 });
@@ -160,31 +161,32 @@ describe('Node', () => {
     wrapper.find('p').at(2).prop('config').postRender(subElementShape2);
     wrapper.find('p').at(3).prop('config').postRender(subElementShape3);
 
-    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
+    expect(registerRule).toHaveBeenCalledTimes(5);
+
+    expect(createLinkingRule).toHaveBeenCalledWith({
       between: ['2', '2-0'],
       distance: 7,
-      strengthMultiplier: 2.5,
-    }));
-    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
+      strength: 2.5,
+    });
+    expect(createLinkingRule).toHaveBeenCalledWith({
       between: ['2', '2-2'],
       distance: 8,
-      strengthMultiplier: 2.5,
-    }));
-    expect(registerRule).toHaveBeenCalledWith(new DistanceSettingRuleDefinition({
+      strength: 2.5,
+    });
+    expect(createLinkingRule).toHaveBeenCalledWith({
       between: ['2', '2-3'],
       distance: 9,
-      strengthMultiplier: 2.5,
-    }));
-    expect(registerRule).toHaveBeenCalledWith(new RelativePositioningRuleDefinition({
+      strength: 2.5,
+    });
+    expect(createRelativePositioningRule).toHaveBeenCalledWith({
       baseElementId: '2',
       targetElementId: '2-0',
-      directions: Orientation.TOP_LEFT.getDirections(),
-    }));
-    expect(registerRule).toHaveBeenCalledWith(new RelativePositioningRuleDefinition({
+      orientation: Orientation.TOP_LEFT,
+    });
+    expect(createRelativePositioningRule).toHaveBeenCalledWith({
       baseElementId: '2',
       targetElementId: '2-2',
-      directions: Orientation.TOP_RIGHT.getDirections(),
-    }));
-    expect(registerRule).toHaveBeenCalledTimes(5)
+      orientation: Orientation.TOP_RIGHT,
+    });
   });
 });

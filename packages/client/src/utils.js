@@ -20,7 +20,11 @@ const extractArgs = (args, ...extraArgNames) => {
   return Object.assign({ name, value }, extraArgValues);
 }
 
-const requireCondition = (pass, value, message) => {
+const requireCondition = function() {
+  const pass = arguments[0];
+  const value = arguments.length === 3 ? arguments[1] : undefined;
+  const message = arguments.length === 3 ? arguments[2] : arguments[1];
+
   if (!pass) {
     throw new Error(message);
   } else {
@@ -45,6 +49,15 @@ export const requirePresent = function() {
     !!value,
     value,
     expectationMessage(name, value, 'present')
+  );
+}
+
+export const requireFunction = function() {
+  const { name, value } = extractArgs(arguments);
+  return requireCondition(
+    typeof value === 'function',
+    value,
+    expectationMessage(name, value, 'a function')
   );
 }
 
@@ -76,6 +89,15 @@ export const requireOneOf = function() {
   );
 }
 
+export const requireBetween = function() {
+  const { name, value, min, max } = extractArgs(arguments, 'min', 'max');
+  return requireCondition(
+    typeof value === 'number' && (min <= value) && (value <= max),
+    value,
+    expectationMessage(name, value, 'a number between ' + min + ' and ' + max)
+  )
+}
+
 export const requirePositionObject = function() {
   const { name, value } = extractArgs(arguments);
   requirePresent(value);
@@ -105,6 +127,15 @@ export const requireGreaterThanZero = function() {
   );
 }
 
+export const requireNonNegative = function() {
+  const { name, value } = extractArgs(arguments);
+  return requireCondition(
+    typeof value === 'number' && value >= 0,
+    value,
+    expectationMessage(name, value, 'a number greater than or equal to zero')
+  );
+}
+
 export const makeArray = (array) => Array.isArray(array) ? array : [array];
 
 export const flatten = (array) => {
@@ -120,13 +151,17 @@ export const flatten = (array) => {
 export const isWithin = (num1, num2, tolerance) => Math.abs(num1 - num2) < tolerance;
 
 export default {
+  requireCondition,
   requirePresent,
+  requireFunction,
   requireArray,
   requireArrayOfLength,
   requireOneOf,
+  requireBetween,
   requirePositionObject,
   requireInstanceOf,
   requireGreaterThanZero,
+  requireNonNegative,
   makeArray,
   flatten,
   isWithin,

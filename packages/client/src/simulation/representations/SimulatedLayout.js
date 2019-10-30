@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import D3ForceSimulation from '../d3/ForceSimulation';
-
+import ForceSimulation from '../ForceSimulation';
 import SimulationContext from './SimulationContext';
+
+let contextIdSequence = 0;
 
 export default class SimulatedLayout extends React.Component {
   static propTypes = {
@@ -11,11 +12,12 @@ export default class SimulatedLayout extends React.Component {
   }
 
   static defaultProps = {
-    SimulationClass: D3ForceSimulation,
+    SimulationClass: ForceSimulation,
   }
 
   constructor(props) {
     super(props);
+    this.contextId = 'simulation-context-' + (++contextIdSequence);
 
     const simulation = new props.SimulationClass().onNewLayout(
       s => this.setState({ contextValue: this.wrapSimulation(s) })
@@ -38,6 +40,7 @@ export default class SimulatedLayout extends React.Component {
 
   wrapSimulation(simulation) {
     return {
+      contextId: this.contextId,
       registerElement: (elementId, shape) => simulation.registerElement(elementId, shape),
       getElementData: elementId => simulation.getElementData(elementId),
       registerForce: force => simulation.registerForce(force),

@@ -1,13 +1,7 @@
-import Direction from '../simulation/Direction';
-
 class Orientation {
-  constructor(name, directions) {
+  constructor(name, angle) {
     this.name = name;
-    this.directions = directions;
-  }
-
-  getDirections() {
-    return this.directions;
+    this.angle = angle;
   }
 
   isPrimary() {
@@ -18,14 +12,18 @@ class Orientation {
     return this.name;
   }
 
-  hasDirections() {
-    return !!this.directions.length;
+  isSpatiallyOriented() {
+    return this.angle !== null && this.angle !== undefined;
+  }
+
+  getAngle() {
+    return this.angle;
   }
 }
 
 class PrimaryOrientation extends Orientation {
   constructor() {
-    super('PRIMARY', []);
+    super('PRIMARY', null);
   }
 
   isPrimary() {
@@ -34,14 +32,14 @@ class PrimaryOrientation extends Orientation {
 }
 
 export default {
-  TOP_LEFT: new Orientation('TOP_LEFT', [Direction.UP, Direction.LEFT]),
-  TOP: new Orientation('TOP', [Direction.UP]),
-  TOP_RIGHT: new Orientation('TOP_RIGHT', [Direction.UP, Direction.RIGHT]),
-  RIGHT: new Orientation('RIGHT', [Direction.RIGHT]),
-  BOTTOM_RIGHT: new Orientation('RIGHT', [Direction.DOWN, Direction.RIGHT]),
-  BOTTOM: new Orientation('BOTTOM', [Direction.DOWN]),
-  BOTTOM_LEFT: new Orientation('BOTTOM_LEFT', [Direction.DOWN, Direction.LEFT]),
-  LEFT: new Orientation('BOTTOM_LEFT', [Direction.LEFT]),
-  UNSPECIFIED: new Orientation('UNSPECIFIED', []),
+  TOP_LEFT: new Orientation('TOP_LEFT', 3 * Math.PI / 4),
+  TOP: new Orientation('TOP', Math.PI / 2),
+  TOP_RIGHT: new Orientation('TOP_RIGHT', Math.PI / 4),
+  RIGHT: new Orientation('RIGHT', 0),
+  BOTTOM_RIGHT: new Orientation('BOTTOM_RIGHT', 7 * Math.PI / 4),
+  BOTTOM: new Orientation('BOTTOM', 3 * Math.PI / 2),
+  BOTTOM_LEFT: new Orientation('BOTTOM_LEFT', 5 * Math.PI / 4),
+  LEFT: new Orientation('LEFT', Math.PI),
+  UNSPECIFIED: new Orientation('UNSPECIFIED', null),
   PRIMARY: new PrimaryOrientation(),
 }
