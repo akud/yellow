@@ -1,6 +1,6 @@
 import ShapeDefinition from './ShapeDefinition';
 
-export default class Point extends ShapeDefinition {
+class PointDefinition extends ShapeDefinition {
   getBoundingRadius() {
     return 0;
   }
@@ -9,3 +9,6 @@ export default class Point extends ShapeDefinition {
     return center;
   }
 }
+
+PointDefinition.INSTANCE = new PointDefinition();
+export default PointDefinition;

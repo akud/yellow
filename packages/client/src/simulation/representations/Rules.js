@@ -1,32 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../representations/CustomPropTypes';
-import Direction from '../Direction';
-import {
-  PositioningRuleDefinition,
-  RelativePositioningRuleDefinition,
-} from '../RuleDefinition';
+
 import SimulationContext from './SimulationContext';
 
+import Orientation from '../../elements/Orientation';
+
+import {
+  createPositioningRule,
+  createUniversalPositioningRule,
+  createRelativePositioningRule,
+} from '../PositioningRules';
+
+import { createLinkingRule } from '../LinkingRule';
+
 export class PositioningRule extends React.Component {
-  static contextType = SimulationContext
+  static contextType = SimulationContext;
   static propTypes = {
-    nodeId: PropTypes.string.isRequired,
-    position: CustomPropTypes.position,
-  }
+    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    position: CustomPropTypes.position.isRequired,
+    strength: PropTypes.number,
+  };
 
   static defaultProps = {
-    position: { x: 0, y: 0 },
-  }
+    strength: 1.0,
+  };
 
   componentDidMount() {
     const simulation = this.context;
     simulation.registerRule(
-      new PositioningRuleDefinition({
-        elementId: this.props.nodeId, //picking the primary element for the node
-        x: this.props.position.x,
-        y: this.props.position.y,
-      })
+      createPositioningRule(Object.assign({}, this.props))
+    );
+  }
+
+  render() {
+    return null;
+  }
+}
+
+export class UniversalPositioningRule extends React.Component {
+  static contextType = SimulationContext;
+  static propTypes = {
+    position: CustomPropTypes.position.isRequired,
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerRule(
+      createUniversalPositioningRule(Object.assign({}, this.props))
     );
   }
 
@@ -36,31 +62,87 @@ export class PositioningRule extends React.Component {
 }
 
 export class RelativePositioningRule extends React.Component {
-  static contextType = SimulationContext
+  static contextType = SimulationContext;
   static propTypes = {
-    baseNodeId: PropTypes.string.isRequired,
-    targetNodeId: PropTypes.string.isRequired,
-    directions: PropTypes.arrayOf(PropTypes.oneOf(Object.values(Direction))).isRequired,
-    strengthMultiplier: PropTypes.number,
-  }
+    baseElementId: PropTypes.string.isRequired,
+    targetElementId: PropTypes.string.isRequired,
+    orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
+    strength: PropTypes.number,
+  };
 
   static defaultProps = {
-    strengthMultiplier: 1.0,
-  }
+    strength: 1.0,
+  };
 
   componentDidMount() {
     const simulation = this.context;
     simulation.registerRule(
-      new RelativePositioningRuleDefinition({
-        baseElementId: this.props.baseNodeId, //picking the primary element for the node
-        targetElementId: this.props.targetNodeId, //picking the primary element for the node
-        directions: this.props.directions,
-        strengthMultiplier: this.props.strengthMultiplier,
-      })
+      createRelativePositioningRule(Object.assign({}, this.props))
     );
   }
 
   render() {
     return null;
   }
+}
+
+export class LinkingRule extends React.Component {
+  static contextType = SimulationContext;
+  static propTypes = {
+    between: PropTypes.arrayOf(PropTypes.string).isRequired,
+    distance: PropTypes.number.isRequired,
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerRule(
+      createLinkingRule(Object.assign({}, this.props))
+    );
+  }
+
+  render() {
+    return null;
+  }
+}
+
+/**
+ * <RepellingRule>
+ *
+ * Registers a rule with the simulation that causes elements to repel each other
+ *
+ */
+export class RepellingRule extends React.Component {
+  static contextType = SimulationContext;
+  static propTypes = {
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.setRepellingForceStrength(
+      this.props.strength
+    );
+  }
+
+  render() {
+    return null;
+  }
+}
+
+
+export default {
+  PositioningRule,
+  UniversalPositioningRule,
+  RelativePositioningRule,
+  LinkingRule,
+  RepellingRule,
 }

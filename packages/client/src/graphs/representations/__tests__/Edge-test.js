@@ -1,6 +1,7 @@
 jest.mock('../../../elements/geometry-utils');
 jest.mock('../../../elements/ShapeDefinition');
-jest.mock('../../../simulation/Simulation');
+jest.mock('../../../simulation/ForceSimulation');
+jest.mock('../../../simulation/LinkingRule');
 
 import React from 'react';
 
@@ -13,10 +14,10 @@ import MockSimulation, {
   getElementData,
   registerRule,
   resetMockSimulation
-} from '../../../simulation/Simulation';
+} from '../../../simulation/ForceSimulation';
 
 
-import { DistanceSettingRuleDefinition } from '../../../simulation/RuleDefinition';
+import { createLinkingRule } from '../../../simulation/LinkingRule';
 import SimulationContext from '../../../simulation/representations/SimulationContext';
 
 import { mount } from 'enzyme';
@@ -33,6 +34,7 @@ describe('Edge', () => {
 
   beforeEach(() => {
     resetMockSimulation();
+    createLinkingRule.mockReset();
   });
 
   it('renders a line between the provided points', () => {
@@ -159,11 +161,10 @@ describe('Edge', () => {
         />
       </SimulationContext.Provider>
     );
-    expect(registerRule).toHaveBeenCalledOnceWith(
-      new DistanceSettingRuleDefinition({
-        between: ['123', '456'],
-        distance: 324,
-      })
-    );
+    expect(registerRule).toHaveBeenCalledOnce();
+    expect(createLinkingRule).toHaveBeenCalledOnceWith( {
+      between: ['123', '456'],
+      distance: 324,
+    });
   });
 });

@@ -16,7 +16,14 @@ describe('Graph', () => {
 
     expect(simulatedLayout.find('p').length).toBe(1);
 
-    expect(simulatedLayout.find('CenteringForce').length).toBe(1);
+    expect(simulatedLayout.find('UniversalPositioningRule').length).toBe(1);
+    expect(simulatedLayout.find('UniversalPositioningRule').prop('position')).toEqual({
+      x: 250,
+      y: 250,
+    });
+
+    expect(simulatedLayout.find('RepellingRule').length).toBe(1);
+    expect(simulatedLayout.find('RepellingRule').prop('strength')).toBe(50);
   });
 
 
@@ -29,7 +36,7 @@ describe('Graph', () => {
     expect(wrapper.find('svg').prop('height')).toBe(580);
     expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 350 580');
 
-    expect(wrapper.find('CenteringForce').prop('center')).toEqual({
+    expect(wrapper.find('UniversalPositioningRule').prop('position')).toEqual({
       x: 175,
       y: 290
     });
@@ -44,23 +51,13 @@ describe('Graph', () => {
     expect(wrapper.find('svg').prop('height')).toBe(500);
     expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 150 250');
 
-    expect(wrapper.find('CenteringForce').prop('center')).toEqual({
+    expect(wrapper.find('UniversalPositioningRule').prop('position')).toEqual({
       x: 75,
       y: 125
     });
   });
 
-  it('renders a repelling force by default', () => {
-    const wrapper = shallow(<Graph />);
-    expect(wrapper.find('RepellingForce').prop('strengthMultiplier')).toBe(1.0);
-  });
-
-  it('passes the provided repelling force strength to a repelling force', () => {
-    const wrapper = shallow(<Graph repellingForceStrengthMultiplier={0.5} />);
-    expect(wrapper.find('RepellingForce').prop('strengthMultiplier')).toBe(0.5);
-  });
-
-  it('does not render a boder by default', () => {
+  it('does not render a border by default', () => {
     const wrapper = shallow(<Graph />);
     expect(wrapper.find('svg').length).toBe(1);
     expect(wrapper.find('svg').prop('style').border).toBe(undefined);
