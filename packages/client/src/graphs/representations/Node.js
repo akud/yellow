@@ -6,8 +6,8 @@ import { withExtraProps } from '../../representations/component-utils';
 import Orientation from '../../elements/Orientation';
 
 import SimulationContext from '../../simulation/representations/SimulationContext';
-import { DistanceSettingRuleDefinition } from '../../simulation/RuleDefinition';
-import { RelativePositioningRuleDefinition } from '../../simulation/RuleDefinition';
+import { createRelativePositioningRule } from '../../simulation/PositioningRules';
+import { createLinkingRule } from '../../simulation/LinkingRules';
 
 import utils from '../../utils';
 
@@ -86,10 +86,10 @@ export default class Node extends React.Component {
       elements.forEach(e => {
         if (!e.orientation.isPrimary()) {
           const distance = primaryElementRadius + shapes[e.id].getBoundingRadius();
-          simulation.registerRule(new DistanceSettingRuleDefinition({
+          simulation.registerRule(createLinkingRule({
             between: [primaryElement.id, e.id],
             distance,
-            strengthMultiplier: 2.5,
+            strength: 2.5,
           }));
           LOGGER.debug(
             'Set distance between {} and {} to {}',
@@ -105,12 +105,12 @@ export default class Node extends React.Component {
   registerRelativePositioningRules(element) {
     const { nodeId } = this.props;
     const simulation = this.context;
-    if (element.orientation.hasDirections()) {
+    if (element.orientation.isSpatiallyOriented()) {
       simulation.registerRule(
-        new RelativePositioningRuleDefinition({
+        createRelativePositioningRule({
           baseElementId: nodeId,
           targetElementId: element.id,
-          directions: element.orientation.getDirections()
+          orientation: element.orientation
         })
       );
     }

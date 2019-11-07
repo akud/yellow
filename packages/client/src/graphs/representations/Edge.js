@@ -4,7 +4,7 @@ import React from 'react';
 
 import Arrow from '../../elements/representations/Arrow';
 
-import { DistanceSettingRuleDefinition }  from '../../simulation/RuleDefinition';
+import { createLinkingRule }  from '../../simulation/LinkingRules';
 import SimulationContext from '../../simulation/representations/SimulationContext';
 
 export default class Edge extends React.Component {
@@ -32,7 +32,7 @@ export default class Edge extends React.Component {
     const { fromNodeId, toNodeId, distance } = this.props;
     const simulation = this.context;
     simulation.registerRule(
-      new DistanceSettingRuleDefinition({
+      createLinkingRule({
         between: [ fromNodeId, toNodeId ],
         distance: distance
       })
