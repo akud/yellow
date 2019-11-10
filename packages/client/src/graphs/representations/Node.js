@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withExtraProps } from '../../representations/component-utils';
 
 import Orientation from '../../elements/Orientation';
+import ElementGroup from '../../elements/representations/ElementGroup';
 
 import SimulationContext from '../../simulation/representations/SimulationContext';
 import { createRelativePositioningRule } from '../../simulation/PositioningRules';
@@ -47,7 +48,7 @@ export default class Node extends React.Component {
     const { elements } = this;
     const { children } = this.props;
     return (
-      <g className="node">
+      <ElementGroup className="node">
         {
           withExtraProps(
             children,
@@ -66,7 +67,7 @@ export default class Node extends React.Component {
             }
           )
         }
-      </g>
+      </ElementGroup>
     );
   }
 

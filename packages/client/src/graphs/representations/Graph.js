@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import DisplayWindow from '../../elements/representations/DisplayWindow';
+import ElementGroup from '../../elements/representations/ElementGroup';
 import SimulatedLayout from '../../simulation/representations/SimulatedLayout';
 import {
   UniversalPositioningRule,
@@ -22,7 +24,7 @@ export default class Graph extends React.Component {
     height: PropTypes.number,
     border: PropTypes.bool,
     zoom: PropTypes.number,
-    repellingForceStrenght: PropTypes.number,
+    repellingForceStrength: PropTypes.number,
   }
 
   render() {
@@ -35,25 +37,24 @@ export default class Graph extends React.Component {
       repellingForceStrength,
     } = this.props;
 
-    const realWidth = width / zoom;
-    const realHeight = height / zoom;
-
     return (
-      <svg
-        xmlns='http://www.w3.org/2000/svg'
-        viewBox={`0 0 ${realWidth} ${realHeight}`}
+      <DisplayWindow
         width={width}
         height={height}
-        style={ border ? { border: '1px solid black' } : {} }
-      >
-        <g className="yellow-graph">
-          <SimulatedLayout>
-            {children}
-            <UniversalPositioningRule position={{ x: realWidth / 2, y: realHeight / 2 }} />
-            <RepellingRule strength={repellingForceStrength} />
-          </SimulatedLayout>
-        </g>
-      </svg>
+        border={border}
+        zoom={zoom}
+        render={
+          ({center}) => (
+            <ElementGroup className="yellow-graph">
+              <SimulatedLayout>
+                {children}
+                <UniversalPositioningRule position={center} />
+                <RepellingRule strength={repellingForceStrength} />
+              </SimulatedLayout>
+            </ElementGroup>
+          )
+        }
+      />
     );
   }
 }

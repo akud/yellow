@@ -5,67 +5,66 @@ import Graph from '../Graph';
 import { shallow } from 'enzyme';
 
 describe('Graph', () => {
-  it('renders a simulated layout', () => {
+  it('renders a simulated layout inside a display window', () => {
     const wrapper = shallow(
       <Graph>
         <p>Hello!</p>
       </Graph>
     );
-    const simulatedLayout = wrapper.find('SimulatedLayout');
+    const displayWindow = wrapper.find('DisplayWindow');
+
+    expect(displayWindow.prop('width')).toBe(500);
+    expect(displayWindow.prop('height')).toBe(500);
+    expect(displayWindow.prop('zoom')).toBe(1.0);
+    expect(displayWindow.prop('border')).toBe(false)
+
+    const center = { x: 200, y: 200 };
+    const displayedContents = displayWindow.renderProp('render')({
+      center,
+    });
+
+    const simulatedLayout = displayedContents.find('SimulatedLayout');
     expect(simulatedLayout.length).toBe(1);
 
     expect(simulatedLayout.find('p').length).toBe(1);
 
     expect(simulatedLayout.find('UniversalPositioningRule').length).toBe(1);
-    expect(simulatedLayout.find('UniversalPositioningRule').prop('position')).toEqual({
-      x: 250,
-      y: 250,
-    });
+    expect(simulatedLayout.find('UniversalPositioningRule').prop('position')).toEqual(
+      center
+    );
 
     expect(simulatedLayout.find('RepellingRule').length).toBe(1);
     expect(simulatedLayout.find('RepellingRule').prop('strength')).toBe(50);
   });
 
-
-  it('renders with the provided width and height', () => {
+  it('forwards props to the DisplayWindow', () => {
     const wrapper = shallow(
-      <Graph width={350} height={580} />
+      <Graph
+        width={1000}
+        height={1500}
+        zoom={2.0}
+        border={true}
+      >
+        <p>Hello!</p>
+      </Graph>
     );
-    expect(wrapper.find('svg').length).toBe(1);
-    expect(wrapper.find('svg').prop('width')).toBe(350);
-    expect(wrapper.find('svg').prop('height')).toBe(580);
-    expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 350 580');
-
-    expect(wrapper.find('UniversalPositioningRule').prop('position')).toEqual({
-      x: 175,
-      y: 290
-    });
+    const displayWindow = wrapper.find('DisplayWindow');
+    expect(displayWindow.prop('width')).toBe(1000);
+    expect(displayWindow.prop('height')).toBe(1500);
+    expect(displayWindow.prop('zoom')).toBe(2.0);
+    expect(displayWindow.prop('border')).toBe(true)
   });
 
-  it('applies the zoom to width and height', () => {
+  it('forwards repellingForceStrength to the RepellingRule', () => {
     const wrapper = shallow(
-      <Graph width={300} height={500} zoom={2.0}/>
+      <Graph repellingForceStrength={100}>
+        <p>Hello!</p>
+      </Graph>
     );
-    expect(wrapper.find('svg').length).toBe(1);
-    expect(wrapper.find('svg').prop('width')).toBe(300);
-    expect(wrapper.find('svg').prop('height')).toBe(500);
-    expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 150 250');
 
-    expect(wrapper.find('UniversalPositioningRule').prop('position')).toEqual({
-      x: 75,
-      y: 125
+    const displayContents = wrapper.find('DisplayWindow').renderProp('render')({
+      center: { x: 0, y: 0 }
     });
-  });
-
-  it('does not render a border by default', () => {
-    const wrapper = shallow(<Graph />);
-    expect(wrapper.find('svg').length).toBe(1);
-    expect(wrapper.find('svg').prop('style').border).toBe(undefined);
-  });
-
-  it('renders a border if told to', () => {
-    const wrapper = shallow(<Graph border={true} />);
-    expect(wrapper.find('svg').length).toBe(1);
-    expect(wrapper.find('svg').prop('style').border).toEqual('1px solid black');
+    expect(displayContents.find('RepellingRule').prop('strength')).toBe(100);
   });
 });
