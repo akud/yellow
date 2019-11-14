@@ -12,11 +12,8 @@ describe('Image', () => {
         src="image_src"
         width={100}
         height={200}
-        config={{
-          id: '234',
-          position: point(500, 700),
-          postRender: () => {},
-        }}
+        id='234'
+        position={point(500, 700)}
       />
     );
     expect(wrapper.find('image').length).toBe(1);
@@ -29,21 +26,19 @@ describe('Image', () => {
   });
 
   it('registers a rectangle with element config', () => {
-    const postRender = jest.fn();
+    const registerShape = jest.fn();
     const wrapper = mount(
       <Image
         src="image_src"
         width={100}
         height={200}
-        config={{
-          id: '234',
-          position: point(500, 700),
-          postRender,
-        }}
+        id='234'
+        position={point(500, 700)}
+        registerShape={registerShape}
       />
     );
-    expect(postRender).toHaveBeenCalledOnceWith(
-      new RectangleDefinition({ width: 100, height: 200 })
+    expect(registerShape).toHaveBeenCalledOnceWith(
+      '234', new RectangleDefinition({ width: 100, height: 200 })
     );
   });
 });

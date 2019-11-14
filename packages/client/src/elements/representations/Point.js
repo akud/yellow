@@ -1,23 +1,14 @@
 import React from 'react';
 import PointDefinition from '../PointDefinition';
-import ElementPropTypes from './ElementPropTypes';
-
-import logging from '@akud/logging';
-
-const LOGGER = new logging.Logger('Point');
+import ElementProps from './ElementProps';
 
 export default class Point extends React.Component {
-  static propTypes = {
-    config: ElementPropTypes.config,
-  }
+  static propTypes = ElementProps.BasePropTypes;
+  static defaultProps = ElementProps.DefaultBaseProps;
 
   componentDidMount() {
-    const { config } = this.props;
-    if (config) {
-      config.postRender(new PointDefinition());
-    } else {
-      LOGGER.warn('No element config passed for render');
-    }
+    const { id, registerShape } = this.props;
+    registerShape(id, new PointDefinition());
   }
 
   render() {

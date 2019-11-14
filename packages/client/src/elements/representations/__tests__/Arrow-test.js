@@ -7,7 +7,7 @@ describe('Arrow', () => {
   it('renders a path at the provided point', () => {
     const wrapper = shallow(
       <Arrow
-        to={{ x: 56, y: 89 }}
+        position={{ x: 56, y: 89 }}
         color='green'
         thickness={2}
         angle={Math.PI/4}

@@ -11,11 +11,8 @@ describe('Rectangle', () => {
         width={20}
         height={18}
         color='#442200'
-        config={{
-          id: '123',
-          position: { x: 420, y: 69 },
-          postRender: () => {},
-        }}
+        id='123'
+        position={{ x: 420, y: 69 }}
       />
     );
     expect(wrapper.find('rect').length).toBe(1);
@@ -28,21 +25,19 @@ describe('Rectangle', () => {
   });
 
   it('registers a RectangleDefinition with the postRender callback', () => {
-    const postRender = jest.fn();
+    const registerShape = jest.fn();
     const wrapper = mount(
       <Rectangle
         width={20}
         height={18}
         color='#442200'
-        config={{
-          id: '123',
-          position: { x: 420, y: 69 },
-          postRender,
-        }}
+        id='123'
+        position={{ x: 420, y: 69 }}
+        registerShape={registerShape}
       />
     );
 
-    expect(postRender).toHaveBeenCalledOnceWith(new RectangleDefinition({
+    expect(registerShape).toHaveBeenCalledOnceWith('123', new RectangleDefinition({
       width: 20,
       height: 18,
     }));
