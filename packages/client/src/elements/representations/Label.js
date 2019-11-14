@@ -29,10 +29,10 @@ export default class Label extends React.Component {
 
   refCallback = element => {
     if (element) {
-      const { id, registerShape, padding } = this.props;
+      const { registerShape, padding } = this.props;
       const rect = element.getBoundingClientRect();
       this.setState({ width: rect.width, height: rect.height });
-      registerShape(id, new RectangleDefinition({
+      registerShape(new RectangleDefinition({
         width: rect.width + padding,
         height: rect.height + padding,
       }));

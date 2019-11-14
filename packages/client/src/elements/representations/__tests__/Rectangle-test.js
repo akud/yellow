@@ -37,7 +37,7 @@ describe('Rectangle', () => {
       />
     );
 
-    expect(registerShape).toHaveBeenCalledOnceWith('123', new RectangleDefinition({
+    expect(registerShape).toHaveBeenCalledOnceWith(new RectangleDefinition({
       width: 20,
       height: 18,
     }));

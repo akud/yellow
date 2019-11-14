@@ -94,11 +94,11 @@ describe('Label', () => {
       <Label
         text="Hello World!"
         padding={5}
-        {...baseElementProps({ id: 'asdf', registerShape })}
+        {...baseElementProps({ registerShape })}
       />
     );
     expect(registerShape).toHaveBeenCalledOnceWith(
-      'asdf', new RectangleDefinition({ width: 105, height: 34 })
+      new RectangleDefinition({ width: 105, height: 34 })
     );
   });
 });

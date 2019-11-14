@@ -28,11 +28,10 @@ describe('Circle', () => {
       <Circle
         radius={5}
         color='#442200'
-        id='45'
         position={{ x: 420, y: 69 }}
         registerShape={registerShape}
       />
     );
-    expect(registerShape).toHaveBeenCalledOnceWith('45', new CircleDefinition({ radius: 5 }));
+    expect(registerShape).toHaveBeenCalledOnceWith(new CircleDefinition({ radius: 5 }));
   });
 });

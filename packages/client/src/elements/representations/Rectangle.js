@@ -23,8 +23,8 @@ export default class Rectangle extends React.Component {
   );
 
   componentDidMount() {
-    const { id, registerShape, width, height } = this.props;
-    registerShape(id, new RectangleDefinition({ width, height }));
+    const { registerShape, width, height } = this.props;
+    registerShape(new RectangleDefinition({ width, height }));
   }
 
   render() {

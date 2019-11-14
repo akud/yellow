@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import CustomPropTypes from '../../representations/CustomPropTypes';
 
+let sequence = 0;
+
 export const BasePropTypes = {
   id: PropTypes.string,
   position: CustomPropTypes.position,
@@ -8,9 +10,11 @@ export const BasePropTypes = {
 }
 
 export const DefaultBaseProps = {
-  id: 'default-element-id',
+  get id() {
+    return 'element-' + (++sequence);
+  },
   position: { x: 0, y: 0 },
-  registerShape: (elementId, shape) => {},
+  registerShape: (shape) => {},
 }
 
 export default {

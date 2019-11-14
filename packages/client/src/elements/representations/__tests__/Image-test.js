@@ -32,13 +32,12 @@ describe('Image', () => {
         src="image_src"
         width={100}
         height={200}
-        id='234'
         position={point(500, 700)}
         registerShape={registerShape}
       />
     );
     expect(registerShape).toHaveBeenCalledOnceWith(
-      '234', new RectangleDefinition({ width: 100, height: 200 })
+      new RectangleDefinition({ width: 100, height: 200 })
     );
   });
 });

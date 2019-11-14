@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import ForceSimulation from '../ForceSimulation';
 import SimulationContext from './SimulationContext';
+import SimulatedElement from './SimulatedElement';
+
+import utils from '../../utils';
 
 let contextIdSequence = 0;
 
@@ -33,7 +36,22 @@ export default class SimulatedLayout extends React.Component {
     const { contextValue } = this.state;
     return (
       <SimulationContext.Provider value={contextValue}>
-        {children}
+        {
+          utils.makeArray(children).map((c, i) => {
+            const id = c.props.id || this.contextId + '-' + i;
+            return (
+              <SimulatedElement
+                id={id}
+                key={id}
+                onShapeRegistration={c.props.onShapeRegistration || (() => {})}
+                render={({ position, velocity, registerShape }) => React.cloneElement(
+                  c,
+                  { position, velocity, registerShape }
+                )}
+              />
+            );
+          })
+        }
       </SimulationContext.Provider>
     );
   }
