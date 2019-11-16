@@ -26,12 +26,6 @@ import utils from '../../../utils';
 
 describe('Node', () => {
 
-  const newSimulatedElement = elementId => ({
-    id: elementId || '1',
-    position: newPosition(),
-    shape: new MockShapeDefinition(),
-  });
-
   const selectElementFrom = (...elements) => elementId => {
     return elements.find(e => e.id === elementId);
   };
@@ -42,10 +36,10 @@ describe('Node', () => {
     createLinkingRule.mockReset();
   });
 
-  it('renders children with position from the simulation', () => {
-    const element = newSimulatedElement();
+  it.only('wraps children in a SimulatedElement', () => {
+    const position = newPosition();
 
-    getElementData.mockReturnValueOnce(element);
+    getElementData.mockReturnValueOnce({ position });
 
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
@@ -54,11 +48,17 @@ describe('Node', () => {
         </Node>
       </SimulationContext.Provider>
     );
-    expect(wrapper.find('p').length).toBe(1);
-    expect(wrapper.find('p').prop('config').position).toEqual(element.position);
-    expect(wrapper.find('p').prop('config').id).toEqual('2');
-    expect(getElementData).toHaveBeenCalledWith('2');
-    expect(getElementData).toHaveBeenCalledTimes(1);
+
+    expect(wrapper.find('SimulatedElement').length).toBe(1);
+    const simulatedElement = wrapper.find('SimulatedElement').at(0);
+
+    expect(simulatedElement.prop('id')).toEqual('2');
+
+    expect(simulatedElement.find('p').length).toBe(1);
+    expect(simulatedElement.find('p').prop('position')).toEqual(position);
+    expect(simulatedElement.find('p').prop('id')).toEqual('2');
+
+    expect(getElementData).toHaveBeenCalledOnceWith('2');
   });
 
   it('assigns positions and ids to elements by their orientation', () => {

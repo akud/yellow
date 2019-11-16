@@ -7,6 +7,7 @@ import Orientation from '../../elements/Orientation';
 import ElementGroup from '../../elements/representations/ElementGroup';
 
 import SimulationContext from '../../simulation/representations/SimulationContext';
+import SimulatedElement from '../../simulation/representations/SimulatedElement';
 import { createRelativePositioningRule } from '../../simulation/PositioningRules';
 import { createLinkingRule } from '../../simulation/LinkingRule';
 
@@ -50,22 +51,20 @@ export default class Node extends React.Component {
     return (
       <ElementGroup className="node">
         {
-          withExtraProps(
-            children,
-            (child, index) => {
-              const element = elements[index];
-              return {
-                config: {
-                  id: element.id,
-                  position: simulation.getElementData(element.id).position,
-                  postRender: shape => {
-                    this.registerShape(element, shape);
-                    this.registerRelativePositioningRules(element);
-                  }
-                }
-              };
-            }
-          )
+          utils.makeArray(children).map((c, i) => {
+            const elementId = this.elements[i].id;
+            return (
+              <SimulatedElement
+                id={elementId}
+                key={elementId}
+                render={(elementData) => React.cloneElement(
+                  c,
+                  { id: elementId, ...elementData }
+                )}
+                onShapeRegistration={(shape) => this.registerShape(this.elements[i], shape)}
+              />
+            );
+          })
         }
       </ElementGroup>
     );
@@ -75,7 +74,6 @@ export default class Node extends React.Component {
     const simulation = this.context;
     const { primaryElement, elements, shapes } = this;
 
-    simulation.registerElement(element.id, shape);
     this.shapes[element.id] = shape;
     if (this.hasRegisteredAllShapes()) {
       LOGGER.debug(

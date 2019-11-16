@@ -10,22 +10,18 @@ import logging from '@akud/logging';
 const LOGGER = new logging.Logger('Label');
 
 export default class Label extends React.Component {
-  static propTypes = Object.assign(
-    {
-      text: PropTypes.string.isRequired,
-      padding: PropTypes.number,
-      border: PropTypes.bool,
-    },
-    ElementProps.BasePropTypes
-  );
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    padding: PropTypes.number,
+    border: PropTypes.bool,
+    ...ElementProps.BasePropTypes
+  };
 
-  static defaultProps = Object.assign(
-    {
-      padding: 0,
-      border: false,
-    },
-    ElementProps.DefaultBaseProps
-  );
+  static defaultProps = {
+    padding: 0,
+    border: false,
+    ...ElementProps.DefaultBaseProps
+  };
 
   refCallback = element => {
     if (element) {

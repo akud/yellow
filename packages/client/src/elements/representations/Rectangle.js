@@ -4,23 +4,19 @@ import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 
 export default class Rectangle extends React.Component {
-  static propTypes = Object.assign(
-    {
-      color: PropTypes.string,
-      width: PropTypes.number,
-      height: PropTypes.number,
-    },
-    ElementProps.BasePropTypes
-  );
+  static propTypes = {
+    color: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    ...ElementProps.BasePropTypes
+  };
 
-  static defaultProps = Object.assign(
-    {
-      color: '#4286f4',
-      width: 10,
-      height: 10
-    },
-    ElementProps.DefaultBaseProps
-  );
+  static defaultProps = {
+    color: '#4286f4',
+    width: 10,
+    height: 10,
+    ...ElementProps.DefaultBaseProps
+  };
 
   componentDidMount() {
     const { registerShape, width, height } = this.props;

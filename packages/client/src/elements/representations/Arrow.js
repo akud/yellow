@@ -5,23 +5,19 @@ import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 
 export default class Arrow extends React.Component {
-  static propTypes = Object.assign(
-    {
-      color: PropTypes.string,
-      thickness: PropTypes.number,
-      angle: PropTypes.number,
-    },
-    ElementProps.BasePropTypes
-  );
+  static propTypes = {
+    color: PropTypes.string,
+    thickness: PropTypes.number,
+    angle: PropTypes.number,
+    ...ElementProps.BasePropTypes
+  };
 
-  static defaultProps = Object.assign(
-    {
-      color: '#c7c7c7',
-      thickness: 1,
-      angle: 0,
-    },
-    ElementProps.DefaultBaseProps
-  );
+  static defaultProps = {
+    color: '#c7c7c7',
+    thickness: 1,
+    angle: 0,
+    ...ElementProps.DefaultBaseProps
+  };
 
   render() {
     const { position, color, thickness, angle } = this.props;

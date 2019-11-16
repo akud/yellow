@@ -4,16 +4,14 @@ import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 
 export default class Image extends React.Component {
-  static propTypes = Object.assign(
-    {
-      src: PropTypes.string.isRequired,
-      width: PropTypes.number.isRequired,
-      height: PropTypes.number.isRequired,
-    },
-    ElementProps.BasePropTypes
-  );
+  static propTypes = {
+    src: PropTypes.string.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    ...ElementProps.BasePropTypes
+  };
 
-  static defaultProps = ElementProps.DefaultBaseProps;
+  static defaultProps = {...ElementProps.DefaultBaseProps};
 
   componentDidMount() {
     const { registerShape, width, height } = this.props;

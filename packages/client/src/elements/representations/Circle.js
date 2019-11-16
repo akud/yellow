@@ -8,21 +8,17 @@ import logging from '@akud/logging';
 const LOGGER = new logging.Logger('Circle');
 
 export default class Circle extends React.Component {
-  static propTypes = Object.assign(
-    {
-      color: PropTypes.string,
-      radius: PropTypes.number,
-    },
-    ElementProps.BasePropTypes
-  );
+  static propTypes = {
+    color: PropTypes.string,
+    radius: PropTypes.number,
+    ...ElementProps.BasePropTypes
+  };
 
-  static defaultProps = Object.assign(
-    {
-      color: '#4286f4',
-      radius: 10,
-    },
-    ElementProps.DefaultBaseProps
-  );
+  static defaultProps = {
+    color: '#4286f4',
+    radius: 10,
+    ...ElementProps.DefaultBaseProps
+  };
 
   componentDidMount() {
     const { registerShape, radius } = this.props;
