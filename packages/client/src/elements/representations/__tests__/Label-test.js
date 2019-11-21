@@ -7,10 +7,10 @@ import { mount } from 'enzyme';
 describe('Label', () => {
   let mockBoundingClientRect;
 
-  const newElementConfig = opts => Object.assign({
+  const baseElementProps = opts => Object.assign({
     id: '123',
     position: newPosition(),
-    postRender: () => {},
+    registerShape: jest.fn(),
   }, opts);
 
   beforeEach(() => {
@@ -28,13 +28,13 @@ describe('Label', () => {
     expect(wrapper.find('text').text()).toEqual('Hello World!');
   });
 
-  it('passes the correct element id to the g element', () => {
+  it('passes the correct element id to the ElementGroup', () => {
     const wrapper = mount(
-      <Label text="Hello World!" config={newElementConfig({ id: '124' })} />
+      <Label text="Hello World!" {...baseElementProps({ id: '124' })} />
     );
 
-    expect(wrapper.find('g').length).toBe(1);
-    expect(wrapper.find('g').prop('data-element-id')).toEqual('124');
+    expect(wrapper.find('ElementGroup').length).toBe(1);
+    expect(wrapper.find('ElementGroup').prop('data-element-id')).toEqual('124');
   });
 
   it('does not render a border by default', () => {
@@ -51,7 +51,7 @@ describe('Label', () => {
     const wrapper = mount(
       <Label
         text="Hello World!"
-        config={newElementConfig({ position: point(10, 56) })}
+        {...baseElementProps({ position: point(10, 56) })}
       />
     ).update();
 
@@ -69,7 +69,7 @@ describe('Label', () => {
         text="Hello World!"
         border={true}
         padding={12}
-        config={newElementConfig({ position: point(10, 56) })}
+        {...baseElementProps({ position: point(10, 56) })}
       />
     ).update();
 
@@ -89,15 +89,15 @@ describe('Label', () => {
       width: 100,
       height: 29
     });
-    const postRender = jest.fn();
+    const registerShape = jest.fn();
     const wrapper = mount(
       <Label
         text="Hello World!"
         padding={5}
-        config={newElementConfig({ postRender })}
+        {...baseElementProps({ registerShape })}
       />
     );
-    expect(postRender).toHaveBeenCalledOnceWith(
+    expect(registerShape).toHaveBeenCalledOnceWith(
       new RectangleDefinition({ width: 105, height: 34 })
     );
   });

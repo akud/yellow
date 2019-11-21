@@ -1,7 +1,9 @@
 import React from 'react';
 import RectangleDefinition from '../RectangleDefinition';
 import PropTypes from 'prop-types';
-import ElementPropTypes from './ElementPropTypes';
+
+import ElementGroup from './ElementGroup';
+import ElementProps from './ElementProps';
 
 import logging from '@akud/logging';
 
@@ -12,27 +14,24 @@ export default class Label extends React.Component {
     text: PropTypes.string.isRequired,
     padding: PropTypes.number,
     border: PropTypes.bool,
-    config: ElementPropTypes.config,
-  }
+    ...ElementProps.BasePropTypes
+  };
 
   static defaultProps = {
     padding: 0,
     border: false,
-  }
+    ...ElementProps.DefaultBaseProps
+  };
 
   refCallback = element => {
     if (element) {
-      const { config, padding } = this.props;
+      const { registerShape, padding } = this.props;
       const rect = element.getBoundingClientRect();
       this.setState({ width: rect.width, height: rect.height });
-      if (config) {
-        config.postRender(new RectangleDefinition({
-          width: rect.width + padding,
-          height: rect.height + padding,
-        }));
-      } else {
-        LOGGER.warn('No element config passed for render');
-      }
+      registerShape(new RectangleDefinition({
+        width: rect.width + padding,
+        height: rect.height + padding,
+      }));
     }
   }
 
@@ -45,21 +44,16 @@ export default class Label extends React.Component {
   }
 
   render() {
-    const { border, config, text, padding } = this.props;
+    const { id, position, border, config, text, padding } = this.props;
     const { width, height } = this.state;
-    if (config) {
-      const { position, id } = config;
-      const x = position.x - width / 2;
-      const y = position.y + height / 4;
-      return (
-        <g className="label" data-element-id={id}>
-          { border && this.renderBorder({ position, width, height, padding }) }
-          <text x={x} y={y} ref={this.refCallback}>{text}</text>
-        </g>
-      );
-    } else {
-      return <text ref={this.refCallback}>{text}</text>;
-    }
+    const x = position.x - width / 2;
+    const y = position.y + height / 4;
+    return (
+      <ElementGroup className="label" data-element-id={id}>
+        { border && this.renderBorder({ position, width, height, padding }) }
+        <text x={x} y={y} ref={this.refCallback}>{text}</text>
+      </ElementGroup>
+    );
   }
 
   renderBorder({ position, width, height, padding }) {

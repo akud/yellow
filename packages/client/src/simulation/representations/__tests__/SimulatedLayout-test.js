@@ -2,6 +2,9 @@ jest.mock('../../ForceSimulation');
 
 import React from 'react'
 
+import Circle from '../../../elements/representations/Circle';
+import CircleDefinition from '../../../elements/CircleDefinition';
+
 import SimulationContext from '../SimulationContext';
 import SimulatedLayout from '../SimulatedLayout';
 
@@ -33,7 +36,6 @@ describe('SimulatedLayout', () => {
         </SimulationContext.Consumer>
       </SimulatedLayout>
     );
-
     expect(ForceSimulation).toHaveBeenCalled();
     expect(onNewLayout).toHaveBeenCalled();
     expect(registerElement).not.toHaveBeenCalled();

@@ -44,5 +44,5 @@ export default React.createContext({
    * thata optionally determines a set of forces to apply to the next state
    * in the simulation
    */
-  registerRule: rule => {},
+  registerRule: (ruleId, rule) => {},
 });

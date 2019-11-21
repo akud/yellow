@@ -14,8 +14,33 @@ import {
 
 import { createLinkingRule } from '../LinkingRule';
 
-export class PositioningRule extends React.Component {
+let ruleIdSequence = 0;
+
+class RuleComponent extends React.Component {
   static contextType = SimulationContext;
+
+  constructor(props) {
+    super(props);
+    this.ruleId = 'component-rule-' + (++ruleIdSequence);
+  }
+
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerRule(
+      this.ruleId, this.createRule()
+    );
+  }
+
+  render() {
+    return null;
+  }
+
+  createRule() {
+    throw new Error('Subclasses must implement createRule()');
+  }
+}
+
+export class PositioningRule extends RuleComponent {
   static propTypes = {
     elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
     position: CustomPropTypes.position.isRequired,
@@ -26,20 +51,12 @@ export class PositioningRule extends React.Component {
     strength: 1.0,
   };
 
-  componentDidMount() {
-    const simulation = this.context;
-    simulation.registerRule(
-      createPositioningRule(Object.assign({}, this.props))
-    );
-  }
-
-  render() {
-    return null;
+  createRule() {
+    return createPositioningRule(Object.assign({}, this.props));
   }
 }
 
-export class UniversalPositioningRule extends React.Component {
-  static contextType = SimulationContext;
+export class UniversalPositioningRule extends RuleComponent {
   static propTypes = {
     position: CustomPropTypes.position.isRequired,
     strength: PropTypes.number,
@@ -49,20 +66,12 @@ export class UniversalPositioningRule extends React.Component {
     strength: 1.0,
   };
 
-  componentDidMount() {
-    const simulation = this.context;
-    simulation.registerRule(
-      createUniversalPositioningRule(Object.assign({}, this.props))
-    );
-  }
-
-  render() {
-    return null;
+  createRule() {
+    return createUniversalPositioningRule(Object.assign({}, this.props));
   }
 }
 
-export class RelativePositioningRule extends React.Component {
-  static contextType = SimulationContext;
+export class RelativePositioningRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
     targetElementId: PropTypes.string.isRequired,
@@ -74,20 +83,12 @@ export class RelativePositioningRule extends React.Component {
     strength: 1.0,
   };
 
-  componentDidMount() {
-    const simulation = this.context;
-    simulation.registerRule(
-      createRelativePositioningRule(Object.assign({}, this.props))
-    );
-  }
-
-  render() {
-    return null;
+  createRule() {
+    return createRelativePositioningRule(Object.assign({}, this.props));
   }
 }
 
-export class LinkingRule extends React.Component {
-  static contextType = SimulationContext;
+export class LinkingRule extends RuleComponent {
   static propTypes = {
     between: PropTypes.arrayOf(PropTypes.string).isRequired,
     distance: PropTypes.number.isRequired,
@@ -98,15 +99,8 @@ export class LinkingRule extends React.Component {
     strength: 1.0,
   };
 
-  componentDidMount() {
-    const simulation = this.context;
-    simulation.registerRule(
-      createLinkingRule(Object.assign({}, this.props))
-    );
-  }
-
-  render() {
-    return null;
+  createRule() {
+    return createLinkingRule(Object.assign({}, this.props));
   }
 }
 

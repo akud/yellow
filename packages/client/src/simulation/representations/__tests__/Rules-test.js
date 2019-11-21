@@ -51,7 +51,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
         position: { x: 45, y: 91 },
@@ -75,7 +77,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
         position: { x: 45, y: 91 },
@@ -101,7 +105,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 45, y: 91 },
@@ -121,7 +127,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 45, y: 91 },
@@ -148,7 +156,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
@@ -174,7 +184,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
@@ -202,7 +214,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).not.toHaveBeenCalled();
@@ -226,7 +240,9 @@ describe('Rules', () => {
         </SimulationContext.Provider>
       );
 
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(rule);
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
       expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).not.toHaveBeenCalled();

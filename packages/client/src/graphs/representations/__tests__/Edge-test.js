@@ -24,13 +24,13 @@ import { mount } from 'enzyme';
 
 describe('Edge', () => {
 
-  const newSimulatedElement = opts => Object.assign({
-    id: '1',
+  const newElementData = opts => Object.assign({
     position: newPosition(),
+    velocity: newPosition(),
     shape: new MockShapeDefinition(),
   }, opts);
 
-  const selectElementFrom = (...elements) => id => elements.find(e => e.id === id);
+  const selectElementFrom = (elements) => id => elements[id];
 
   beforeEach(() => {
     resetMockSimulation();
@@ -41,10 +41,10 @@ describe('Edge', () => {
     const shape1 = new MockShapeDefinition({ intersectionPoint: { x: 45, y: 87 } });
     const shape2 = new MockShapeDefinition({ intersectionPoint: { x: 123, y: 56 } });
 
-    getElementData.mockImplementation(selectElementFrom(
-      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
-      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
-    ));
+    getElementData.mockImplementation(selectElementFrom({
+      '1-primary': newElementData({ position: { x: 1, y: 2 }, shape: shape1 }),
+      '2-primary': newElementData({ position: { x: 3, y: 4 }, shape: shape2 }),
+    }));
 
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
@@ -56,16 +56,18 @@ describe('Edge', () => {
         />
       </SimulationContext.Provider>
     );
-    expect(wrapper.find('line').length).toBe(1);
+    expect(wrapper.find('Line').length).toBe(1);
     expect(wrapper.find('Arrow').length).toBe(0);
 
-    expect(wrapper.find('line').prop('x1')).toBe(45);
-    expect(wrapper.find('line').prop('y1')).toBe(87);
-    expect(wrapper.find('line').prop('x2')).toBe(123);
-    expect(wrapper.find('line').prop('y2')).toBe(56);
+    expect(wrapper.find('Line').prop('from')).toEqual({
+      x: 45, y: 87
+    });
+    expect(wrapper.find('Line').prop('to')).toEqual({
+      x: 123, y: 56
+    });
 
-    expect(wrapper.find('line').prop('stroke')).toEqual('#442200');
-    expect(wrapper.find('line').prop('strokeWidth')).toEqual(3);
+    expect(wrapper.find('Line').prop('color')).toEqual('#442200');
+    expect(wrapper.find('Line').prop('thickness')).toEqual(3);
 
     expect(shape1.computeIntersectionWithRay).toHaveBeenCalledWith({ x: 1, y: 2 }, { x: 3, y: 4 });
     expect(shape2.computeIntersectionWithRay).toHaveBeenCalledWith({ x: 3, y: 4 }, { x: 1, y: 2 });
@@ -78,10 +80,10 @@ describe('Edge', () => {
       Math.PI / 3
     );
 
-    getElementData.mockImplementation(selectElementFrom(
-      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
-      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
-    ));
+    getElementData.mockImplementation(selectElementFrom({
+      '1-primary': newElementData({ position: { x: 1, y: 2 }, shape: shape1 }),
+      '2-primary': newElementData({ position: { x: 3, y: 4 }, shape: shape2 }),
+    }));
 
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
@@ -113,10 +115,10 @@ describe('Edge', () => {
       .mockReturnValueOnce(Math.PI / 3)
       .mockReturnValueOnce(Math.PI / 4);
 
-    getElementData.mockImplementation(selectElementFrom(
-      newSimulatedElement({ id: '1', position: { x: 1, y: 2 }, shape: shape1 }),
-      newSimulatedElement({ id: '2', position: { x: 3, y: 4 }, shape: shape2 }),
-    ));
+    getElementData.mockImplementation(selectElementFrom({
+      '1-primary': newElementData({ position: { x: 1, y: 2 }, shape: shape1 }),
+      '2-primary': newElementData({ position: { x: 3, y: 4 }, shape: shape2 }),
+    }));
 
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
@@ -158,13 +160,15 @@ describe('Edge', () => {
           fromNodeId='123'
           toNodeId='456'
           distance={324}
+          bindingStrength={4.5}
         />
       </SimulationContext.Provider>
     );
     expect(registerRule).toHaveBeenCalledOnce();
-    expect(createLinkingRule).toHaveBeenCalledOnceWith( {
-      between: ['123', '456'],
+    expect(createLinkingRule).toHaveBeenCalledOnceWith({
+      between: ['123-primary', '456-primary'],
       distance: 324,
+      strength: 4.5,
     });
   });
 });

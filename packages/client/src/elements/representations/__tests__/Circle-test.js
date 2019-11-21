@@ -10,11 +10,8 @@ describe('Circle', () => {
       <Circle
         radius={5}
         color='#442200'
-        config={{
-          id: '45',
-          position: { x: 420, y: 69 },
-          postRender: () => {},
-        }}
+        id='45'
+        position={{ x: 420, y: 69 }}
       />
     );
     expect(wrapper.find('circle').length).toBe(1);
@@ -25,19 +22,16 @@ describe('Circle', () => {
     expect(wrapper.find('circle').prop('data-element-id')).toEqual('45');
   });
 
-  it('passes a CircleDefinition to the postRender callback', () => {
-    const postRender = jest.fn();
+  it('passes a CircleDefinition to the registerShape callback', () => {
+    const registerShape = jest.fn();
     const wrapper = mount(
       <Circle
         radius={5}
         color='#442200'
-        config={{
-          id: '45',
-          position: { x: 420, y: 69 },
-          postRender,
-        }}
+        position={{ x: 420, y: 69 }}
+        registerShape={registerShape}
       />
     );
-    expect(postRender).toHaveBeenCalledOnceWith(new CircleDefinition({ radius: 5 }));
+    expect(registerShape).toHaveBeenCalledOnceWith(new CircleDefinition({ radius: 5 }));
   });
 });

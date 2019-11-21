@@ -116,14 +116,14 @@ describe('ForceSimulation', () => {
     it('adds rules to the runtime rule set', () => {
       const rule1 = jest.fn().mockReturnValue([]);
       const rule2 = jest.fn().mockReturnValue([]);
-      const simulation = new ForceSimulation().registerRule(rule1);
+      const simulation = new ForceSimulation().registerRule('rule1', rule1);
 
       callRuleForce();
 
       expect(rule1).toHaveBeenCalled();
       expect(rule2).not.toHaveBeenCalled();
 
-      simulation.registerRule(rule2)
+      simulation.registerRule('rule2', rule2)
 
       callRuleForce();
 
@@ -166,8 +166,8 @@ describe('ForceSimulation', () => {
           .registerElement('element-1')
           .registerElement('element-2')
           .registerElement('element-3')
-          .registerRule(rule1)
-          .registerRule(rule2);
+          .registerRule('rule1', rule1)
+          .registerRule('rule2', rule2);
 
         expect(rule1).not.toHaveBeenCalled();
         expect(rule2).not.toHaveBeenCalled();
@@ -224,7 +224,7 @@ describe('ForceSimulation', () => {
 
         const simulation = new ForceSimulation()
           .registerElement('element-1')
-          .registerRule(rule);
+          .registerRule('rule', rule);
 
         callRuleForce(0.75);
 

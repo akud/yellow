@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import ForceSimulation from '../ForceSimulation';
 import SimulationContext from './SimulationContext';
 
+import utils from '../../utils';
+
 let contextIdSequence = 0;
 
 export default class SimulatedLayout extends React.Component {
@@ -33,7 +35,7 @@ export default class SimulatedLayout extends React.Component {
     const { contextValue } = this.state;
     return (
       <SimulationContext.Provider value={contextValue}>
-        {children}
+        { children }
       </SimulationContext.Provider>
     );
   }
@@ -44,7 +46,7 @@ export default class SimulatedLayout extends React.Component {
       registerElement: (elementId, shape) => simulation.registerElement(elementId, shape),
       getElementIds: () => simulation.getElementIds(),
       getElementData: elementId => simulation.getElementData(elementId),
-      registerRule: (rule) => simulation.registerRule(rule),
+      registerRule: (ruleId, rule) => simulation.registerRule(ruleId, rule),
       setRepellingForceStrength: (strength) => simulation.setRepellingForceStrength(strength),
     };
   }

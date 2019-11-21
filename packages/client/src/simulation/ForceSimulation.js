@@ -29,7 +29,7 @@ export default class ForceSimulation {
   constructor() {
     this.elements = {};
     this.listeners = [];
-    this.rules = [];
+    this.rules = {};
     this.iterationNumber = 0;
     this.simulation = d3.forceSimulation()
       .force('ruleForce', (alpha) => this._applyRules(alpha))
@@ -62,8 +62,8 @@ export default class ForceSimulation {
    *
    * that optionally determines a set of state changes to apply to the simulation
    */
-  registerRule(rule) {
-    this.rules.push(rule);
+  registerRule(ruleId, rule) {
+    this.rules[ruleId] = rule;
     return this;
   }
 
@@ -135,7 +135,7 @@ export default class ForceSimulation {
   }
 
   _applyRules(alpha) {
-    utils.flatten(this.rules.map(rule => rule(this)))
+    utils.flatten(Object.values(this.rules).map(rule => rule(this)))
       .forEach(forceApplication => {
         forceApplication.getAffectedElementIds().forEach(elementId => {
           const element = this.elements[elementId];
