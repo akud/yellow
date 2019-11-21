@@ -104,6 +104,15 @@ export class LinkingRule extends RuleComponent {
   }
 }
 
+export class FunctionRule extends RuleComponent {
+  static propTypes = {
+    rule: PropTypes.func.isRequired,
+  };
+
+  createRule() {
+    return this.props.rule;
+  }
+}
 /**
  * <RepellingRule>
  *

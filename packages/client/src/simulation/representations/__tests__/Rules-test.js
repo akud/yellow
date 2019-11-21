@@ -8,6 +8,7 @@ import {
   UniversalPositioningRule,
   RelativePositioningRule,
   LinkingRule,
+  FunctionRule,
   RepellingRule,
 } from '../Rules';
 
@@ -251,6 +252,25 @@ describe('Rules', () => {
         distance: 45,
         strength: 1.0,
       });
+    });
+  });
+
+  describe('FunctionRule', () => {
+    it('registers the provided function with the simulation', () => {
+      const rule = jest.fn();
+      const wrapper = mount(
+        <SimulationContext.Provider value={simulation}>
+          <FunctionRule rule={rule} />
+        </SimulationContext.Provider>
+      );
+
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
+
+      expect(createPositioningRule).not.toHaveBeenCalled();
+      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
+      expect(createRelativePositioningRule).not.toHaveBeenCalled();
     });
   });
 
