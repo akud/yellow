@@ -113,6 +113,7 @@ export class FunctionRule extends RuleComponent {
     return this.props.rule;
   }
 }
+
 /**
  * <RepellingRule>
  *
