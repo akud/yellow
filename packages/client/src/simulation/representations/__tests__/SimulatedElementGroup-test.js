@@ -171,11 +171,15 @@ describe('SimulatedElementGroup', () => {
   });
 
   it('registers rules with the simulation based on element orientations', () => {
+    const customRule = jest.fn();
+    const customRuleCreator = jest.fn().mockReturnValue(customRule);
+
     const wrapper = mount(
       <SimulationContext.Provider value={new MockSimulation()}>
         <SimulatedElementGroup
           elementIdPrefix='rules'
           bindingStrength={4.3}
+          customRuleCreator={customRuleCreator}
         >
           <Circle radius={3} orientation={Orientation.TOP_LEFT} />
           <Circle radius={4} />
@@ -184,7 +188,15 @@ describe('SimulatedElementGroup', () => {
         </SimulatedElementGroup>
       </SimulationContext.Provider>
     );
-    expect(registerRule).toHaveBeenCalledTimes(5);
+    expect(registerRule).toHaveBeenCalledTimes(6);
+
+    expect(customRuleCreator).toHaveBeenCalledOnceWith([
+      'rules-0',
+      'rules-primary',
+      'rules-2',
+      'rules-3',
+    ]);
+    expect(registerRule).toHaveBeenCalledWith(expect.any(String), customRule);
 
     expect(createLinkingRule).toHaveBeenCalledWith({
       between: ['rules-primary', 'rules-0'],

@@ -15,6 +15,8 @@ import logging from '@akud/logging';
 
 const LOGGER = new logging.Logger('SimulatedElementGroup');
 
+let ruleIdSequence = 0;
+
 /**
  * Wrap a group of elements and keep them bound to each other around a primary element
  *
@@ -26,11 +28,13 @@ export default class SimulatedElementGroup extends React.Component {
     elementIdPrefix: PropTypes.string.isRequired,
     className: PropTypes.string,
     bindingStrength: PropTypes.number,
+    customRuleCreator: PropTypes.func,
   };
 
   static defaultProps = {
     className: 'simulated-element-group',
     bindingStrength: 2.5,
+    customRuleCreator: (elementIds) => (simulation) => [],
   };
 
   static getPrimaryElementId(prefix) {
@@ -39,6 +43,7 @@ export default class SimulatedElementGroup extends React.Component {
 
   constructor(props) {
     super(props);
+    this.ruleId = 'element-group-rule-' + (++ruleIdSequence);
     const { elementIdPrefix } = props;
 
     this.primaryElement = null;
@@ -59,6 +64,16 @@ export default class SimulatedElementGroup extends React.Component {
     });
     this.shapes = {};
   };
+
+  componentDidMount() {
+    const simulation = this.context;
+    simulation.registerRule(
+      this.ruleId,
+      this.props.customRuleCreator(
+        this.elements.map(e => e.id)
+      )
+    );
+  }
 
   render() {
     const { children, className } = this.props;
