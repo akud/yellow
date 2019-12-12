@@ -3,10 +3,6 @@ import PropTypes from 'prop-types';
 import CircleDefinition from '../CircleDefinition';
 import ElementProps from './ElementProps';
 
-import logging from '@akud/logging';
-
-const LOGGER = new logging.Logger('Circle');
-
 export default class Circle extends React.Component {
   static propTypes = {
     color: PropTypes.string,

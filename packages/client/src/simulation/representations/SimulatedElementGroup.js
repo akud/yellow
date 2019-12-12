@@ -61,8 +61,6 @@ export default class SimulatedElementGroup extends React.Component {
   };
 
   render() {
-    const simulation = this.context;
-    const { elements } = this;
     const { children, className } = this.props;
     return (
       <ElementGroup className={className}>

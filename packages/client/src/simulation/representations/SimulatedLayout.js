@@ -4,8 +4,6 @@ import PropTypes from 'prop-types';
 import ForceSimulation from '../ForceSimulation';
 import SimulationContext from './SimulationContext';
 
-import utils from '../../utils';
-
 let contextIdSequence = 0;
 
 export default class SimulatedLayout extends React.Component {
