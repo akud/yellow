@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
 
 import logging from '@akud/logging';
-import DisplayedGraph from './local/DisplayedGraph';
+
+let Graph;
+try {
+  Graph = require('./local/DisplayedGraph').default;
+} catch (err) {
+  Graph = require('./local/DefaultGraph').default;
+}
 
 export default class App extends Component {
   constructor(props) {
@@ -10,6 +16,6 @@ export default class App extends Component {
   }
 
   render() {
-    return <DisplayedGraph />;
+    return <Graph />;
   }
 }

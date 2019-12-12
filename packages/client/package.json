@@ -6,11 +6,10 @@
   "scripts": {
     "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/App.js\"",
     "prepublishOnly": "npm run transpile",
-    "display": "f() { npm run generate $1 && npm run start; }; f ",
-    "generate": "f() { if [ -z \"$1\" ]; then TARGET=\"./src/local/DefaultGraph.js\"; else TARGET=\"$1\"; fi; echo \"Promoting $TARGET to displayed graph\"; cp $TARGET ./src/local/DisplayedGraph.js; }; f ",
-    "prepare": "test -f ./src/local/DisplayedGraph.js || npm run generate",
-    "start": "npm run prepare && node scripts/start.js",
-    "build": "npm run prepare && node scripts/build.js",
+    "display": "npm run generate $1 && npm run start",
+    "generate": "echo \"Promoting $1 to displayed graph\" && cp $1 ./src/local/DisplayedGraph.js",
+    "start": "node scripts/start.js",
+    "build": "node scripts/build.js",
     "test": "jest",
     "test:debug": "node-inspect $(npm bin)/jest"
   },
