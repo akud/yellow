@@ -22,6 +22,11 @@ import utils from '../../../utils';
 import { mount } from 'enzyme';
 
 describe('SimulatedLayout', () => {
+  const windowProps = {
+    width: 500,
+    height: 500,
+    center: { x: 250, y: 250 },
+  };
 
   beforeEach(() => {
     resetMockSimulation();
@@ -30,7 +35,7 @@ describe('SimulatedLayout', () => {
   it('Initializes a simulation and passes it via context', () => {
     let contextValue;
     const wrapper = mount(
-      <SimulatedLayout SimulationClass={ForceSimulation}>
+      <SimulatedLayout SimulationClass={ForceSimulation} {...windowProps}>
         <SimulationContext.Consumer>
           { value => { contextValue = value; return null; } }
         </SimulationContext.Consumer>
@@ -57,7 +62,7 @@ describe('SimulatedLayout', () => {
   it('Passes a new instance to the context on every simulation update', () => {
     const contextValues = [];
     const wrapper = mount(
-      <SimulatedLayout SimulationClass={ForceSimulation}>
+      <SimulatedLayout SimulationClass={ForceSimulation} {...windowProps}>
         <SimulationContext.Consumer>
           { value => { contextValues.push(value); return null; } }
         </SimulationContext.Consumer>

@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 
 import ElementGroup from './ElementGroup';
 import ElementProps from './ElementProps';
-
-import logging from '@akud/logging';
-
-const LOGGER = new logging.Logger('Label');
+import ElementContext from './ElementContext';
 
 export default class Label extends React.Component {
+  static contextType = ElementContext;
+
   static propTypes = {
     text: PropTypes.string.isRequired,
     padding: PropTypes.number,
@@ -25,10 +24,11 @@ export default class Label extends React.Component {
 
   refCallback = element => {
     if (element) {
-      const { registerShape, padding } = this.props;
+      const { registerShape } = this.context;
+      const { id, padding } = this.props;
       const rect = element.getBoundingClientRect();
       this.setState({ width: rect.width, height: rect.height });
-      registerShape(new RectangleDefinition({
+      registerShape(id, new RectangleDefinition({
         width: rect.width + padding,
         height: rect.height + padding,
       }));
@@ -44,7 +44,7 @@ export default class Label extends React.Component {
   }
 
   render() {
-    const { id, position, border, config, text, padding } = this.props;
+    const { id, position, border, text, padding } = this.props;
     const { width, height } = this.state;
     const x = position.x - width / 2;
     const y = position.y + height / 4;

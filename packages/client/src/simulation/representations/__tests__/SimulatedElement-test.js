@@ -1,8 +1,11 @@
 jest.mock('../../ForceSimulation');
-jest.mock('../../../elements/ShapeDefinition');
 
 import React from 'react';
 import { mount } from 'enzyme';
+
+
+import Circle from '../../../elements/representations/Circle';
+import CircleDefinition from '../../../elements/CircleDefinition';
 
 import SimulatedElement from '../SimulatedElement';
 import SimulationContext from '../SimulationContext';
@@ -12,7 +15,6 @@ import MockSimulation, {
   registerElement,
   resetMockSimulation,
 } from '../../../simulation/ForceSimulation';
-import MockShapeDefinition from '../../../elements/ShapeDefinition';
 
 describe('SimulatedElement', () => {
   let simulation;
@@ -22,8 +24,7 @@ describe('SimulatedElement', () => {
     simulation = new MockSimulation();
   });
 
-  it('calls the render prop with simulated element data', () => {
-    const renderProp = jest.fn().mockReturnValue(<div id='asdf' />);
+  it('renders children with element data from the simulation and registers them', () => {
     getElementData.mockReturnValue({
       position: { x: 234, y: -124 },
       velocity: { x: 420, y: 69 },
@@ -31,45 +32,24 @@ describe('SimulatedElement', () => {
 
     const wrapper = mount(
       <SimulationContext.Provider value={simulation}>
-        <SimulatedElement id='63532l' render={renderProp} />
+        <SimulatedElement id='63532l'>
+          <Circle radius={5} />
+        </SimulatedElement>
       </SimulationContext.Provider>
     );
 
-    expect(wrapper.find('div').length).toBe(1);
-    expect(wrapper.find('div').prop('id')).toEqual('asdf');
-
-    expect(renderProp).toHaveBeenCalledOnceWith({
-      position: { x: 234, y: -124 },
-      velocity: { x: 420, y: 69 },
-      registerShape: expect.any(Function),
+    expect(wrapper.find('Circle').length).toBe(1);
+    expect(wrapper.find('Circle').prop('id')).toEqual('63532l');
+    expect(wrapper.find('Circle').prop('position')).toEqual({
+      x: 234, y: -124
     });
-  });
-
-  it('passes a shape registration callback to the render prop', () => {
-    const shape = new MockShapeDefinition();
-    const renderProp = jest.fn().mockReturnValue(<div />);
-    const onShapeRegistration = jest.fn();
-    getElementData.mockReturnValue({
-      position: { x: 234, y: -124 },
-      velocity: { x: 420, y: 69 },
+    expect(wrapper.find('Circle').prop('velocity')).toEqual({
+      x: 420, y: 69
     });
 
-    const wrapper = mount(
-      <SimulationContext.Provider value={simulation}>
-        <SimulatedElement
-          id='63532l'
-          render={renderProp}
-          onShapeRegistration={onShapeRegistration}
-        />
-      </SimulationContext.Provider>
+    expect(registerElement).toHaveBeenCalledOnceWith(
+      '63532l', new CircleDefinition({ radius: 5 })
     );
-
-    const registerShapeCallback = renderProp.mock.calls[0][0].registerShape;
-
-    registerShapeCallback(shape);
-
-    expect(registerElement).toHaveBeenCalledOnceWith('63532l', shape);
-    expect(onShapeRegistration).toHaveBeenCalledOnceWith(shape);
   });
 });
 

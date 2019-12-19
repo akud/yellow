@@ -1,16 +1,19 @@
 import Point from '../Point';
+import ElementContext from '../ElementContext';
 import PointDefinition from '../../PointDefinition';
 import React from 'react';
 
 import { mount } from 'enzyme';
 
 describe('Point', () => {
-  it('registers a PointDefinition with the registerShape callback', () => {
+  it('registers a PointDefinition on the context', () => {
     const registerShape = jest.fn();
     const wrapper = mount(
-      <Point registerShape={registerShape} />
+      <ElementContext.Provider value={{registerShape}}>
+        <Point id='hij' registerShape={registerShape} />
+      </ElementContext.Provider>
     );
 
-    expect(registerShape).toHaveBeenCalledOnceWith(new PointDefinition());
+    expect(registerShape).toHaveBeenCalledOnceWith('hij', new PointDefinition());
   });
 });

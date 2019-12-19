@@ -7,8 +7,8 @@ export default class Point extends React.Component {
   static defaultProps = {...ElementProps.DefaultBaseProps};
 
   componentDidMount() {
-    const { registerShape } = this.props;
-    registerShape(new PointDefinition());
+    const { id, registerShape } = this.props;
+    registerShape(id, new PointDefinition());
   }
 
   render() {

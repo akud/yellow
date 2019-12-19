@@ -14,6 +14,12 @@ describe('ForceSimulation', () => {
   let d3ForceCollide;
   let d3ForceManyBody;
 
+  const newSimulation = (opts) => new ForceSimulation(Object.assign({
+    width: 500,
+    height: 500,
+    center: { x: 250, y: 250 },
+  }, opts));
+
   beforeEach(() => {
     d3Simulation = {
       force: jest.fn(),
@@ -39,7 +45,7 @@ describe('ForceSimulation', () => {
   });
 
   it('initializes a simulation with base forces', () => {
-    const simulation = new ForceSimulation();
+    const simulation = newSimulation();
 
     expect(d3.forceSimulation).toHaveBeenCalled();
 
@@ -64,30 +70,42 @@ describe('ForceSimulation', () => {
       const shape1 = new MockShapeDefinition();
       const shape2 = new MockShapeDefinition();
       const shape3 = new MockShapeDefinition();
-      new ForceSimulation()
+      newSimulation({ center: { x: 100, y: 200 } })
         .registerElement('1', shape1)
         .registerElement('2', shape2)
         .registerElement('3', shape3);
 
       expect(d3Simulation.nodes).toHaveBeenCalledWith([
-        { id: '1', x: 0, y: 0, vx: 0, vy: 0, shape: shape1 },
+        { id: '1', x: 100, y: 200, vx: 0, vy: 0, shape: shape1 },
       ]);
       expect(d3Simulation.nodes).toHaveBeenCalledWith([
-        { id: '1', x: 0, y: 0, vx: 0, vy: 0, shape: shape1 },
-        { id: '2', x: 0, y: 0, vx: 0, vy: 0, shape: shape2 },
+        { id: '1', x: 100, y: 200, vx: 0, vy: 0, shape: shape1 },
+        { id: '2', x: 100, y: 200, vx: 0, vy: 0, shape: shape2 },
       ]);
       expect(d3Simulation.nodes).toHaveBeenCalledWith([
-        { id: '1', x: 0, y: 0, vx: 0, vy: 0, shape: shape1 },
-        { id: '2', x: 0, y: 0, vx: 0, vy: 0, shape: shape2 },
-        { id: '3', x: 0, y: 0, vx: 0, vy: 0, shape: shape3 },
+        { id: '1', x: 100, y: 200, vx: 0, vy: 0, shape: shape1 },
+        { id: '2', x: 100, y: 200, vx: 0, vy: 0, shape: shape2 },
+        { id: '3', x: 100, y: 200, vx: 0, vy: 0, shape: shape3 },
       ]);
       expect(d3Simulation.nodes).toHaveBeenCalledTimes(3);
     });
   });
 
+  describe('registerGroup', () => {
+    it('registers the group element ids so they can be retrieved by getGroupElementIds', () => {
+      const simulation = newSimulation()
+        .registerGroup('group1', ['e1', 'e2', 'e3'])
+        .registerGroup('group2', ['e4', 'e5']);
+
+      expect(simulation.getGroupElementIds('group1')).toEqual(['e1', 'e2', 'e3']);
+      expect(simulation.getGroupElementIds('group2')).toEqual(['e4', 'e5']);
+      expect(simulation.getGroupElementIds('foo')).toEqual([]);
+    });
+  });
+
   describe('setRepellingForceStrength', () => {
     it('registers a d3.forceManyBody() force on the simulation', () => {
-      new ForceSimulation().setRepellingForceStrength(3.5);
+      newSimulation().setRepellingForceStrength(3.5);
 
       expect(d3ForceManyBody.strength).toHaveBeenCalledWith(-30 * 3.5);
       expect(d3Simulation.force).toHaveBeenCalledWith('repelling', d3ForceManyBody);
@@ -116,7 +134,7 @@ describe('ForceSimulation', () => {
     it('adds rules to the runtime rule set', () => {
       const rule1 = jest.fn().mockReturnValue([]);
       const rule2 = jest.fn().mockReturnValue([]);
-      const simulation = new ForceSimulation().registerRule('rule1', rule1);
+      const simulation = newSimulation().registerRule('rule1', rule1);
 
       callRuleForce();
 
@@ -134,7 +152,7 @@ describe('ForceSimulation', () => {
 
     describe('ruleForce', () => {
       it('does nothing if there are no elements', () => {
-        new ForceSimulation();
+        newSimulation();
         callRuleForce();
       });
 
@@ -162,7 +180,7 @@ describe('ForceSimulation', () => {
         const rule2 = jest.fn().mockReturnValue([
           forceApplication3,
         ]);
-        const simulation = new ForceSimulation()
+        const simulation = newSimulation()
           .registerElement('element-1')
           .registerElement('element-2')
           .registerElement('element-3')
@@ -222,7 +240,7 @@ describe('ForceSimulation', () => {
         });
         const rule = jest.fn().mockReturnValue([forceApplication]);
 
-        const simulation = new ForceSimulation()
+        const simulation = newSimulation()
           .registerElement('element-1')
           .registerRule('rule', rule);
 
@@ -238,7 +256,7 @@ describe('ForceSimulation', () => {
   describe('onNewLayout', () => {
     it('adds a listener to the simulation\'s \'tick\' event', () => {
       const listener = jest.fn();
-      const simulation = new ForceSimulation().onNewLayout(listener);
+      const simulation = newSimulation().onNewLayout(listener);
       expect(d3Simulation.on).toHaveBeenCalledWith('tick', expect.functionWithSideEffect({
         before: () => expect(listener).not.toHaveBeenCalled(),
         after: () => expect(listener).toHaveBeenCalledWith(simulation),

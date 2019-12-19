@@ -2,8 +2,11 @@ import React from 'react';
 import RectangleDefinition from '../RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
+import ElementContext from './ElementContext';
 
 export default class Rectangle extends React.Component {
+  static contextType = ElementContext;
+
   static propTypes = {
     color: PropTypes.string,
     width: PropTypes.number,
@@ -19,8 +22,9 @@ export default class Rectangle extends React.Component {
   };
 
   componentDidMount() {
-    const { registerShape, width, height } = this.props;
-    registerShape(new RectangleDefinition({ width, height }));
+    const { registerShape } = this.context;
+    const { id, width, height } = this.props;
+    registerShape(id, new RectangleDefinition({ width, height }));
   }
 
   render() {

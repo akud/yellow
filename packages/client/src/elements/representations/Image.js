@@ -2,8 +2,10 @@ import React from 'react';
 import RectangleDefinition from '../RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
+import ElementContext from './ElementContext';
 
 export default class Image extends React.Component {
+  static contextType = ElementContext;
   static propTypes = {
     src: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
@@ -14,12 +16,13 @@ export default class Image extends React.Component {
   static defaultProps = {...ElementProps.DefaultBaseProps};
 
   componentDidMount() {
-    const { registerShape, width, height } = this.props;
-    registerShape(new RectangleDefinition({ width, height }));
+    const { registerShape } = this.context;
+    const { id, width, height } = this.props;
+    registerShape(id, new RectangleDefinition({ width, height }));
   }
 
   render() {
-    const { id, position, src, config, width, height } = this.props;
+    const { id, position, src, width, height } = this.props;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
     return (

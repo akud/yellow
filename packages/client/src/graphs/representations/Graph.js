@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import DisplayWindow from '../../elements/representations/DisplayWindow';
 import ElementGroup from '../../elements/representations/ElementGroup';
-import SimulatedLayout from '../../simulation/representations/SimulatedLayout';
+import SimulationWindow from '../../simulation/representations/SimulationWindow';
+
 import {
-  UniversalPositioningRule,
   RepellingRule,
 } from '../../simulation/representations/Rules';
 
@@ -38,23 +37,17 @@ export default class Graph extends React.Component {
     } = this.props;
 
     return (
-      <DisplayWindow
+      <SimulationWindow
         width={width}
         height={height}
         border={border}
         zoom={zoom}
-        render={
-          ({center}) => (
-            <ElementGroup className="yellow-graph">
-              <SimulatedLayout>
-                {children}
-                <UniversalPositioningRule position={center} />
-                <RepellingRule strength={repellingForceStrength} />
-              </SimulatedLayout>
-            </ElementGroup>
-          )
-        }
-      />
+      >
+        <ElementGroup className="yellow-graph">
+          {children}
+        </ElementGroup>
+        <RepellingRule strength={repellingForceStrength} />
+      </SimulationWindow>
     );
   }
 }

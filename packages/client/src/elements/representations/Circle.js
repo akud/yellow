@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import CircleDefinition from '../CircleDefinition';
 import ElementProps from './ElementProps';
+import ElementContext from './ElementContext';
 
 export default class Circle extends React.Component {
+  static contextType = ElementContext;
+
   static propTypes = {
     color: PropTypes.string,
     radius: PropTypes.number,
@@ -17,8 +20,9 @@ export default class Circle extends React.Component {
   };
 
   componentDidMount() {
-    const { registerShape, radius } = this.props;
-    registerShape(new CircleDefinition({ radius }));
+    const { registerShape } = this.context;
+    const { id, radius } = this.props;
+    registerShape(id, new CircleDefinition({ radius }));
   }
 
   render() {

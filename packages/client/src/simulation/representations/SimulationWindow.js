@@ -1,27 +1,41 @@
 import React from 'react';
-
 import PropTypes from 'prop-types';
 
 import DisplayWindow from '../../elements/representations/DisplayWindow';
+import WindowContext from '../../elements/representations/WindowContext';
+
 import SimulatedLayout from './SimulatedLayout';
 
 export default class SimulationWindow extends React.Component {
-  static propTypes = DisplayWindow.propTypes;
-  static defaultProps = DisplayWindow.defaultProps;
+  static propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number,
+    border: PropTypes.bool,
+    zoom: PropTypes.number,
+  };
+
+  static defaultProps = {
+    width: 500,
+    height: 500,
+    border: false,
+    zoom: 1.0,
+  };
 
   render() {
     const windowProps = Object.assign({}, this.props);
-    delete windowProps.render
-
+    delete windowProps.children;
     return (
-      <DisplayWindow
-        {...windowProps}
-        render={({center}) => (
-          <SimulatedLayout>
-            {this.props.render({ center })}
-          </SimulatedLayout>
-        )}
-      />
-    );
+      <DisplayWindow {...windowProps}>
+        <WindowContext.Consumer>
+          {
+            (windowContext) => (
+              <SimulatedLayout {...windowContext}>
+                {this.props.children}
+              </SimulatedLayout>
+            )
+          }
+        </WindowContext.Consumer>
+      </DisplayWindow>
+      );
   }
 }

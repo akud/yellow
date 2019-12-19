@@ -4,13 +4,13 @@ import CustomPropTypes from '../../representations/CustomPropTypes';
 export const BasePropTypes = {
   id: PropTypes.string,
   position: CustomPropTypes.position,
-  registerShape: PropTypes.func
+  velocity: CustomPropTypes.position,
 }
 
 export const DefaultBaseProps = {
   id: 'default-element-id',
   position: { x: 0, y: 0 },
-  registerShape: (shape) => {},
+  velocity: { x: 0, y: 0 },
 }
 
 export default {

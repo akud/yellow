@@ -1,31 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SimulationContext from './SimulationContext';
+import ElementContext from '../../elements/representations/ElementContext';
 
 export default class SimulatedElement extends React.Component {
   static contextType = SimulationContext;
   static propTypes = {
     id: PropTypes.string.isRequired,
-    //Signature: ({ position, velocity, registerShape }) => <>
-    render: PropTypes.func.isRequired,
-    //Signature: (elementId, shape) => {},
-    onShapeRegistration: PropTypes.func,
   };
 
-  static defaultProps = {
-    onShapeRegistration: (elementId, shape) => {},
-  };
 
   render() {
     const simulation = this.context;
     const elementData = simulation.getElementData(this.props.id);
-    return this.props.render({
-      position: elementData.position,
-      velocity: elementData.velocity,
-      registerShape: (shape) => {
-        simulation.registerElement(this.props.id, shape);
-        this.props.onShapeRegistration(shape);
-      },
-    });
+
+    return (
+      <ElementContext.Provider value={{
+        registerShape: (id, shape) => simulation.registerElement(id, shape)
+      }}>
+        {
+          React.cloneElement(
+            this.props.children,
+            { id: this.props.id, ...elementData }
+          )
+        }
+      </ElementContext.Provider>
+    );
   }
 }

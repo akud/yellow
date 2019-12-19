@@ -26,10 +26,12 @@ const DEFAULT_REPELLING_FORCE_STRENGTH = -30;
  * Runs a force-directed d3 simulation for element positions.
  */
 export default class ForceSimulation {
-  constructor() {
+  constructor({ width, height, center }) {
     this.elements = {};
     this.listeners = [];
     this.rules = {};
+    this.groups = {};
+    this.center = center;
     this.iterationNumber = 0;
     this.simulation = d3.forceSimulation()
       .force('ruleForce', (alpha) => this._applyRules(alpha))
@@ -44,16 +46,36 @@ export default class ForceSimulation {
    * Add a new element to the simulation
    */
   registerElement(elementId, shape) {
-    this.elements[elementId] = {
-      id: elementId,
-      x: 0,
-      y: 0,
-      vx: 0,
-      vy: 0,
-      shape: shape || PointDefinition.INSTANCE,
-    };
+    shape = shape || PointDefinition.INSTANCE;
+    if (this.elements[elementId]) {
+      this.elements[elementId].shape = shape;
+    } else {
+      this.elements[elementId] = {
+        id: elementId,
+        x: this.center.x,
+        y: this.center.y,
+        vx: 0,
+        vy: 0,
+        shape: shape,
+      };
+    }
     this.simulation.nodes(Object.values(this.elements));
     return this;
+  }
+
+  /**
+   * Register a group of elements so clients can fetch all elements for the group
+   */
+  registerGroup(groupId, elementIds) {
+    this.groups[groupId] = utils.requireArray(elementIds);
+    return this;
+  }
+
+  /**
+   * Get element ids for a the registered group
+   */
+  getGroupElementIds(groupId) {
+    return this.groups[groupId] || [];
   }
 
   /**
@@ -137,7 +159,7 @@ export default class ForceSimulation {
   _applyRules(alpha) {
     utils.flatten(Object.values(this.rules).map(rule => rule(this)))
       .forEach(forceApplication => {
-        forceApplication.getAffectedElementIds().forEach(elementId => {
+        forceApplication.getAffectedElementIds(this).forEach(elementId => {
           const element = this.elements[elementId];
           if (element) {
             element.vx += alpha * forceApplication.getXComponent();

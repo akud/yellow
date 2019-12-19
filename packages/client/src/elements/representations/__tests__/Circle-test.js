@@ -1,18 +1,27 @@
 import Circle from '../Circle';
+import ElementContext from '../ElementContext';
 import CircleDefinition from '../../CircleDefinition';
 import React from 'react';
 
 import { mount } from 'enzyme';
 
 describe('Circle', () => {
+  let context;
+
+  beforeEach(() => {
+    context = { registerShape: jest.fn() };
+  });
+
   it('renders with the given position, radius, and fill color', () => {
     const wrapper = mount(
-      <Circle
-        radius={5}
-        color='#442200'
-        id='45'
-        position={{ x: 420, y: 69 }}
-      />
+      <ElementContext.Provider value={context}>
+        <Circle
+          radius={5}
+          color='#442200'
+          id='45'
+          position={{ x: 420, y: 69 }}
+        />
+      </ElementContext.Provider>
     );
     expect(wrapper.find('circle').length).toBe(1);
     expect(wrapper.find('circle').prop('r')).toBe(5);
@@ -23,15 +32,18 @@ describe('Circle', () => {
   });
 
   it('passes a CircleDefinition to the registerShape callback', () => {
-    const registerShape = jest.fn();
     const wrapper = mount(
-      <Circle
-        radius={5}
-        color='#442200'
-        position={{ x: 420, y: 69 }}
-        registerShape={registerShape}
-      />
+      <ElementContext.Provider value={context}>
+        <Circle
+          id='circle-register-id'
+          radius={5}
+          color='#442200'
+          position={{ x: 420, y: 69 }}
+        />
+      </ElementContext.Provider>
     );
-    expect(registerShape).toHaveBeenCalledOnceWith(new CircleDefinition({ radius: 5 }));
+    expect(context.registerShape).toHaveBeenCalledOnceWith(
+      'circle-register-id', new CircleDefinition({ radius: 5 })
+    );
   });
 });

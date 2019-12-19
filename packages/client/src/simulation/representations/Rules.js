@@ -149,4 +149,5 @@ export default {
   RelativePositioningRule,
   LinkingRule,
   RepellingRule,
+  FunctionRule,
 }

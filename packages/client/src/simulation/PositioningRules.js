@@ -14,8 +14,7 @@ const SPRING_CONSTANT = 0.25;
 /**
  * Create a simulation rule that pushes the specified elements towards the specified position
  */
-export const createPositioningRule = ({ elementIds, position, strength=1.0}) => {
-  utils.requireArray(elementIds);
+export const createPositioningRule = ({ elementIds, groupId, position, strength=1.0}) => {
   utils.requirePositionObject(position);
   utils.requireNonNegative(strength);
 

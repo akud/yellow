@@ -8,7 +8,7 @@ export default class StubbedForceApplication {
     this.yComponent = yComponent;
   }
 
-  getAffectedElementIds() {
+  getAffectedElementIds(simulation) {
     return this.elementIds;
   }
 
