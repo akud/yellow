@@ -7,6 +7,7 @@ import SimulationContext from './SimulationContext';
 import Orientation from '../../elements/Orientation';
 
 import {
+  createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
   createRelativePositioningRule,
@@ -37,6 +38,22 @@ class RuleComponent extends React.Component {
 
   createRule() {
     throw new Error('Subclasses must implement createRule()');
+  }
+}
+
+export class DirectionalRule extends RuleComponent {
+  static propTypes = {
+    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    angle: PropTypes.number.isRequired,
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  createRule() {
+    return createDirectionalRule(Object.assign({}, this.props));
   }
 }
 
@@ -144,6 +161,7 @@ export class RepellingRule extends React.Component {
 
 
 export default {
+  DirectionalRule,
   PositioningRule,
   UniversalPositioningRule,
   RelativePositioningRule,

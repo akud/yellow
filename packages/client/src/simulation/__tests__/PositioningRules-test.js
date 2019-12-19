@@ -2,6 +2,7 @@ jest.mock('../../elements/geometry-utils');
 jest.mock('../ForceSimulation');
 
 import {
+  createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
   createRelativePositioningRule,
@@ -22,6 +23,23 @@ describe('PositioningRules', () => {
     simulation = new MockSimulation();
   });
 
+  describe('createDirectionalRule', () => {
+    it('creates a rule that pushes the provided elements in the specified direction', () => {
+      const rule = createDirectionalRule({
+        elementIds: ['a', 'b', 'c'],
+        angle: PI_OVER_TWO,
+        strength: 5.3
+      });
+
+      expect(rule()).toEqual([
+        new ForceApplication({
+          elementIds: ['a', 'b', 'c'],
+          angle: PI_OVER_TWO,
+          strength: 5.3
+        })
+      ]);
+    });
+  });
 
   describe('createPositioningRule', () => {
     it('creates a rule that pushes the provided elements to the specified point', () => {

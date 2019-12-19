@@ -12,9 +12,28 @@ const LOGGER = new logging.Logger('PositioningRules');
 const SPRING_CONSTANT = 0.25;
 
 /**
+ * Create a simulation rule that pushes the specified elements in the specified angle
+ */
+export const createDirectionalRule = ({ elementIds, angle, strength=1.0}) => {
+  utils.requireArray(elementIds);
+  utils.requireBetween(angle, 0, 2 * Math.PI);
+  utils.requireNonNegative(strength);
+
+  return (simulation) => [
+    new ForceApplication({
+      elementIds,
+      angle,
+      strength
+    })
+  ];
+}
+
+
+/**
  * Create a simulation rule that pushes the specified elements towards the specified position
  */
-export const createPositioningRule = ({ elementIds, groupId, position, strength=1.0}) => {
+export const createPositioningRule = ({ elementIds, position, strength=1.0}) => {
+  utils.requireArray(elementIds);
   utils.requirePositionObject(position);
   utils.requireNonNegative(strength);
 

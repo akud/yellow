@@ -81,7 +81,7 @@ export default class SimulatedElementGroup extends React.Component {
               const elementData = simulation.getElementData(elementId);
               return React.cloneElement(
                 c,
-                { id: elementId, ...elementData }
+                { id: elementId, key: elementId, ...elementData }
               );
             })
           }
