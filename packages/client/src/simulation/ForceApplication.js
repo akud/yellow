@@ -20,6 +20,6 @@ export default class ForceApplication {
   }
 
   getYComponent() {
-    return this.strength * Math.sin(this.angle);
+    return -1 * this.strength * Math.sin(this.angle);
   }
 }

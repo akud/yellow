@@ -67,12 +67,12 @@ describe('LinkingRule', () => {
     expect(rule(simulation)).toEqual([
       new ForceApplication({
         elementIds: [ elementId1 ],
-        angle: PI_OVER_TWO,
+        angle: TWO_PI,
         strength: 25,
       }),
       new ForceApplication({
         elementIds: [ elementId2 ],
-        angle: TWO_PI,
+        angle: PI_OVER_TWO,
         strength: 25,
       }),
     ]);

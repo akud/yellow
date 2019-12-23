@@ -45,16 +45,16 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
         new ForceApplication({
           elementIds: [ sourceId ],
           angle: geometryUtils.computeHorizontalIntersectionAngle(
-            sourcePosition,
-            targetPosition
+            targetPosition,
+            sourcePosition
           ),
           strength: strength * SPRING_CONSTANT * (currentDistance - distance),
         }),
         new ForceApplication({
           elementIds: [ targetId ],
           angle: geometryUtils.computeHorizontalIntersectionAngle(
-            targetPosition,
-            sourcePosition
+            sourcePosition,
+            targetPosition
           ),
           strength: strength * SPRING_CONSTANT * (currentDistance - distance),
         }),
