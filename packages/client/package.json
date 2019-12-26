@@ -4,14 +4,13 @@
   "description": "Client side React components for Yellow applications",
   "main": "distribution/export.js",
   "scripts": {
-    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/App.js\"",
-    "prepublishOnly": "npm run transpile",
-    "display": "f() { npm run generate $1 && npm run start; }; f",
-    "generate": "f() { echo \"Promoting $1 to displayed graph\" && cp $1 ./src/local/DisplayedGraph.js; }; f",
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "clean": "rm -rf distribution/* build/* src/tmp/*",
+    "display": "f() { npm run clean && node scripts/display.js $1; }; f",
+    "display:debug": "f() { npm run clean && node-inspect scripts/display.js $1; }; f",
+    "prepublishOnly": "npm run clean && npm run transpile",
     "test": "jest",
-    "test:debug": "node-inspect $(npm bin)/jest"
+    "test:debug": "node-inspect $(npm bin)/jest",
+    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\"\""
   },
   "repository": {
     "type": "git",
@@ -107,6 +106,8 @@
     "babel-core": "7.0.0-bridge.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
+    "mkdirp": "^0.5.1",
+    "path": "^0.12.7",
     "react-test-renderer": "^16.7.0"
   },
   "jest": {
