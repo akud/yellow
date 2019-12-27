@@ -6,7 +6,7 @@ package-lock.json
 
 src/local/*
 src/tmp/*
-!src/local/DefaultGraph.js
+it.log
 build/*
 distribution/*
 

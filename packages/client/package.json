@@ -7,10 +7,12 @@
     "clean": "rm -rf distribution/* build/* src/tmp/*",
     "display": "f() { npm run clean && node scripts/display.js $1; }; f",
     "display:debug": "f() { npm run clean && node-inspect scripts/display.js $1; }; f",
+    "it": "node scripts/run_integration_tests.js",
+    "it:run": "TEST_TIMEOUT=30000 jest src/tmp/it-test.js --runInBand --forceExit --detectOpenHandles --useStderr 2> it.log; cat it.log; rm it.log",
     "prepublishOnly": "npm run clean && npm run transpile",
-    "test": "jest",
-    "test:debug": "node-inspect $(npm bin)/jest",
-    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\"\""
+    "test": "f() { jest $* --testPathIgnorePatterns=\"/src/integration_tests/\"; }; f",
+    "test:debug": "node-inspect $(npm bin)/jest --testPathIgnorePatterns=\"/src/integration_tests/\"",
+    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/integration_tests/**.js\""
   },
   "repository": {
     "type": "git",
@@ -104,9 +106,11 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-react": "^7.0.0",
     "babel-core": "7.0.0-bridge.0",
+    "clear": "^0.1.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.7.1",
     "mkdirp": "^0.5.1",
+    "npm": "^6.13.4",
     "path": "^0.12.7",
     "react-test-renderer": "^16.7.0"
   },
@@ -121,8 +125,7 @@
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/src/test-utils/setup.js",
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/?(*.)(spec|test).{js,jsx,ts,tsx}"
+      "<rootDir>/src/**/?(*)-test.js"
     ],
     "testEnvironment": "jsdom",
     "testURL": "http://localhost",

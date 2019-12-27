@@ -14,3 +14,7 @@ expect.extend(expectations);
 Object.assign(global, utils);
 
 logging.setLevel(logging.TRACE);
+
+if (process.env.TEST_TIMEOUT) {
+  jest.setTimeout(parseInt(process.env.TEST_TIMEOUT));
+}
