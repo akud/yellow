@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
 import ElementPropTypes from '../elements/ElementPropTypes';
+import WindowContext from '../elements/WindowContext';
 
 import SimulationContext from './SimulationContext';
 
@@ -88,6 +90,25 @@ export class UniversalPositioningRule extends RuleComponent {
   }
 }
 
+export class CenteringRule extends React.Component {
+  static propTypes = {
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  render() {
+    const { strength } = this.props;
+    return (
+      <WindowContext.Consumer>
+        { ({center}) => <UniversalPositioningRule position={center} strength={strength} /> }
+      </WindowContext.Consumer>
+    );
+  }
+}
+
 export class RelativePositioningRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
@@ -161,6 +182,7 @@ export class RepellingRule extends React.Component {
 
 
 export default {
+  CenteringRule,
   DirectionalRule,
   PositioningRule,
   UniversalPositioningRule,

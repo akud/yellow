@@ -4,6 +4,7 @@ jest.mock('../force/LinkingRule');
 
 import React from 'react';
 import {
+  CenteringRule,
   DirectionalRule,
   PositioningRule,
   UniversalPositioningRule,
@@ -12,6 +13,8 @@ import {
   FunctionRule,
   RepellingRule,
 } from '../Rules';
+
+import WindowContext from '../../elements/WindowContext';
 
 import SimulationContext from '../SimulationContext';
 import Orientation from '../Orientation';
@@ -203,6 +206,61 @@ describe('Rules', () => {
       expect(createLinkingRule).not.toHaveBeenCalled();
     });
   });
+
+  describe('CenteringRule', () => {
+    it('registers a universal positioning rule pointed towards the window center', () => {
+      const center = { x: 500, y: 500 };
+      const rule = jest.fn();
+      createUniversalPositioningRule.mockReturnValue(rule);
+
+      const wrapper = mount(
+        <WindowContext.Provider value={{center}}>
+          <SimulationContext.Provider value={simulation}>
+            <CenteringRule strength={4.2} />
+          </SimulationContext.Provider>
+        </WindowContext.Provider>
+      );
+
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
+      expect(createDirectionalRule).not.toHaveBeenCalled();
+      expect(createPositioningRule).not.toHaveBeenCalled();
+      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
+        position: { x: 500, y: 500 },
+        strength: 4.2,
+      });
+      expect(createRelativePositioningRule).not.toHaveBeenCalled();
+      expect(createLinkingRule).not.toHaveBeenCalled();
+    });
+
+    it('defaults the strength to 1.0', () => {
+      const center = { x: 500, y: 500 };
+      const rule = jest.fn();
+      createUniversalPositioningRule.mockReturnValue(rule);
+
+      const wrapper = mount(
+        <WindowContext.Provider value={{center}}>
+          <SimulationContext.Provider value={simulation}>
+            <CenteringRule />
+          </SimulationContext.Provider>
+        </WindowContext.Provider>
+      );
+
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
+      expect(createDirectionalRule).not.toHaveBeenCalled();
+      expect(createPositioningRule).not.toHaveBeenCalled();
+      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
+        position: { x: 500, y: 500 },
+        strength: 1.0,
+      });
+      expect(createRelativePositioningRule).not.toHaveBeenCalled();
+      expect(createLinkingRule).not.toHaveBeenCalled();
+    });
+  });
+
 
   describe('RelativePositioningRule', () => {
     it('registers a relative positioning rule with the simulation context', () => {
