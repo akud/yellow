@@ -1,5 +1,4 @@
 import geometryUtils from '../geometry-utils';
-import Orientation from '../../Orientation';
 
 describe('geometry utils', () => {
   describe('slope', () => {
@@ -81,71 +80,6 @@ describe('geometry utils', () => {
       testCases.forEach(({ nearPoint, farPoint, expected }) => {
         const message = 'from: ' + JSON.stringify(nearPoint) + ' to ' + JSON.stringify(farPoint);
         expect(geometryUtils.computeHorizontalIntersectionAngle(nearPoint, farPoint), message).toBeCloseTo(expected);
-      });
-    });
-  });
-
-  describe('isOriented', () => {
-    const spatialOrientations = [
-      Orientation.RIGHT,
-      Orientation.TOP_RIGHT,
-      Orientation.TOP,
-      Orientation.TOP_LEFT,
-      Orientation.LEFT,
-      Orientation.BOTTOM_LEFT,
-      Orientation.BOTTOM,
-      Orientation.BOTTOM_RIGHT,
-    ];
-
-    const isOriented = (opts) => geometryUtils.isOriented(Object.assign(
-      {
-        anchorPoint: { x: 0, y: 0 },
-        targetPoint: { x: 1, y: 1 },
-      },
-      opts
-    ));
-
-    const generateTestCases = ({
-      anchorPoint,
-      targetPoint,
-      expectedOrientations,
-      tolerance=Math.PI / 6,
-    }) => {
-      return spatialOrientations.map(o => ({
-        anchorPoint,
-        targetPoint,
-        tolerance,
-        orientation: o,
-        expected: expectedOrientations.indexOf(o) !== -1,
-      }));
-    };
-
-    it('is always true if the orientation is not spatially oriented', () => {
-      expect(isOriented({ orientation: Orientation.UNSPECIFIED })).toBe(true);
-      expect(isOriented({ orientation: Orientation.PRIMARY })).toBe(true);
-    });
-
-    it('checks if the target point is correctly oriented relative to the anchor point', () => {
-      const testCases =
-        generateTestCases({
-          anchorPoint: { x: 0, y: 0 },
-          targetPoint: { x: 1, y: 1 },
-          expectedOrientations: [ Orientation.TOP_RIGHT ],
-        })
-        .concat(generateTestCases({
-          anchorPoint: { x: 4, y: -3 },
-          targetPoint: { x: -1, y: -5 },
-          expectedOrientations: [ Orientation.BOTTOM_LEFT, Orientation.LEFT ],
-        }));
-
-      testCases.forEach(({ anchorPoint, targetPoint, orientation, tolerance, expected }) => {
-        const message = JSON.stringify(anchorPoint) +
-          ' to ' +
-          JSON.stringify(targetPoint) +
-          '; tolerance=' + tolerance +
-          '; orientation=' + orientation.getName() +
-          '; expected=' + expected;
-        expect(isOriented({ anchorPoint, targetPoint, orientation }), message).toBe(expected);
       });
     });
   });

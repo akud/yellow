@@ -16,10 +16,10 @@ describe('Motion', () => {
 <SimulatedElement id='left'>
   <Label text='going left' />
 </SimulatedElement>
-<Rules.DirectionalRule elementIds={['up']} angle={3 * Math.PI / 2} />
-<Rules.DirectionalRule elementIds={['down']} angle={Math.PI / 2} />
-<Rules.DirectionalRule elementIds={['left']} angle={Math.PI} />
-<Rules.DirectionalRule elementIds={['right']} angle={0} />
+<Rules.DirectionalRule elementIds={['up']} orientation={Orientation.TOP} />
+<Rules.DirectionalRule elementIds={['down']} orientation={Orientation.BOTTOM} />
+<Rules.DirectionalRule elementIds={['left']} orientation={Orientation.LEFT} />
+<Rules.DirectionalRule elementIds={['right']} orientation={Orientation.RIGHT} />
 `
     );
   });

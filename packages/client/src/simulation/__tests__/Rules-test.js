@@ -14,8 +14,7 @@ import {
 } from '../Rules';
 
 import SimulationContext from '../SimulationContext';
-
-import Orientation from '../../elements/Orientation';
+import Orientation from '../Orientation';
 
 import { mount } from 'enzyme';
 
@@ -48,7 +47,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <DirectionalRule
             elementIds={['node-43', 'node-55']}
-            angle={PI_OVER_FOUR}
+            orientation={Orientation.TOP_RIGHT}
             strength={4.2}
           />
         </SimulationContext.Provider>
@@ -59,7 +58,7 @@ describe('Rules', () => {
       );
       expect(createDirectionalRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
-        angle: PI_OVER_FOUR,
+        orientation: Orientation.TOP_RIGHT,
         strength: 4.2,
       });
       expect(createPositioningRule).not.toHaveBeenCalled();
@@ -76,7 +75,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <DirectionalRule
             elementIds={['node-43', 'node-55']}
-            angle={THREE_PI_OVER_TWO}
+            orientation={Orientation.BOTTOM_LEFT}
           />
         </SimulationContext.Provider>
       );
@@ -86,7 +85,7 @@ describe('Rules', () => {
       );
       expect(createDirectionalRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
-        angle: THREE_PI_OVER_TWO,
+        orientation: Orientation.BOTTOM_LEFT,
         strength: 1.0,
       });
       expect(createPositioningRule).not.toHaveBeenCalled();

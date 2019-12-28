@@ -2,9 +2,9 @@ jest.mock('../force/ForceSimulation');
 jest.mock('../force/PositioningRules');
 jest.mock('../force/LinkingRule');
 
+import Orientation from '../Orientation';
 import SimulatedElementGroup from '../SimulatedElementGroup';
 
-import Orientation from '../../elements/Orientation';
 import Circle from '../../elements/Circle';
 import CircleDefinition from '../../elements/geometry/CircleDefinition';
 

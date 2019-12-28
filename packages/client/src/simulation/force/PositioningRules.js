@@ -2,7 +2,7 @@ import utils from '../../utils';
 
 import ForceApplication from './ForceApplication';
 
-import Orientation from '../../elements/Orientation';
+import Orientation from '../Orientation';
 import geometryUtils from '../../elements/geometry/geometry-utils';
 
 import logging from '@akud/logging';
@@ -12,17 +12,18 @@ const LOGGER = new logging.Logger('PositioningRules');
 const SPRING_CONSTANT = 0.25;
 
 /**
- * Create a simulation rule that pushes the specified elements in the specified angle
+ * Create a simulation rule that pushes the specified elements in the direction of the
+ * specified orientation
  */
-export const createDirectionalRule = ({ elementIds, angle, strength=1.0}) => {
+export const createDirectionalRule = ({ elementIds, orientation, strength=1.0}) => {
   utils.requireArray(elementIds);
-  utils.requireBetween(angle, 0, 2 * Math.PI);
+  utils.requirePresent(orientation);
   utils.requireNonNegative(strength);
 
   return (simulation) => [
     new ForceApplication({
       elementIds,
-      angle,
+      angle: orientation.getAngle(),
       strength
     })
   ];
@@ -90,8 +91,7 @@ export const createRelativePositioningRule = ({ baseElementId, targetElementId, 
   return (simulation) => {
     const baseElementData = simulation.getElementData(baseElementId);
     const targetElementData = simulation.getElementData(targetElementId);
-    const isOriented = geometryUtils.isOriented({
-      orientation,
+    const isOriented = orientation.isOriented({
       anchorPoint: baseElementData.position,
       targetPoint: targetElementData.position,
     });
@@ -125,6 +125,7 @@ export const createRelativePositioningRule = ({ baseElementId, targetElementId, 
 }
 
 export default {
+  createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
   createRelativePositioningRule,

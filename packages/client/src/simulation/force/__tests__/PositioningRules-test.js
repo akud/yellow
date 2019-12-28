@@ -1,5 +1,6 @@
 jest.mock('../../../elements/geometry/geometry-utils');
 jest.mock('../ForceSimulation');
+jest.mock('../../Orientation');
 
 import {
   createDirectionalRule,
@@ -9,7 +10,7 @@ import {
 } from '../PositioningRules';
 import ForceApplication from '../ForceApplication';
 
-import Orientation from '../../../elements/Orientation';
+import Orientation, { resetMockOrientations } from '../../Orientation';
 
 import geometryUtils from '../../../elements/geometry/geometry-utils';
 import MockSimulation, { resetMockSimulation } from '../ForceSimulation';
@@ -20,14 +21,16 @@ describe('PositioningRules', () => {
   beforeEach(() => {
     geometryUtils.mockReset();
     resetMockSimulation();
+    resetMockOrientations();
     simulation = new MockSimulation();
   });
 
   describe('createDirectionalRule', () => {
-    it('creates a rule that pushes the provided elements in the specified direction', () => {
+    it('creates a rule that pushes the provided elements in the direction of the specified orientation', () => {
+      Orientation.TOP.getAngle.mockReturnValue(PI_OVER_TWO);
       const rule = createDirectionalRule({
         elementIds: ['a', 'b', 'c'],
-        angle: PI_OVER_TWO,
+        orientation: Orientation.TOP,
         strength: 5.3
       });
 
@@ -218,9 +221,10 @@ describe('PositioningRules', () => {
         'target-element': targetElementData,
       }[elementId]));
 
-      geometryUtils.isOriented.mockReturnValue(false);
+      orientation.isOriented.mockReturnValue(false);
+      orientation.getAngle.mockReturnValue(PI_OVER_FOUR);
       geometryUtils.computeHorizontalIntersectionAngle.mockReturnValue(
-        orientation.getAngle() + PI_OVER_TWO
+        THREE_PI_OVER_FOUR
       );
 
       const rule = createRelativePositioningRule({
@@ -233,7 +237,7 @@ describe('PositioningRules', () => {
       expect(rule(simulation)).toEqual([
         new ForceApplication({
           elementIds: ['target-element'],
-          angle: orientation.getAngle(),
+          angle: PI_OVER_FOUR,
           strength: PI_OVER_TWO * 5.6
         }),
       ]);
@@ -242,11 +246,11 @@ describe('PositioningRules', () => {
       expect(simulation.getElementData).toHaveBeenCalledWith('target-element');
       expect(simulation.getElementData).toHaveBeenCalledTimes(2);
 
-      expect(geometryUtils.isOriented).toHaveBeenCalledOnceWith({
-        orientation,
+      expect(orientation.isOriented).toHaveBeenCalledOnceWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
       });
+      expect(orientation.getAngle).toHaveBeenCalled();
       expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledOnceWith(
         baseElementData.position,
         targetElementData.position
@@ -263,7 +267,7 @@ describe('PositioningRules', () => {
         'target-element': targetElementData,
       }[elementId]));
 
-      geometryUtils.isOriented.mockReturnValue(true);
+      orientation.isOriented.mockReturnValue(true);
 
       const rule = createRelativePositioningRule({
         baseElementId: 'base-element',
@@ -277,8 +281,7 @@ describe('PositioningRules', () => {
       expect(simulation.getElementData).toHaveBeenCalledWith('target-element');
       expect(simulation.getElementData).toHaveBeenCalledTimes(2);
 
-      expect(geometryUtils.isOriented).toHaveBeenCalledOnceWith({
-        orientation,
+      expect(orientation.isOriented).toHaveBeenCalledOnceWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
       });

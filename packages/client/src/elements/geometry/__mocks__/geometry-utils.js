@@ -2,7 +2,6 @@ export const slope = jest.fn();
 export const distance = jest.fn();
 export const approximatelyEqual = jest.fn();
 export const computeHorizontalIntersectionAngle = jest.fn();
-export const isOriented = jest.fn();
 export const radiansToDegrees = jest.fn();
 export const addVectors = jest.fn();
 export const mockReset = () => {
@@ -12,7 +11,6 @@ export const mockReset = () => {
   computeHorizontalIntersectionAngle.mockReset();
   radiansToDegrees.mockReset();
   addVectors.mockReset();
-  isOriented.mockReset();
 };
 
 export default {
@@ -20,7 +18,6 @@ export default {
   distance,
   approximatelyEqual,
   computeHorizontalIntersectionAngle,
-  isOriented,
   radiansToDegrees,
   addVectors,
   mockReset,

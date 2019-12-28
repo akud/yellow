@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Orientation from '../elements/Orientation';
 import ElementGroup from '../elements/ElementGroup';
 import ElementContext from '../elements/ElementContext';
 
+import Orientation from './Orientation';
 import SimulationContext from './SimulationContext';
 import { createRelativePositioningRule } from './force/PositioningRules';
 import { createLinkingRule } from './force/LinkingRule';

@@ -4,7 +4,7 @@ import ElementPropTypes from '../elements/ElementPropTypes';
 
 import SimulationContext from './SimulationContext';
 
-import Orientation from '../elements/Orientation';
+import Orientation from './Orientation';
 
 import {
   createDirectionalRule,
@@ -44,7 +44,7 @@ class RuleComponent extends React.Component {
 export class DirectionalRule extends RuleComponent {
   static propTypes = {
     elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
-    angle: PropTypes.number.isRequired,
+    orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
   };
 

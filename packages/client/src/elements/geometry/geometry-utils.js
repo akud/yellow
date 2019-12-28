@@ -1,5 +1,3 @@
-import Orientation from '../Orientation';
-
 /**
  * Determine the slope of the line formed by the two points
  *
@@ -44,32 +42,7 @@ export const computeHorizontalIntersectionAngle = (p1, p2) => {
 }
 
 /**
- * Indicates if the target point is oriented correctly with respect to the target orientation.
- *
- * params:
- *   anchorPoint - the anchor point
- *   targetPoint - the point to consider
- *   tolerance - radians to allow on either side of the target angle. Defaults to pi/6
- */
-export const isOriented = ({
-  anchorPoint,
-  targetPoint,
-  orientation=Orientation.UNSPECIFIED,
-  tolerance=Math.PI/6,
-}) => {
-  if (!orientation.isSpatiallyOriented()) {
-    return true;
-  }
-
-  const angleBetweenPositions = computeHorizontalIntersectionAngle(
-    anchorPoint,
-    targetPoint,
-  );
-  return Math.abs(angleBetweenPositions - orientation.getAngle()) <= tolerance;
-}
-
-/**
- * Calculate the eudlidean distance between two points
+ * Calculate the euclidean distance between two points
  */
 export const distance = (p1, p2) => Math.sqrt(
   (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y)
@@ -90,7 +63,6 @@ export default {
   distance,
   approximatelyEqual,
   computeHorizontalIntersectionAngle,
-  isOriented,
   radiansToDegrees,
   addVectors,
 };

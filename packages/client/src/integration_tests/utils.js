@@ -129,7 +129,6 @@ import ElementPropTypes from '../elements/ElementPropTypes';
 import Image from '../elements/Image';
 import Label from '../elements/Label';
 import Line from '../elements/Line';
-import Orientation from '../elements/Orientation';
 import Point from '../elements/Point';
 import Rectangle from '../elements/Rectangle';
 import WindowContext from '../elements/WindowContext';
@@ -137,7 +136,8 @@ import geometryUtils from '../elements/geometry/geometry-utils';
 `);
 
 const simulationImports = () => (
-`import Rules from '../simulation/Rules';
+`import Orientation from '../simulation/Orientation';
+import Rules from '../simulation/Rules';
 import SimulatedElementGroup from '../simulation/SimulatedElementGroup';
 import SimulatedElement from '../simulation/SimulatedElement';
 import SimulatedLayout from '../simulation/SimulatedLayout';
