@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Graph from '../Graph';
+import GraphStyle from '../GraphStyle';
 
 import { shallow } from 'enzyme';
 
@@ -19,8 +20,7 @@ describe('Graph', () => {
     expect(simulationWindow.prop('border')).toBe(false)
 
     expect(simulationWindow.find('p').length).toBe(1);
-    expect(simulationWindow.find('RepellingRule').length).toBe(1);
-    expect(simulationWindow.find('RepellingRule').prop('strength')).toBe(50);
+    expect(simulationWindow.find(GraphStyle.Default).length).toBe(1);
   });
 
   it('forwards props to the SimulationWindow', () => {
@@ -39,15 +39,5 @@ describe('Graph', () => {
     expect(simulationWindow.prop('height')).toBe(1500);
     expect(simulationWindow.prop('zoom')).toBe(2.0);
     expect(simulationWindow.prop('border')).toBe(true)
-  });
-
-  it('forwards repellingForceStrength to the RepellingRule', () => {
-    const wrapper = shallow(
-      <Graph repellingForceStrength={100}>
-        <p>Hello!</p>
-      </Graph>
-    );
-
-    expect(wrapper.find('RepellingRule').prop('strength')).toBe(100);
   });
 });

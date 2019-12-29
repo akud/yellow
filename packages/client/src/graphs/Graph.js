@@ -4,27 +4,24 @@ import PropTypes from 'prop-types';
 import ElementGroup from '../elements/ElementGroup';
 import SimulationWindow from '../simulation/SimulationWindow';
 
-import {
-  RepellingRule
-} from '../simulation/Rules';
+import GraphStyle from './GraphStyle';
 
 export default class Graph extends React.Component {
+  static propTypes = {
+    width: PropTypes.number,
+    height: PropTypes.number,
+    border: PropTypes.bool,
+    zoom: PropTypes.number,
+    style: PropTypes.oneOf(Object.values(GraphStyle)),
+  };
 
   static defaultProps = {
     width: 500,
     height: 500,
     border: false,
     zoom: 1.0,
-    repellingForceStrength: 50,
-  }
-
-  static propTypes = {
-    width: PropTypes.number,
-    height: PropTypes.number,
-    border: PropTypes.bool,
-    zoom: PropTypes.number,
-    repellingForceStrength: PropTypes.number,
-  }
+    style: GraphStyle.Default,
+  };
 
   render() {
     const {
@@ -33,9 +30,10 @@ export default class Graph extends React.Component {
       border,
       zoom,
       children,
-      repellingForceStrength,
+      style,
     } = this.props;
 
+    debugger;
     return (
       <SimulationWindow
         width={width}
@@ -46,7 +44,7 @@ export default class Graph extends React.Component {
         <ElementGroup className="yellow-graph">
           {children}
         </ElementGroup>
-        <RepellingRule strength={repellingForceStrength} />
+        { React.createElement(style) }
       </SimulationWindow>
     );
   }
