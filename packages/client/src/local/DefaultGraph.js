@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Graph from '../graphs/representations/Graph';
-import Edge from '../graphs/representations/Edge';
-import CircleNode from '../graphs/representations/CircleNode';
+import Graph from '../graphs/Graph';
+import Edge from '../graphs/Edge';
+import CircleNode from '../graphs/CircleNode';
 
 export default () => (
   <Graph>

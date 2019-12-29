@@ -5,7 +5,8 @@ package-lock.json
 .pnp.js
 
 src/local/*
-!src/local/DefaultGraph.js
+src/tmp/*
+it.log
 build/*
 distribution/*
 
