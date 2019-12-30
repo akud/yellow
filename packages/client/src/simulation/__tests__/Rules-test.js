@@ -9,7 +9,7 @@ import {
   DirectionalRule,
   PositioningRule,
   UniversalPositioningRule,
-  RelativePositioningRule,
+  OrientingRule,
   LinkingRule,
   FunctionRule,
   RepellingRule,
@@ -27,7 +27,7 @@ import {
   createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
-  createRelativePositioningRule,
+  createOrientingRule,
   resetMockPositioningRules,
 } from '../force/PositioningRules';
 
@@ -52,7 +52,7 @@ describe('Rules', () => {
       createDirectionalRule,
       createPositioningRule,
       createUniversalPositioningRule,
-      createRelativePositioningRule,
+      createOrientingRule,
       createBindingRule,
       createLinkingRule,
       simulation.setRepellingForceStrength,
@@ -259,14 +259,14 @@ describe('Rules', () => {
   });
 
 
-  describe('RelativePositioningRule', () => {
+  describe('OrientingRule', () => {
     it('registers a relative positioning rule with the simulation context', () => {
       const rule = jest.fn();
-      createRelativePositioningRule.mockReturnValue(rule);
+      createOrientingRule.mockReturnValue(rule);
 
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
-          <RelativePositioningRule
+          <OrientingRule
             baseElementId='base-element'
             targetElementId='target-element'
             orientation={Orientation.BOTTOM_RIGHT}
@@ -278,22 +278,22 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
+      expect(createOrientingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation: Orientation.BOTTOM_RIGHT,
         strength: 4.2,
       });
-      expectOtherRulesNotToHaveBeenCalled(createRelativePositioningRule);
+      expectOtherRulesNotToHaveBeenCalled(createOrientingRule);
     });
 
     it('defaults the strength to 1.0', () => {
       const rule = jest.fn();
-      createRelativePositioningRule.mockReturnValue(rule);
+      createOrientingRule.mockReturnValue(rule);
 
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
-          <RelativePositioningRule
+          <OrientingRule
             baseElementId='base-element'
             targetElementId='target-element'
             orientation={Orientation.TOP_LEFT}
@@ -304,13 +304,13 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
+      expect(createOrientingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation: Orientation.TOP_LEFT,
         strength: 1.0,
       });
-      expectOtherRulesNotToHaveBeenCalled(createRelativePositioningRule);
+      expectOtherRulesNotToHaveBeenCalled(createOrientingRule);
     });
   });
 

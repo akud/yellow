@@ -12,7 +12,7 @@ import {
   createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
-  createRelativePositioningRule,
+  createOrientingRule,
 } from './force/PositioningRules';
 
 import {
@@ -145,7 +145,7 @@ export class CenteringRule extends React.Component {
  * orientation - Orientation determining the desired positioning. e.g. Orientation.TOP_LEFT
  * strength - rule strength
  */
-export class RelativePositioningRule extends RuleComponent {
+export class OrientingRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
     targetElementId: PropTypes.string.isRequired,
@@ -158,7 +158,7 @@ export class RelativePositioningRule extends RuleComponent {
   };
 
   createRule() {
-    return createRelativePositioningRule(Object.assign({}, this.props));
+    return createOrientingRule(Object.assign({}, this.props));
   }
 }
 
@@ -259,7 +259,7 @@ export default {
   DirectionalRule,
   PositioningRule,
   UniversalPositioningRule,
-  RelativePositioningRule,
+  OrientingRule,
   LinkingRule,
   RepellingRule,
   FunctionRule,

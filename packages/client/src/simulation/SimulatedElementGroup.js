@@ -6,7 +6,7 @@ import ElementContext from '../elements/ElementContext';
 
 import Orientation from './Orientation';
 import SimulationContext from './SimulationContext';
-import { createRelativePositioningRule } from './force/PositioningRules';
+import { createOrientingRule } from './force/PositioningRules';
 import { createBindingRule } from './force/LinkingRules';
 
 import utils from '../utils';
@@ -106,7 +106,7 @@ export default class SimulatedElementGroup extends React.Component {
       if (!e.orientation.isPrimary()) {
         this.registerBindingRule(e);
         if (e.orientation.isSpatiallyOriented()) {
-          this.registerRelativePositioningRule(e);
+          this.registerOrientingRule(e);
         }
       }
     }, this);
@@ -135,12 +135,12 @@ export default class SimulatedElementGroup extends React.Component {
     );
   }
 
-  registerRelativePositioningRule(element) {
+  registerOrientingRule(element) {
     const simulation = this.context;
     const { primaryElement, groupId } = this;
     simulation.registerRule(
       `${groupId}:positioning:${primaryElement.id}-${element.id}`,
-      createRelativePositioningRule({
+      createOrientingRule({
         baseElementId: primaryElement.id,
         targetElementId: element.id,
         orientation: element.orientation

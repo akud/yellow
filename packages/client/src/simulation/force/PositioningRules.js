@@ -82,7 +82,7 @@ export const createUniversalPositioningRule = ({ position, strength=1.0}) => {
  * by pushing the target elemnt in specified orientation if the target
  * element is out of alignment with the orientation
  */
-export const createRelativePositioningRule = ({ baseElementId, targetElementId, orientation=Orientation.TOP_LEFT, strength=1.0}) => {
+export const createOrientingRule = ({ baseElementId, targetElementId, orientation=Orientation.TOP_LEFT, strength=1.0}) => {
   utils.requirePresent(baseElementId);
   utils.requirePresent(targetElementId);
   utils.requireOneOf(orientation, Object.values(Orientation));
@@ -128,5 +128,5 @@ export default {
   createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
-  createRelativePositioningRule,
+  createOrientingRule,
 }

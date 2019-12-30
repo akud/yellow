@@ -6,7 +6,7 @@ import {
   createDirectionalRule,
   createPositioningRule,
   createUniversalPositioningRule,
-  createRelativePositioningRule,
+  createOrientingRule,
 } from '../PositioningRules';
 import ForceApplication from '../ForceApplication';
 
@@ -210,7 +210,7 @@ describe('PositioningRules', () => {
     });
   });
 
-  describe('createRelativePositioningRule', () => {
+  describe('createOrientingRule', () => {
     it('pushes the target element in the orientation\'s direction', () => {
       const orientation = Orientation.BOTTOM_LEFT;
       const baseElementData = { position: { x: 234, y: 4754 } };
@@ -227,7 +227,7 @@ describe('PositioningRules', () => {
         THREE_PI_OVER_FOUR
       );
 
-      const rule = createRelativePositioningRule({
+      const rule = createOrientingRule({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation,
@@ -269,7 +269,7 @@ describe('PositioningRules', () => {
 
       orientation.isOriented.mockReturnValue(true);
 
-      const rule = createRelativePositioningRule({
+      const rule = createOrientingRule({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation,

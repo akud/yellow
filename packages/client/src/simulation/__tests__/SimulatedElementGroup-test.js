@@ -8,7 +8,7 @@ import SimulatedElementGroup from '../SimulatedElementGroup';
 import Circle from '../../elements/Circle';
 import CircleDefinition from '../../elements/geometry/CircleDefinition';
 
-import { createRelativePositioningRule } from '../force/PositioningRules';
+import { createOrientingRule } from '../force/PositioningRules';
 import { createBindingRule } from '../force/LinkingRules';
 import MockSimulation, {
   getElementData,
@@ -32,7 +32,7 @@ describe('SimulatedElementGroup', () => {
 
   beforeEach(() => {
     resetMockSimulation();
-    createRelativePositioningRule.mockReset();
+    createOrientingRule.mockReset();
     createBindingRule.mockReset();
     getElementData.mockImplementation(newElementData);
   });
@@ -165,7 +165,7 @@ describe('SimulatedElementGroup', () => {
       .mockReturnValueOnce(bindingRule1)
       .mockReturnValueOnce(bindingRule2)
       .mockReturnValueOnce(bindingRule3);
-    createRelativePositioningRule
+    createOrientingRule
       .mockReturnValueOnce(relativePositioningRule1)
       .mockReturnValueOnce(relativePositioningRule2);
 
@@ -229,12 +229,12 @@ describe('SimulatedElementGroup', () => {
       distance: 10,
       strength: 4.3,
     });
-    expect(createRelativePositioningRule).toHaveBeenCalledWith({
+    expect(createOrientingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
       targetElementId: 'rules_0',
       orientation: Orientation.TOP_LEFT,
     });
-    expect(createRelativePositioningRule).toHaveBeenCalledWith({
+    expect(createOrientingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
       targetElementId: 'rules_2',
       orientation: Orientation.TOP_RIGHT,
