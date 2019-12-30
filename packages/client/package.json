@@ -8,7 +8,7 @@
     "display": "f() { npm run clean && node scripts/display.js $1; }; f",
     "display:debug": "f() { npm run clean && node-inspect scripts/display.js $1; }; f",
     "it": "node scripts/run_integration_tests.js",
-    "it:run": "TEST_TIMEOUT=30000 jest src/tmp/it-test.js --runInBand --forceExit --detectOpenHandles --useStderr 2> it.log; cat it.log; rm it.log",
+    "it:run": "TEST_TIMEOUT=100000 jest src/tmp/it-test.js --runInBand --forceExit --detectOpenHandles --useStderr 2> it.log; cat it.log; rm it.log",
     "prepublishOnly": "npm run clean && npm run transpile",
     "test": "f() { jest $* --testPathIgnorePatterns=\"/src/integration_tests/\"; }; f",
     "test:debug": "f() { node-inspect $(npm bin)/jest $* --testPathIgnorePatterns=\"/src/integration_tests/\"; }; f",
