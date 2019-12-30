@@ -1,9 +1,10 @@
 jest.mock('../force/ForceSimulation');
 jest.mock('../force/PositioningRules');
-jest.mock('../force/LinkingRule');
+jest.mock('../force/LinkingRules');
 
 import React from 'react';
 import {
+  BindingRule,
   CenteringRule,
   DirectionalRule,
   PositioningRule,
@@ -30,16 +31,36 @@ import {
   resetMockPositioningRules,
 } from '../force/PositioningRules';
 
-import { createLinkingRule } from '../force/LinkingRule';
+import {
+  createBindingRule,
+  createLinkingRule,
+  resetMockLinkingRules,
+} from '../force/LinkingRules';
 
 describe('Rules', () => {
   let simulation;
+
   beforeEach(() => {
     resetMockPositioningRules();
+    resetMockLinkingRules();
     resetMockSimulation();
-    createLinkingRule.mockReset();
     simulation = new MockSimulation();
   });
+
+  const expectOtherRulesNotToHaveBeenCalled = (rule) => {
+    [
+      createDirectionalRule,
+      createPositioningRule,
+      createUniversalPositioningRule,
+      createRelativePositioningRule,
+      createBindingRule,
+      createLinkingRule,
+      simulation.setRepellingForceStrength,
+    ].filter(other => other !== rule)
+      .forEach((other) => {
+        expect(other).not.toHaveBeenCalled();
+    });
+  };
 
   describe('DirectionalRule', () => {
     it('registers a directional rule with the simulation context', () => {
@@ -64,10 +85,7 @@ describe('Rules', () => {
         orientation: Orientation.TOP_RIGHT,
         strength: 4.2,
       });
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createDirectionalRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -91,10 +109,7 @@ describe('Rules', () => {
         orientation: Orientation.BOTTOM_LEFT,
         strength: 1.0,
       });
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createDirectionalRule);
     });
   });
 
@@ -117,15 +132,12 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
         position: { x: 45, y: 91 },
         strength: 4.2,
       });
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -144,15 +156,12 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
         elementIds: ['node-43', 'node-55'],
         position: { x: 45, y: 91 },
         strength: 1.0,
       });
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
   });
 
@@ -173,14 +182,11 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 45, y: 91 },
         strength: 4.2,
       });
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -196,14 +202,11 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 45, y: 91 },
         strength: 1.0,
       });
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
     });
   });
 
@@ -224,14 +227,11 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 500, y: 500 },
         strength: 4.2,
       });
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -250,14 +250,11 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
       expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
         position: { x: 500, y: 500 },
         strength: 1.0,
       });
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
     });
   });
 
@@ -281,16 +278,13 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation: Orientation.BOTTOM_RIGHT,
         strength: 4.2,
       });
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createRelativePositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -310,21 +304,18 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
       expect(createRelativePositioningRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
         targetElementId: 'target-element',
         orientation: Orientation.TOP_LEFT,
         strength: 1.0,
       });
-      expect(createLinkingRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(createRelativePositioningRule);
     });
   });
 
   describe('LinkingRule', () => {
-    it('registers a distance setting rule with the simulation context', () => {
+    it('registers a linking rule with the simulation context', () => {
       const rule = jest.fn();
       createLinkingRule.mockReturnValue(rule);
 
@@ -341,15 +332,12 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
       expect(createLinkingRule).toHaveBeenCalledOnceWith({
         between: [ 'base-element', 'target-element' ],
         distance: 45,
         strength: 4.2,
       });
+      expectOtherRulesNotToHaveBeenCalled(createLinkingRule);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -368,17 +356,70 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
       expect(createLinkingRule).toHaveBeenCalledOnceWith({
         between: [ 'base-element', 'target-element' ],
         distance: 45,
         strength: 1.0,
       });
+      expectOtherRulesNotToHaveBeenCalled(createLinkingRule);
     });
   });
+
+  describe('BindingRule', () => {
+    it('registers a binding rule with the simulation context', () => {
+      const rule = jest.fn();
+      createBindingRule.mockReturnValue(rule);
+
+      const wrapper = mount(
+        <SimulationContext.Provider value={simulation}>
+          <BindingRule
+            baseElementId='base-element'
+            targetElementId='target-element'
+            distance={45}
+            strength={4.2}
+          />
+        </SimulationContext.Provider>
+      );
+
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
+      expect(createBindingRule).toHaveBeenCalledOnceWith({
+        baseElementId: 'base-element',
+        targetElementId: 'target-element',
+        distance: 45,
+        strength: 4.2,
+      });
+      expectOtherRulesNotToHaveBeenCalled(createBindingRule);
+    });
+
+    it('defaults the strength to 1.0', () => {
+      const rule = jest.fn();
+      createBindingRule.mockReturnValue(rule);
+
+      const wrapper = mount(
+        <SimulationContext.Provider value={simulation}>
+          <BindingRule
+            baseElementId='base-element'
+            targetElementId='target-element'
+            distance={45}
+          />
+        </SimulationContext.Provider>
+      );
+
+      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
+        expect.any(String), rule
+      );
+      expect(createBindingRule).toHaveBeenCalledOnceWith({
+        baseElementId: 'base-element',
+        targetElementId: 'target-element',
+        distance: 45,
+        strength: 1.0,
+      });
+      expectOtherRulesNotToHaveBeenCalled(createBindingRule);
+    });
+  });
+
 
   describe('FunctionRule', () => {
     it('registers the provided function with the simulation', () => {
@@ -393,10 +434,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
 
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled();
     });
   });
 
@@ -409,11 +447,7 @@ describe('Rules', () => {
       );
 
       expect(simulation.setRepellingForceStrength).toHaveBeenCalledOnceWith(4.2);
-      expect(simulation.registerRule).not.toHaveBeenCalled();
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(simulation.setRepellingForceStrength);
     });
 
     it('defaults the strength to 1.0', () => {
@@ -424,11 +458,7 @@ describe('Rules', () => {
       );
 
       expect(simulation.setRepellingForceStrength).toHaveBeenCalledOnceWith(1.0);
-      expect(simulation.registerRule).not.toHaveBeenCalled();
-      expect(createDirectionalRule).not.toHaveBeenCalled();
-      expect(createPositioningRule).not.toHaveBeenCalled();
-      expect(createUniversalPositioningRule).not.toHaveBeenCalled();
-      expect(createRelativePositioningRule).not.toHaveBeenCalled();
+      expectOtherRulesNotToHaveBeenCalled(simulation.setRepellingForceStrength);
     });
   });
 });

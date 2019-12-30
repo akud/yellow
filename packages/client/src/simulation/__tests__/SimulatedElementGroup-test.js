@@ -1,6 +1,6 @@
 jest.mock('../force/ForceSimulation');
 jest.mock('../force/PositioningRules');
-jest.mock('../force/LinkingRule');
+jest.mock('../force/LinkingRules');
 
 import Orientation from '../Orientation';
 import SimulatedElementGroup from '../SimulatedElementGroup';
@@ -9,7 +9,7 @@ import Circle from '../../elements/Circle';
 import CircleDefinition from '../../elements/geometry/CircleDefinition';
 
 import { createRelativePositioningRule } from '../force/PositioningRules';
-import { createLinkingRule } from '../force/LinkingRule';
+import { createBindingRule } from '../force/LinkingRules';
 import MockSimulation, {
   getElementData,
   registerElement,
@@ -33,7 +33,7 @@ describe('SimulatedElementGroup', () => {
   beforeEach(() => {
     resetMockSimulation();
     createRelativePositioningRule.mockReset();
-    createLinkingRule.mockReset();
+    createBindingRule.mockReset();
     getElementData.mockImplementation(newElementData);
   });
 
@@ -52,11 +52,11 @@ describe('SimulatedElementGroup', () => {
 
     expect(wrapper.find('Circle').length).toBe(1);
     expect(wrapper.find('Circle').prop('position')).toEqual(elementData.position);
-    expect(wrapper.find('Circle').prop('id')).toEqual('2-primary');
+    expect(wrapper.find('Circle').prop('id')).toEqual('2_primary');
 
-    expect(getElementData).toHaveBeenCalledOnceWith('2-primary');
+    expect(getElementData).toHaveBeenCalledOnceWith('2_primary');
     expect(registerElement).toHaveBeenCalledOnceWith(
-      '2-primary', new CircleDefinition({ radius: 4.5 })
+      '2_primary', new CircleDefinition({ radius: 4.5 })
     );
   });
 
@@ -66,9 +66,9 @@ describe('SimulatedElementGroup', () => {
     const subElement2 = newElementData();
 
     getElementData.mockImplementation((elementId) => ({
-      '2-0': subElement1,
-      '2-primary': primaryElement,
-      '2-2': subElement2,
+      '2_0': subElement1,
+      '2_primary': primaryElement,
+      '2_2': subElement2,
     })[elementId]);
 
     const wrapper = mount(
@@ -87,22 +87,22 @@ describe('SimulatedElementGroup', () => {
     expect(wrapper.find('Circle').at(1).prop('position')).toEqual(primaryElement.position);
     expect(wrapper.find('Circle').at(2).prop('position')).toEqual(subElement2.position);
 
-    expect(wrapper.find('Circle').at(0).prop('id')).toEqual('2-0');
-    expect(wrapper.find('Circle').at(1).prop('id')).toEqual('2-primary');
-    expect(wrapper.find('Circle').at(2).prop('id')).toEqual('2-2');
+    expect(wrapper.find('Circle').at(0).prop('id')).toEqual('2_0');
+    expect(wrapper.find('Circle').at(1).prop('id')).toEqual('2_primary');
+    expect(wrapper.find('Circle').at(2).prop('id')).toEqual('2_2');
 
-    expect(getElementData).toHaveBeenCalledWith('2-0');
-    expect(getElementData).toHaveBeenCalledWith('2-primary');
-    expect(getElementData).toHaveBeenCalledWith('2-2');
+    expect(getElementData).toHaveBeenCalledWith('2_0');
+    expect(getElementData).toHaveBeenCalledWith('2_primary');
+    expect(getElementData).toHaveBeenCalledWith('2_2');
 
     expect(registerElement).toHaveBeenCalledWith(
-      '2-0', new CircleDefinition({ radius: 1 })
+      '2_0', new CircleDefinition({ radius: 1 })
     );
     expect(registerElement).toHaveBeenCalledWith(
-      '2-primary', new CircleDefinition({ radius: 2 })
+      '2_primary', new CircleDefinition({ radius: 2 })
     );
     expect(registerElement).toHaveBeenCalledWith(
-      '2-2', new CircleDefinition({ radius: 3 })
+      '2_2', new CircleDefinition({ radius: 3 })
     );
     expect(registerElement).toHaveBeenCalledTimes(3);
   });
@@ -113,9 +113,9 @@ describe('SimulatedElementGroup', () => {
     const subElement2 = newElementData();
 
     getElementData.mockImplementation((elementId) => ({
-      'inferred-0': subElement1,
-      'inferred-primary': primaryElement,
-      'inferred-2': subElement2,
+      'inferred_0': subElement1,
+      'inferred_primary': primaryElement,
+      'inferred_2': subElement2,
     })[elementId]);
 
     const wrapper = mount(
@@ -134,46 +134,46 @@ describe('SimulatedElementGroup', () => {
     expect(wrapper.find('Circle').at(1).prop('position')).toEqual(primaryElement.position);
     expect(wrapper.find('Circle').at(2).prop('position')).toEqual(subElement2.position);
 
-    expect(wrapper.find('Circle').at(0).prop('id')).toEqual('inferred-0');
-    expect(wrapper.find('Circle').at(1).prop('id')).toEqual('inferred-primary');
-    expect(wrapper.find('Circle').at(2).prop('id')).toEqual('inferred-2');
+    expect(wrapper.find('Circle').at(0).prop('id')).toEqual('inferred_0');
+    expect(wrapper.find('Circle').at(1).prop('id')).toEqual('inferred_primary');
+    expect(wrapper.find('Circle').at(2).prop('id')).toEqual('inferred_2');
 
-    expect(getElementData).toHaveBeenCalledWith('inferred-0');
-    expect(getElementData).toHaveBeenCalledWith('inferred-primary');
-    expect(getElementData).toHaveBeenCalledWith('inferred-2');
+    expect(getElementData).toHaveBeenCalledWith('inferred_0');
+    expect(getElementData).toHaveBeenCalledWith('inferred_primary');
+    expect(getElementData).toHaveBeenCalledWith('inferred_2');
 
     expect(registerElement).toHaveBeenCalledWith(
-      'inferred-0', new CircleDefinition({ radius: 1 })
+      'inferred_0', new CircleDefinition({ radius: 1 })
     );
     expect(registerElement).toHaveBeenCalledWith(
-      'inferred-primary', new CircleDefinition({ radius: 2 })
+      'inferred_primary', new CircleDefinition({ radius: 2 })
     );
     expect(registerElement).toHaveBeenCalledWith(
-      'inferred-2', new CircleDefinition({ radius: 3 })
+      'inferred_2', new CircleDefinition({ radius: 3 })
     );
     expect(registerElement).toHaveBeenCalledTimes(3);
   });
 
   it('registers data with the simulation to set up element bindings', () => {
-    const linkingRule1 = jest.fn();
-    const linkingRule2 = jest.fn();
-    const linkingRule3 = jest.fn();
+    const bindingRule1 = jest.fn();
+    const bindingRule2 = jest.fn();
+    const bindingRule3 = jest.fn();
     const relativePositioningRule1 = jest.fn();
     const relativePositioningRule2 = jest.fn();
 
-    createLinkingRule
-      .mockReturnValueOnce(linkingRule1)
-      .mockReturnValueOnce(linkingRule2)
-      .mockReturnValueOnce(linkingRule3);
+    createBindingRule
+      .mockReturnValueOnce(bindingRule1)
+      .mockReturnValueOnce(bindingRule2)
+      .mockReturnValueOnce(bindingRule3);
     createRelativePositioningRule
       .mockReturnValueOnce(relativePositioningRule1)
       .mockReturnValueOnce(relativePositioningRule2);
 
     getElementData.mockImplementation((elementId) => ({
-      'rules-0': newElementData({ shape: new CircleDefinition({ radius: 3 }) }),
-      'rules-primary': newElementData({ shape: new CircleDefinition({ radius: 4 }) }),
-      'rules-2': newElementData({ shape: new CircleDefinition({ radius: 5 }) }),
-      'rules-3': newElementData({ shape: new CircleDefinition({ radius: 6 }) }),
+      'rules_0': newElementData({ shape: new CircleDefinition({ radius: 3 }) }),
+      'rules_primary': newElementData({ shape: new CircleDefinition({ radius: 4 }) }),
+      'rules_2': newElementData({ shape: new CircleDefinition({ radius: 5 }) }),
+      'rules_3': newElementData({ shape: new CircleDefinition({ radius: 6 }) }),
     })[elementId]);
 
     const wrapper = mount(
@@ -191,49 +191,52 @@ describe('SimulatedElementGroup', () => {
     );
 
     expect(registerGroup).toHaveBeenCalledOnceWith(
-      'rules', ['rules-0', 'rules-primary', 'rules-2', 'rules-3']
+      'rules', ['rules_0', 'rules_primary', 'rules_2', 'rules_3']
     );
 
     expect(registerRule).toHaveBeenCalledWith(
-      'rules:link:rules-primary-rules-0', linkingRule1
+      'rules:binding:rules_0-rules_primary', bindingRule1
     );
     expect(registerRule).toHaveBeenCalledWith(
-      'rules:link:rules-primary-rules-2', linkingRule2
+      'rules:binding:rules_2-rules_primary', bindingRule2
     );
     expect(registerRule).toHaveBeenCalledWith(
-      'rules:link:rules-primary-rules-3', linkingRule3
+      'rules:binding:rules_3-rules_primary', bindingRule3
     );
     expect(registerRule).toHaveBeenCalledWith(
-      'rules:positioning:rules-primary-rules-0', relativePositioningRule1
+      'rules:positioning:rules_primary-rules_0', relativePositioningRule1
     );
     expect(registerRule).toHaveBeenCalledWith(
-      'rules:positioning:rules-primary-rules-2', relativePositioningRule2
+      'rules:positioning:rules_primary-rules_2', relativePositioningRule2
     );
     expect(registerRule).toHaveBeenCalledTimes(5);
 
-    expect(createLinkingRule).toHaveBeenCalledWith({
-      between: ['rules-primary', 'rules-0'],
+    expect(createBindingRule).toHaveBeenCalledWith({
+      baseElementId: 'rules_primary',
+      targetElementId: 'rules_0',
       distance: 7,
       strength: 4.3,
     });
-    expect(createLinkingRule).toHaveBeenCalledWith({
-      between: ['rules-primary', 'rules-2'],
+    expect(createBindingRule).toHaveBeenCalledWith({
+      baseElementId: 'rules_primary',
+      targetElementId: 'rules_2',
       distance: 9,
       strength: 4.3,
     });
-    expect(createLinkingRule).toHaveBeenCalledWith({
-      between: ['rules-primary', 'rules-3'],
+    expect(createBindingRule).toHaveBeenCalledWith({
+      baseElementId: 'rules_primary',
+      targetElementId: 'rules_3',
       distance: 10,
       strength: 4.3,
     });
     expect(createRelativePositioningRule).toHaveBeenCalledWith({
-      baseElementId: 'rules-primary',
-      targetElementId: 'rules-0',
+      baseElementId: 'rules_primary',
+      targetElementId: 'rules_0',
       orientation: Orientation.TOP_LEFT,
     });
     expect(createRelativePositioningRule).toHaveBeenCalledWith({
-      baseElementId: 'rules-primary',
-      targetElementId: 'rules-2',
+      baseElementId: 'rules_primary',
+      targetElementId: 'rules_2',
       orientation: Orientation.TOP_RIGHT,
     });
   });

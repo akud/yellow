@@ -7,7 +7,7 @@ import ElementContext from '../elements/ElementContext';
 import Orientation from './Orientation';
 import SimulationContext from './SimulationContext';
 import { createRelativePositioningRule } from './force/PositioningRules';
-import { createLinkingRule } from './force/LinkingRule';
+import { createBindingRule } from './force/LinkingRules';
 
 import utils from '../utils';
 
@@ -30,11 +30,11 @@ export default class SimulatedElementGroup extends React.Component {
 
   static defaultProps = {
     className: 'simulated-element-group',
-    bindingStrength: 2.5,
+    bindingStrength: 5.0,
   };
 
   static getPrimaryElementId(groupId) {
-    return groupId + '-primary';
+    return groupId + '_primary';
   }
 
   constructor(props) {
@@ -50,7 +50,7 @@ export default class SimulatedElementGroup extends React.Component {
       );
       const id = orientation.isPrimary() ?
         SimulatedElementGroup.getPrimaryElementId(this.groupId) :
-        `${this.groupId}-${i}`;
+        `${this.groupId}_${i}`;
 
       const element = { id, orientation };
       if (element.orientation.isPrimary()) {
@@ -104,7 +104,7 @@ export default class SimulatedElementGroup extends React.Component {
 
     this.elements.forEach(e => {
       if (!e.orientation.isPrimary()) {
-        this.registerLinkingRule(e);
+        this.registerBindingRule(e);
         if (e.orientation.isSpatiallyOriented()) {
           this.registerRelativePositioningRule(e);
         }
@@ -112,16 +112,17 @@ export default class SimulatedElementGroup extends React.Component {
     }, this);
   }
 
-  registerLinkingRule(element) {
+  registerBindingRule(element) {
     const simulation = this.context;
     const { primaryElement, groupId } = this;
     const { bindingStrength } = this.props;
 
     const distance =  this.getBoundingRadius(primaryElement.id) + this.getBoundingRadius(element.id);
     simulation.registerRule(
-      `${groupId}:link:${primaryElement.id}-${element.id}`,
-      createLinkingRule({
-        between: [primaryElement.id, element.id],
+      `${groupId}:binding:${element.id}-${primaryElement.id}`,
+      createBindingRule({
+        baseElementId: primaryElement.id,
+        targetElementId: element.id,
         distance,
         strength: bindingStrength,
       })

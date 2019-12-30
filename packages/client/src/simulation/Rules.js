@@ -15,7 +15,10 @@ import {
   createRelativePositioningRule,
 } from './force/PositioningRules';
 
-import { createLinkingRule } from './force/LinkingRule';
+import {
+  createBindingRule,
+  createLinkingRule,
+} from './force/LinkingRules';
 
 let ruleIdSequence = 0;
 
@@ -183,6 +186,31 @@ export class LinkingRule extends RuleComponent {
 }
 
 /**
+ * Register a rule that binds one element to another
+ *
+ * baseElementId - element id to use as the base. will not be pushed
+ * targetElementId - element to bind to the base, pushing to within the desired distance
+ * distance - distance to keep the elements apart
+ * strength - rule strength
+ */
+export class BindingRule extends RuleComponent {
+  static propTypes = {
+    baseElementId: PropTypes.string.isRequired,
+    targetElementId: PropTypes.string.isRequired,
+    distance: PropTypes.number.isRequired,
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  createRule() {
+    return createBindingRule(Object.assign({}, this.props));
+  }
+}
+
+/**
  * Register a rule from a custom function
  *
  * rule - function of the form (simulation) => [ ForceApplication,...] to use as a rule
@@ -226,6 +254,7 @@ export class RepellingRule extends React.Component {
 
 
 export default {
+  BindingRule,
   CenteringRule,
   DirectionalRule,
   PositioningRule,

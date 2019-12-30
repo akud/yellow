@@ -24,10 +24,10 @@ describe('Edge', () => {
     );
     expect(wrapper.find('SimulatedLink').length).toBe(1);
     expect(wrapper.find('SimulatedLink').prop('fromElementId')).toEqual(
-      '1-primary'
+      '1_primary'
     );
     expect(wrapper.find('SimulatedLink').prop('toElementId')).toEqual(
-      '2-primary'
+      '2_primary'
     );
     expect(wrapper.find('SimulatedLink').prop('distance')).toBe(125);
     expect(wrapper.find('SimulatedLink').prop('bindingStrength')).toBe(5.6);
