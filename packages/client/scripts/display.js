@@ -14,6 +14,7 @@ const fs = require('fs');
 const path = require('path');
 const openBrowser = require('react-dev-utils/openBrowser');
 const mkdirp = require('mkdirp');
+const md5 = require('md5');
 
 if (process.argv.length < 3) {
   throw new Error('usage: display.js <path>');
@@ -21,10 +22,11 @@ if (process.argv.length < 3) {
 
 const INPUT_FILE_PATH = process.argv[2];
 const SOURCE_PATH = path.resolve(__dirname, '../src');
-const ENTRY_POINT_PATH = path.resolve(SOURCE_PATH, 'tmp/index.js');
+const SOURCE_IDENTIFIER = md5(INPUT_FILE_PATH);
+const ENTRY_POINT_PATH = path.resolve(SOURCE_PATH, 'tmp/index-' + SOURCE_IDENTIFIER + '.js');
 const BUILD_DIR = path.resolve(__dirname, '../build');
-const INDEX_HTML = path.resolve(BUILD_DIR, 'index.html');
-const BUILD_FILE_NAME = "display.js"
+const INDEX_HTML = path.resolve(BUILD_DIR, 'index-' + SOURCE_IDENTIFIER +  '.html');
+const BUILD_FILE_NAME = 'display-' + SOURCE_IDENTIFIER + '.js'
 const BUILD_FILE_PATH = path.resolve(BUILD_DIR, BUILD_FILE_NAME);
 
 
