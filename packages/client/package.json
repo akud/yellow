@@ -5,8 +5,8 @@
   "main": "distribution/export.js",
   "scripts": {
     "clean": "rm -rf distribution/* build/* src/tmp/*",
-    "display": "node scripts/display.js",
-    "display:debug": "node-inspect scripts/display.js",
+    "display": "f() { if [ -z \"$1\" ]; then SRC=\"./src/local/DefaultGraph.js\"; else SRC=\"$1\"; fi; node scripts/display.js $SRC; }; f",
+    "display:debug": "f() { if [ -z \"$1\" ]; then SRC=\"./src/local/DefaultGraph.js\"; else SRC=\"$1\"; fi; node-inspect scripts/display.js $SRC; }; f",
     "it": "node scripts/run_integration_tests.js",
     "it:debug": "node-inspect scripts/run_integration_tests.js",
     "it:run": "TEST_TIMEOUT=100000 jest src/tmp/it-test.js --runInBand --forceExit --detectOpenHandles --useStderr 2> it.log; cat it.log; rm it.log",
