@@ -2,7 +2,7 @@ import fs from 'fs';
 import npm from 'npm';
 import clear from 'clear';
 
-const OUTPUT_PATH = './src/local/it.js';
+const OUTPUT_PATH = './src/tmp/it.js';
 
 /**
  * Display some markup in the local browser and await user feedback. Returns a promise
