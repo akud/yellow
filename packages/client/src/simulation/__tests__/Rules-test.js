@@ -8,7 +8,6 @@ import {
   CenteringRule,
   DirectionalRule,
   PositioningRule,
-  UniversalPositioningRule,
   OrientingRule,
   LinkingRule,
   FunctionRule,
@@ -26,7 +25,6 @@ import MockSimulation, { resetMockSimulation } from '../force/ForceSimulation';
 import {
   createDirectionalRule,
   createPositioningRule,
-  createUniversalPositioningRule,
   createOrientingRule,
   resetMockPositioningRules,
 } from '../force/PositioningRules';
@@ -51,7 +49,6 @@ describe('Rules', () => {
     [
       createDirectionalRule,
       createPositioningRule,
-      createUniversalPositioningRule,
       createOrientingRule,
       createBindingRule,
       createLinkingRule,
@@ -70,7 +67,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <DirectionalRule
-            elementIds={['node-43', 'node-55']}
+            elements={{ ids: ['node-43', 'node-55'] }}
             orientation={Orientation.TOP_RIGHT}
             strength={4.2}
           />
@@ -81,7 +78,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createDirectionalRule).toHaveBeenCalledOnceWith({
-        elementIds: ['node-43', 'node-55'],
+        elements: { ids: ['node-43', 'node-55'] },
         orientation: Orientation.TOP_RIGHT,
         strength: 4.2,
       });
@@ -95,7 +92,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <DirectionalRule
-            elementIds={['node-43', 'node-55']}
+            elements={{ ids: ['node-43', 'node-55'] }}
             orientation={Orientation.BOTTOM_LEFT}
           />
         </SimulationContext.Provider>
@@ -105,7 +102,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createDirectionalRule).toHaveBeenCalledOnceWith({
-        elementIds: ['node-43', 'node-55'],
+        elements: { ids: ['node-43', 'node-55'] },
         orientation: Orientation.BOTTOM_LEFT,
         strength: 1.0,
       });
@@ -122,7 +119,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <PositioningRule
-            elementIds={['node-43', 'node-55']}
+            elements={{ ids: ['node-43', 'node-55'] }}
             position={{ x: 45, y: 91 }}
             strength={4.2}
           />
@@ -133,7 +130,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
-        elementIds: ['node-43', 'node-55'],
+        elements: { ids: ['node-43', 'node-55'] },
         position: { x: 45, y: 91 },
         strength: 4.2,
       });
@@ -147,7 +144,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <PositioningRule
-            elementIds={['node-43', 'node-55']}
+            elements={{ ids: ['node-43', 'node-55'] }}
             position={{ x: 45, y: 91 }}
           />
         </SimulationContext.Provider>
@@ -157,7 +154,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createPositioningRule).toHaveBeenCalledOnceWith({
-        elementIds: ['node-43', 'node-55'],
+        elements: { ids: ['node-43', 'node-55'] },
         position: { x: 45, y: 91 },
         strength: 1.0,
       });
@@ -165,56 +162,11 @@ describe('Rules', () => {
     });
   });
 
-  describe('UniversalPositioningRule', () => {
-    it('registers a universal positioning rule with the simulation context', () => {
-      const rule = jest.fn();
-      createUniversalPositioningRule.mockReturnValue(rule);
-
-      const wrapper = mount(
-        <SimulationContext.Provider value={simulation}>
-          <UniversalPositioningRule
-            position={{ x: 45, y: 91 }}
-            strength={4.2}
-          />
-        </SimulationContext.Provider>
-      );
-
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
-        expect.any(String), rule
-      );
-      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
-        position: { x: 45, y: 91 },
-        strength: 4.2,
-      });
-      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
-    });
-
-    it('defaults the strength to 1.0', () => {
-      const rule = jest.fn();
-      createUniversalPositioningRule.mockReturnValue(rule);
-
-      const wrapper = mount(
-        <SimulationContext.Provider value={simulation}>
-          <UniversalPositioningRule position={{ x: 45, y: 91 }} />
-        </SimulationContext.Provider>
-      );
-
-      expect(simulation.registerRule).toHaveBeenCalledOnceWith(
-        expect.any(String), rule
-      );
-      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
-        position: { x: 45, y: 91 },
-        strength: 1.0,
-      });
-      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
-    });
-  });
-
   describe('CenteringRule', () => {
     it('registers a universal positioning rule pointed towards the window center', () => {
       const center = { x: 500, y: 500 };
       const rule = jest.fn();
-      createUniversalPositioningRule.mockReturnValue(rule);
+      createPositioningRule.mockReturnValue(rule);
 
       const wrapper = mount(
         <WindowContext.Provider value={{center}}>
@@ -227,17 +179,18 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
+      expect(createPositioningRule).toHaveBeenCalledOnceWith({
+        elements: 'all',
         position: { x: 500, y: 500 },
         strength: 4.2,
       });
-      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
+      expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
       const center = { x: 500, y: 500 };
       const rule = jest.fn();
-      createUniversalPositioningRule.mockReturnValue(rule);
+      createPositioningRule.mockReturnValue(rule);
 
       const wrapper = mount(
         <WindowContext.Provider value={{center}}>
@@ -250,11 +203,12 @@ describe('Rules', () => {
       expect(simulation.registerRule).toHaveBeenCalledOnceWith(
         expect.any(String), rule
       );
-      expect(createUniversalPositioningRule).toHaveBeenCalledOnceWith({
+      expect(createPositioningRule).toHaveBeenCalledOnceWith({
+        elements: 'all',
         position: { x: 500, y: 500 },
         strength: 1.0,
       });
-      expectOtherRulesNotToHaveBeenCalled(createUniversalPositioningRule);
+      expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
   });
 
@@ -268,7 +222,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <OrientingRule
             baseElementId='base-element'
-            targetElementId='target-element'
+            targetElements={{ ids: ['target-element1', 'target-element2'] }}
             orientation={Orientation.BOTTOM_RIGHT}
             strength={4.2}
           />
@@ -280,7 +234,7 @@ describe('Rules', () => {
       );
       expect(createOrientingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
-        targetElementId: 'target-element',
+        targetElements: { ids: ['target-element1', 'target-element2'] },
         orientation: Orientation.BOTTOM_RIGHT,
         strength: 4.2,
       });
@@ -295,7 +249,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <OrientingRule
             baseElementId='base-element'
-            targetElementId='target-element'
+            targetElements={{ ids: ['target-element1', 'target-element2'] }}
             orientation={Orientation.TOP_LEFT}
           />
         </SimulationContext.Provider>
@@ -306,7 +260,7 @@ describe('Rules', () => {
       );
       expect(createOrientingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
-        targetElementId: 'target-element',
+        targetElements: { ids: ['target-element1', 'target-element2'] },
         orientation: Orientation.TOP_LEFT,
         strength: 1.0,
       });
@@ -322,7 +276,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <LinkingRule
-            between={['base-element', 'target-element']}
+            between={['base-element','target-element']}
             distance={45}
             strength={4.2}
           />
@@ -333,7 +287,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createLinkingRule).toHaveBeenCalledOnceWith({
-        between: [ 'base-element', 'target-element' ],
+        between: ['base-element','target-element'],
         distance: 45,
         strength: 4.2,
       });
@@ -347,7 +301,7 @@ describe('Rules', () => {
       const wrapper = mount(
         <SimulationContext.Provider value={simulation}>
           <LinkingRule
-            between={['base-element', 'target-element']}
+            between={['base-element','target-element']}
             distance={45}
           />
         </SimulationContext.Provider>
@@ -357,7 +311,7 @@ describe('Rules', () => {
         expect.any(String), rule
       );
       expect(createLinkingRule).toHaveBeenCalledOnceWith({
-        between: [ 'base-element', 'target-element' ],
+        between: ['base-element','target-element'],
         distance: 45,
         strength: 1.0,
       });
@@ -374,7 +328,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <BindingRule
             baseElementId='base-element'
-            targetElementId='target-element'
+            targetElements={{ id: 'target-element' }}
             distance={45}
             strength={4.2}
           />
@@ -386,7 +340,7 @@ describe('Rules', () => {
       );
       expect(createBindingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
-        targetElementId: 'target-element',
+        targetElements: { id: 'target-element' },
         distance: 45,
         strength: 4.2,
       });
@@ -401,7 +355,7 @@ describe('Rules', () => {
         <SimulationContext.Provider value={simulation}>
           <BindingRule
             baseElementId='base-element'
-            targetElementId='target-element'
+            targetElements={{ groupId: 'target-elements' }}
             distance={45}
           />
         </SimulationContext.Provider>
@@ -412,7 +366,7 @@ describe('Rules', () => {
       );
       expect(createBindingRule).toHaveBeenCalledOnceWith({
         baseElementId: 'base-element',
-        targetElementId: 'target-element',
+        targetElements: { groupId: 'target-elements' },
         distance: 45,
         strength: 1.0,
       });

@@ -1,6 +1,7 @@
 import utils from '../../utils';
 
 import ForceApplication from './ForceApplication';
+import ElementSelector from './ElementSelector';
 
 import geometryUtils from '../../elements/geometry/geometry-utils';
 
@@ -11,9 +12,11 @@ const LOGGER = new logging.Logger('LinkingRules');
 const SPRING_CONSTANT = 0.25;
 
 /**
- * Create a rule that links two elements together and attempts to keep them a specified
- * distance apart by pushing both elements towards each other if they are too far apart
- * and away from each other if they are too close together.
+ * Create a rule that links two elements together
+ *
+ * between - two-element array of element ids to link together
+ * distance - distance to keep the elements apart
+ * strength - rule strength
  */
 export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
   utils.requireArrayOfLength(between, 2);
@@ -48,7 +51,7 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
       );
       return [
         new ForceApplication({
-          elementIds: [ sourceId ],
+          elements: { id: sourceId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             sourcePosition,
             targetPosition,
@@ -56,7 +59,7 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
           strength: strength * SPRING_CONSTANT * (currentDistance - distance),
         }),
         new ForceApplication({
-          elementIds: [ targetId ],
+          elements: { id: targetId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             targetPosition,
             sourcePosition,
@@ -74,7 +77,7 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
       );
       return [
         new ForceApplication({
-          elementIds: [ sourceId ],
+          elements: { id: sourceId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             targetPosition,
             sourcePosition
@@ -82,7 +85,7 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
           strength: strength * SPRING_CONSTANT * (distance - currentDistance),
         }),
         new ForceApplication({
-          elementIds: [ targetId ],
+          elements: { id: targetId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             sourcePosition,
             targetPosition
@@ -95,69 +98,74 @@ export const createLinkingRule = ({ between, distance, strength=1.0 }) => {
 }
 
 /**
- * Create a rule that binds one element to another, pushing the target point towards
- * and away from the base point.
+ * Create a rule that binds a set of elements to a base element, keeping them a certain distance
+ * away from the base element.
+ *
+ * baseElementId - element id to use as the base. will not be pushed
+ * targetElements - element selector defining the elements to be moved into orientation
+ * distance - distance to keep the elements apart
+ * strength - rule strength
  */
-export const createBindingRule = ({ baseElementId, targetElementId, distance, strength=1.0 }) => {
+
+export const createBindingRule = ({ baseElementId, targetElements, distance, strength=1.0 }) => {
+  const selector = ElementSelector.create(targetElements);
   utils.requirePresent(baseElementId);
-  utils.requirePresent(targetElementId);
   utils.requireGreaterThanZero(distance);
   utils.requireNonNegative(strength);
 
   return (simulation) => {
     const basePosition = simulation.getElementData(baseElementId).position;
-    const targetPosition = simulation.getElementData(targetElementId).position;
+    return selector.select(simulation).map((targetElementId) => {
+      const targetPosition = simulation.getElementData(targetElementId).position;
 
-    const currentDistance = geometryUtils.distance(basePosition, targetPosition);
+      const currentDistance = geometryUtils.distance(basePosition, targetPosition);
 
-    if (geometryUtils.approximatelyEqual(distance, currentDistance)) {
-      LOGGER.debug(
-        '{} is {} away from {}, ({} desired), doing nothing',
-        targetElementId,
-        currentDistance,
-        baseElementId,
-        distance
-      );
-      return [];
-    } else if (currentDistance > distance) {
-      LOGGER.debug(
-        '{} is {} away from {}, (> {} desired), pushing towards {}',
-        targetElementId,
-        currentDistance,
-        baseElementId,
-        distance,
-        baseElementId
-      );
-      return [
-        new ForceApplication({
-          elementIds: [ targetElementId ],
+      if (geometryUtils.approximatelyEqual(distance, currentDistance)) {
+        LOGGER.debug(
+          '{} is {} away from {}, ({} desired), doing nothing',
+          targetElementId,
+          currentDistance,
+          baseElementId,
+          distance
+        );
+        return;
+      } else if (currentDistance > distance) {
+        LOGGER.debug(
+          '{} is {} away from {}, (> {} desired), pushing towards {}',
+          targetElementId,
+          currentDistance,
+          baseElementId,
+          distance,
+          baseElementId
+        );
+        return new ForceApplication({
+          elements: { id: targetElementId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             targetPosition,
             basePosition,
           ),
           strength: strength * SPRING_CONSTANT * (currentDistance - distance),
-        }),
-      ];
-    } else {
-      LOGGER.debug(
-        '{} is {} away from {}, (< {} desired), pushing away from {}',
-        targetElementId,
-        currentDistance,
-        baseElementId,
-        distance,
-        baseElementId
-      );
-      return [
-        new ForceApplication({
-          elementIds: [ targetElementId ],
+        });
+      } else {
+        LOGGER.debug(
+          '{} is {} away from {}, (< {} desired), pushing away from {}',
+          targetElementId,
+          currentDistance,
+          baseElementId,
+          distance,
+          baseElementId
+        );
+        return new ForceApplication({
+          elements: { id: targetElementId },
           angle: geometryUtils.computeHorizontalIntersectionAngle(
             basePosition,
             targetPosition
           ),
           strength: strength * SPRING_CONSTANT * (distance - currentDistance),
-        }),
-      ];
-    }
+        });
+      }
+    })
+    .filter(Boolean);
   };
 }
 

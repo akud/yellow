@@ -213,30 +213,30 @@ describe('SimulatedElementGroup', () => {
 
     expect(createBindingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
-      targetElementId: 'rules_0',
+      targetElements: { id: 'rules_0' },
       distance: 7,
       strength: 4.3,
     });
     expect(createBindingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
-      targetElementId: 'rules_2',
+      targetElements: { id: 'rules_2' },
       distance: 9,
       strength: 4.3,
     });
     expect(createBindingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
-      targetElementId: 'rules_3',
+      targetElements: { id: 'rules_3' },
       distance: 10,
       strength: 4.3,
     });
     expect(createOrientingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
-      targetElementId: 'rules_0',
+      targetElements: { id: 'rules_0' },
       orientation: Orientation.TOP_LEFT,
     });
     expect(createOrientingRule).toHaveBeenCalledWith({
       baseElementId: 'rules_primary',
-      targetElementId: 'rules_2',
+      targetElements: { id: 'rules_2' },
       orientation: Orientation.TOP_RIGHT,
     });
   });

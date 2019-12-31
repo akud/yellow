@@ -16,11 +16,42 @@ describe('Motion', () => {
 <SimulatedElement id='left'>
   <Label text='going left' />
 </SimulatedElement>
-<Rules.DirectionalRule elementIds={['up']} orientation={Orientation.TOP} />
-<Rules.DirectionalRule elementIds={['down']} orientation={Orientation.BOTTOM} />
-<Rules.DirectionalRule elementIds={['left']} orientation={Orientation.LEFT} />
-<Rules.DirectionalRule elementIds={['right']} orientation={Orientation.RIGHT} />
+<Rules.DirectionalRule elements={{ id: 'up' }} orientation={Orientation.TOP} />
+<Rules.DirectionalRule elements={{ id: 'down' }} orientation={Orientation.BOTTOM} />
+<Rules.DirectionalRule elements={{ id: 'left' }} orientation={Orientation.LEFT} />
+<Rules.DirectionalRule elements={{ id: 'right' }} orientation={Orientation.RIGHT} />
 `
     );
   });
+
+  it('can move a groups of elements together', async () => {
+    await checkSimulationFragment(
+`
+<SimulatedElementGroup id='up'>
+  <Label text="we're all" />
+  <Label text='going up' />
+</SimulatedElementGroup>
+<SimulatedElementGroup id='left1'>
+  <Label text="we're all" />
+  <Label text='all of us' />
+</SimulatedElementGroup>
+<SimulatedElementGroup id='left2'>
+  <Label text='going' />
+  <Label text='left' />
+</SimulatedElementGroup>
+
+<Rules.DirectionalRule
+  elements={{ groupId: 'up' }}
+  orientation={Orientation.TOP}
+  strength={2.5}
+  />
+<Rules.DirectionalRule
+  elements={{ groupIds: [ 'left1', 'left2' ] }}
+  orientation={Orientation.LEFT}
+  strength={2.5}
+  />
+`
+    );
+  });
+
 });

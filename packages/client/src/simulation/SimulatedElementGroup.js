@@ -122,7 +122,7 @@ export default class SimulatedElementGroup extends React.Component {
       `${groupId}:binding:${element.id}-${primaryElement.id}`,
       createBindingRule({
         baseElementId: primaryElement.id,
-        targetElementId: element.id,
+        targetElements: { id: element.id },
         distance,
         strength: bindingStrength,
       })
@@ -142,7 +142,7 @@ export default class SimulatedElementGroup extends React.Component {
       `${groupId}:positioning:${primaryElement.id}-${element.id}`,
       createOrientingRule({
         baseElementId: primaryElement.id,
-        targetElementId: element.id,
+        targetElements: { id: element.id },
         orientation: element.orientation
       })
     );

@@ -5,13 +5,13 @@ import ElementPropTypes from '../elements/ElementPropTypes';
 import WindowContext from '../elements/WindowContext';
 
 import SimulationContext from './SimulationContext';
+import SimulationPropTypes from './SimulationPropTypes';
 
 import Orientation from './Orientation';
 
 import {
   createDirectionalRule,
   createPositioningRule,
-  createUniversalPositioningRule,
   createOrientingRule,
 } from './force/PositioningRules';
 
@@ -49,13 +49,13 @@ class RuleComponent extends React.Component {
 /**
  * Register a rule that pushes elements in a direction
  *
- * elementIds - array of element ids to apply the rule to
+ * elements - elementSelector defining the elements to which the rule applies
  * orientation - Orientation determining the direction to push elements in. e.g. Orientation.TOP_LEFT
  * strength - rule strength
  */
 export class DirectionalRule extends RuleComponent {
   static propTypes = {
-    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    elements: SimulationPropTypes.elementSelector.isRequired,
     orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
   };
@@ -72,13 +72,13 @@ export class DirectionalRule extends RuleComponent {
 /**
  * Register a rule that pushes elements towards a position
  *
- * elementIds - array of element ids to apply the rule to
+ * elements - elementSelector defining the elements to which the rule applies
  * position - position to push the elements towards
  * strength - rule strength
  */
 export class PositioningRule extends RuleComponent {
   static propTypes = {
-    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    elements: SimulationPropTypes.elementSelector.isRequired,
     position: ElementPropTypes.position.isRequired,
     strength: PropTypes.number,
   };
@@ -89,27 +89,6 @@ export class PositioningRule extends RuleComponent {
 
   createRule() {
     return createPositioningRule(Object.assign({}, this.props));
-  }
-}
-
-/**
- * Register a rule that pushes all elements towards a position
- *
- * position - position to push the elements towards
- * strength - rule strength
- */
-export class UniversalPositioningRule extends RuleComponent {
-  static propTypes = {
-    position: ElementPropTypes.position.isRequired,
-    strength: PropTypes.number,
-  };
-
-  static defaultProps = {
-    strength: 1.0,
-  };
-
-  createRule() {
-    return createUniversalPositioningRule(Object.assign({}, this.props));
   }
 }
 
@@ -131,24 +110,24 @@ export class CenteringRule extends React.Component {
     const { strength } = this.props;
     return (
       <WindowContext.Consumer>
-        { ({center}) => <UniversalPositioningRule position={center} strength={strength} /> }
+        { ({center}) => <PositioningRule elements='all' position={center} strength={strength} /> }
       </WindowContext.Consumer>
     );
   }
 }
 
 /**
- * Register a rule that positions one element releative to another
+ * Register a rule that positions a set of elements relative to a base element
  *
  * baseElementId - element id to use as the base element, which will not be pushed
- * targetElementId - element id to use as the target element, which will pushed
+ * targetElements - element selector defining the elements to be moved into orientation
  * orientation - Orientation determining the desired positioning. e.g. Orientation.TOP_LEFT
  * strength - rule strength
  */
 export class OrientingRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
-    targetElementId: PropTypes.string.isRequired,
+    targetElements: SimulationPropTypes.elementSelector.isRequired,
     orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
   };
@@ -165,7 +144,7 @@ export class OrientingRule extends RuleComponent {
 /**
  * Register a rule that links two elements together
  *
- * between - element ids to link
+ * between - two-element array of element ids to link together
  * distance - distance to keep the elements apart
  * strength - rule strength
  */
@@ -186,17 +165,17 @@ export class LinkingRule extends RuleComponent {
 }
 
 /**
- * Register a rule that binds one element to another
+ * Register a rule that binds a set of elements to a base element
  *
  * baseElementId - element id to use as the base. will not be pushed
- * targetElementId - element to bind to the base, pushing to within the desired distance
+ * targetElements - element selector defining the elements to be moved into orientation
  * distance - distance to keep the elements apart
  * strength - rule strength
  */
 export class BindingRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
-    targetElementId: PropTypes.string.isRequired,
+    targetElements: SimulationPropTypes.elementSelector.isRequired,
     distance: PropTypes.number.isRequired,
     strength: PropTypes.number,
   };
@@ -258,7 +237,6 @@ export default {
   CenteringRule,
   DirectionalRule,
   PositioningRule,
-  UniversalPositioningRule,
   OrientingRule,
   LinkingRule,
   RepellingRule,
