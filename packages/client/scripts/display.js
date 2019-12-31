@@ -72,6 +72,7 @@ function compileEntryPoint() {
     webpack({
       mode: 'development',
       entry: ENTRY_POINT_PATH,
+      devtool: 'cheap-module-source-map',
       output: {
         path: BUILD_DIR,
         filename: BUILD_FILE_NAME,
