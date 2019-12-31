@@ -1,14 +1,35 @@
+jest.mock('../ElementSelector');
+
 import ForceApplication from '../ForceApplication';
 
+import ElementSelector, { mockSelector, resetMockSelector } from '../ElementSelector';
+
 describe('ForceApplication', () => {
+
+  beforeEach(() => {
+    resetMockSelector();
+  });
+
   const makeForce = (args) => new ForceApplication(Object.assign(
     {
-      elementIds: [ '1' ],
+      elements: { ids: [ '1', '2' ] },
       angle: ZERO,
       strength: 1.0,
     },
     args
   ));
+
+  it('delegates element selection to the element selector', () => {
+    const simulation = jest.fn();
+    const force = makeForce({ elements: { ids: ['1', '2', '3'] } });
+
+    mockSelector.select.mockReturnValue(['1', '2', '3']);
+
+    expect(force.getAffectedElementIds(simulation)).toEqual(['1','2','3']);
+
+    expect(ElementSelector.create).toHaveBeenCalledOnceWith({ ids: ['1', '2', '3'] });
+    expect(mockSelector.select).toHaveBeenCalledOnceWith(simulation);
+  });
 
   it('it breaks the angle into x and y components', () => {
     const testCases = [

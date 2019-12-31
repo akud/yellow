@@ -1,6 +1,6 @@
 jest.mock('../../elements/geometry/ShapeDefinition');
 jest.mock('../force/ForceSimulation');
-jest.mock('../force/LinkingRule');
+jest.mock('../force/LinkingRules');
 
 import React from 'react';
 
@@ -15,7 +15,7 @@ import MockSimulation, {
 } from '../force/ForceSimulation';
 
 
-import { createLinkingRule } from '../force/LinkingRule';
+import { createLinkingRule } from '../force/LinkingRules';
 import SimulationContext from '../SimulationContext';
 
 import { mount } from 'enzyme';

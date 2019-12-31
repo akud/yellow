@@ -5,17 +5,20 @@ import ElementPropTypes from '../elements/ElementPropTypes';
 import WindowContext from '../elements/WindowContext';
 
 import SimulationContext from './SimulationContext';
+import SimulationPropTypes from './SimulationPropTypes';
 
 import Orientation from './Orientation';
 
 import {
   createDirectionalRule,
   createPositioningRule,
-  createUniversalPositioningRule,
-  createRelativePositioningRule,
+  createOrientingRule,
 } from './force/PositioningRules';
 
-import { createLinkingRule } from './force/LinkingRule';
+import {
+  createBindingRule,
+  createLinkingRule,
+} from './force/LinkingRules';
 
 let ruleIdSequence = 0;
 
@@ -43,9 +46,16 @@ class RuleComponent extends React.Component {
   }
 }
 
+/**
+ * Register a rule that pushes elements in a direction
+ *
+ * elements - elementSelector defining the elements to which the rule applies
+ * orientation - Orientation determining the direction to push elements in. e.g. Orientation.TOP_LEFT
+ * strength - rule strength
+ */
 export class DirectionalRule extends RuleComponent {
   static propTypes = {
-    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    elements: SimulationPropTypes.elementSelector.isRequired,
     orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
   };
@@ -59,9 +69,16 @@ export class DirectionalRule extends RuleComponent {
   }
 }
 
+/**
+ * Register a rule that pushes elements towards a position
+ *
+ * elements - elementSelector defining the elements to which the rule applies
+ * position - position to push the elements towards
+ * strength - rule strength
+ */
 export class PositioningRule extends RuleComponent {
   static propTypes = {
-    elementIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+    elements: SimulationPropTypes.elementSelector.isRequired,
     position: ElementPropTypes.position.isRequired,
     strength: PropTypes.number,
   };
@@ -75,21 +92,11 @@ export class PositioningRule extends RuleComponent {
   }
 }
 
-export class UniversalPositioningRule extends RuleComponent {
-  static propTypes = {
-    position: ElementPropTypes.position.isRequired,
-    strength: PropTypes.number,
-  };
-
-  static defaultProps = {
-    strength: 1.0,
-  };
-
-  createRule() {
-    return createUniversalPositioningRule(Object.assign({}, this.props));
-  }
-}
-
+/**
+ * Register a rule that pushes all elements towards the current center of the display window
+ *
+ * strength - rule strength
+ */
 export class CenteringRule extends React.Component {
   static propTypes = {
     strength: PropTypes.number,
@@ -103,16 +110,24 @@ export class CenteringRule extends React.Component {
     const { strength } = this.props;
     return (
       <WindowContext.Consumer>
-        { ({center}) => <UniversalPositioningRule position={center} strength={strength} /> }
+        { ({center}) => <PositioningRule elements='all' position={center} strength={strength} /> }
       </WindowContext.Consumer>
     );
   }
 }
 
-export class RelativePositioningRule extends RuleComponent {
+/**
+ * Register a rule that positions a set of elements relative to a base element
+ *
+ * baseElementId - element id to use as the base element, which will not be pushed
+ * targetElements - element selector defining the elements to be moved into orientation
+ * orientation - Orientation determining the desired positioning. e.g. Orientation.TOP_LEFT
+ * strength - rule strength
+ */
+export class OrientingRule extends RuleComponent {
   static propTypes = {
     baseElementId: PropTypes.string.isRequired,
-    targetElementId: PropTypes.string.isRequired,
+    targetElements: SimulationPropTypes.elementSelector.isRequired,
     orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
   };
@@ -122,10 +137,17 @@ export class RelativePositioningRule extends RuleComponent {
   };
 
   createRule() {
-    return createRelativePositioningRule(Object.assign({}, this.props));
+    return createOrientingRule(Object.assign({}, this.props));
   }
 }
 
+/**
+ * Register a rule that links two elements together
+ *
+ * between - two-element array of element ids to link together
+ * distance - distance to keep the elements apart
+ * strength - rule strength
+ */
 export class LinkingRule extends RuleComponent {
   static propTypes = {
     between: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -142,6 +164,36 @@ export class LinkingRule extends RuleComponent {
   }
 }
 
+/**
+ * Register a rule that binds a set of elements to a base element
+ *
+ * baseElementId - element id to use as the base. will not be pushed
+ * targetElements - element selector defining the elements to be moved into orientation
+ * distance - distance to keep the elements apart
+ * strength - rule strength
+ */
+export class BindingRule extends RuleComponent {
+  static propTypes = {
+    baseElementId: PropTypes.string.isRequired,
+    targetElements: SimulationPropTypes.elementSelector.isRequired,
+    distance: PropTypes.number.isRequired,
+    strength: PropTypes.number,
+  };
+
+  static defaultProps = {
+    strength: 1.0,
+  };
+
+  createRule() {
+    return createBindingRule(Object.assign({}, this.props));
+  }
+}
+
+/**
+ * Register a rule from a custom function
+ *
+ * rule - function of the form (simulation) => [ ForceApplication,...] to use as a rule
+ */
 export class FunctionRule extends RuleComponent {
   static propTypes = {
     rule: PropTypes.func.isRequired,
@@ -153,10 +205,9 @@ export class FunctionRule extends RuleComponent {
 }
 
 /**
- * <RepellingRule>
+ * Register a rule with the simulation that causes all elements to repel each other
  *
- * Registers a rule with the simulation that causes elements to repel each other
- *
+ * strength - rule strength
  */
 export class RepellingRule extends React.Component {
   static contextType = SimulationContext;
@@ -182,11 +233,11 @@ export class RepellingRule extends React.Component {
 
 
 export default {
+  BindingRule,
   CenteringRule,
   DirectionalRule,
   PositioningRule,
-  UniversalPositioningRule,
-  RelativePositioningRule,
+  OrientingRule,
   LinkingRule,
   RepellingRule,
   FunctionRule,

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import SimulationContext from './SimulationContext';
-import { createLinkingRule } from './force/LinkingRule';
+import { createLinkingRule } from './force/LinkingRules';
 
 let ruleIdSequence = 0;
 

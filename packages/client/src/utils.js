@@ -20,7 +20,7 @@ const extractArgs = (args, ...extraArgNames) => {
   return Object.assign({ name, value }, extraArgValues);
 }
 
-const requireCondition = function() {
+export const requireCondition = function() {
   const pass = arguments[0];
   const value = arguments.length === 3 ? arguments[1] : undefined;
   const message = arguments.length === 3 ? arguments[2] : arguments[1];
