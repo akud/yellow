@@ -5,8 +5,8 @@ class Default extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Rules.CenteringRule />,
-        <Rules.RepellingRule strength={10} />
+        <Rules.CenteringRule strength={0.5} />,
+        <Rules.RepellingRule strength={25} />
       </React.Fragment>
     );
   }
