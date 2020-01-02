@@ -85,9 +85,18 @@ describe('geometry utils', () => {
   });
 
   describe('approximatelyEqual', () => {
-    it('compares numbers up to two decimal points', () => {
+    it('compares angle number up to two decimal points', () => {
       expect(geometryUtils.approximatelyEqual(2.01324, 2.01259)).toBe(true);
       expect(geometryUtils.approximatelyEqual(2.01324, 2.02259)).toBe(false);
+    });
+
+    it('compares large numbers by their relative difference', () => {
+      expect(geometryUtils.approximatelyEqual(100, 98)).toBe(true);
+      expect(geometryUtils.approximatelyEqual(100, 101)).toBe(true);
+      expect(geometryUtils.approximatelyEqual(100, 95)).toBe(true);
+      expect(geometryUtils.approximatelyEqual(100, 105)).toBe(true);
+      expect(geometryUtils.approximatelyEqual(100, 90)).toBe(false);
+      expect(geometryUtils.approximatelyEqual(100, 110)).toBe(false);
     });
   });
 
