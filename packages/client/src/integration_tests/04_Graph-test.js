@@ -35,7 +35,7 @@ describe('Graph', () => {
   <CircleNode nodeId="blue-node-1" color="#5b41fc" />
   <CircleNode nodeId="blue-node-2" color="#5b41fc" />
   <Node nodeId="yellow-node">
-    <Label text='bottom right' orientation={Orientation.TOP_RIGHT} />
+    <Label text='bottom right' orientation={Orientation.BOTTOM_RIGHT} />
     <Circle color="#fcf95d" />
   </Node>
   <CircleNode nodeId="green-node" color="#3ba226" />

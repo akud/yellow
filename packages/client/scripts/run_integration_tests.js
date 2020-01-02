@@ -1,12 +1,16 @@
-process.on('unhandledRejection', err => {
-  throw err;
-});
-
 const ARGS = process.argv.slice(2);
 const TEST_FILE = "./src/tmp/it-test.js";
 
 const npm = require('npm');
 const fs = require('fs');
+
+const cleanup = () => fs.existsSync(TEST_FILE) && fs.unlinkSync(TEST_FILE);
+
+process.on('unhandledRejection', err => {
+  throw err;
+});
+
+process.on('SIGINT', cleanup);
 
 new Promise((resolve, reject) => {
   npm.load(function(loadError) {
@@ -16,18 +20,12 @@ new Promise((resolve, reject) => {
       clean()
         .then(generateTestFile)
         .then(runJest)
+        .catch(reject)
+        .then(resolve)
+        .finally(cleanup);
     }
   });
-})
-  .finally(() => new Promise((resolve, reject) => {
-    fs.unlink(TEST_FILE, (err) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  }));
+});
 
 
 const clean = () => new Promise((resolve, reject) => {
@@ -58,6 +56,7 @@ const generateTestFile = () => new Promise((resolve, reject) => {
 
 const runJest = () => new Promise((resolve, reject) => {
   npm.run('it:run', (runError) => {
+    process.stdout.write(runError);
     if (runError) {
       reject(runError);
     } else {

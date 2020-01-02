@@ -8,7 +8,21 @@ export const slope = (p1, p2) => (p2.y - p1.y) / (p2.x - p1.x);
  * Indicate if two numeric values are approximately equal
  *
  */
-export const approximatelyEqual = (n1, n2) => n1.toFixed(2) === n2.toFixed(2);
+export const approximatelyEqual = (n1, n2) => {
+  if (n1 <= 2 * Math.PI || n2 <= 2 * Math.PI) {
+    return n1.toFixed(2) === n2.toFixed(2);
+  } else {
+    return (Math.abs(n1 - n2) / Math.max(n1, n2)) <= 0.05;
+  }
+}
+
+/**
+ * Find the point a given distance from the target point at the target angle
+ *
+ */
+export const pointAwayFrom = ({base, distance, angle}) => {
+  return addVectors(base, { x: distance * Math.cos(angle), y: distance * Math.sin(angle) });
+}
 
 /**
  * Compute the angle formed by the line determined by the provided points and the x axis.
@@ -65,4 +79,5 @@ export default {
   computeHorizontalIntersectionAngle,
   radiansToDegrees,
   addVectors,
+  pointAwayFrom,
 };
