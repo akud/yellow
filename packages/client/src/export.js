@@ -1,71 +1,100 @@
-import Arrow from './elements/Arrow';
-import Circle from './elements/Circle';
-import DisplayWindow from './elements/DisplayWindow';
-import ElementContext from './elements/ElementContext';
-import ElementGroup from './elements/ElementGroup';
-import ElementProps from './elements/ElementProps';
-import ElementPropTypes from './elements/ElementPropTypes';
-import Image from './elements/Image';
-import Label from './elements/Label';
-import Line from './elements/Line';
-import Point from './elements/Point';
-import Rectangle from './elements/Rectangle';
-import WindowContext from './elements/WindowContext';
-import geometryUtils from './elements/geometry/geometry-utils';
+import YellowArrow from './elements/Arrow';
+import YellowCircle from './elements/Circle';
+import YellowDisplayWindow from './elements/DisplayWindow';
+import YellowElementContext from './elements/ElementContext';
+import YellowElementGroup from './elements/ElementGroup';
+import YellowElementProps from './elements/ElementProps';
+import YellowElementPropTypes from './elements/ElementPropTypes';
+import YellowImage from './elements/Image';
+import YellowLabel from './elements/Label';
+import YellowLine from './elements/Line';
+import YellowPoint from './elements/Point';
+import YellowRectangle from './elements/Rectangle';
+import YellowWindowContext from './elements/WindowContext';
+import YellowGeometryUtils from './elements/geometry/geometry-utils';
 
+import YellowOrientation from './simulation/Orientation';
+import YellowRules from './simulation/Rules';
+import YellowSimulatedElementGroup from './simulation/SimulatedElementGroup';
+import YellowSimulatedElement from './simulation/SimulatedElement';
+import YellowSimulatedLayout from './simulation/SimulatedLayout';
+import YellowSimulatedLink from './simulation/SimulatedLink';
+import YellowSimulationContext from './simulation/SimulationContext';
+import YellowSimulationWindow from './simulation/SimulationWindow';
 
-import Orientation from './simulation/Orientation';
-import Rules from './simulation/Rules';
-import SimulatedElementGroup from './simulation/SimulatedElementGroup';
-import SimulatedElement from './simulation/SimulatedElement';
-import SimulatedLayout from './simulation/SimulatedLayout';
-import SimulatedLink from './simulation/SimulatedLink';
-import SimulationContext from './simulation/SimulationContext';
-import SimulationWindow from './simulation/SimulationWindow';
-
-import CircleNode from './graphs/CircleNode';
-import Edge from './graphs/Edge';
-import Graph from './graphs/Graph';
-import ImageNode from './graphs/ImageNode';
-import Node from './graphs/Node';
-import PointNode from './graphs/PointNode';
+import YellowCircleNode from './graphs/CircleNode';
+import YellowEdge from './graphs/Edge';
+import YellowGraph from './graphs/Graph';
+import YellowImageNode from './graphs/ImageNode';
+import YellowNode from './graphs/Node';
+import YellowPointNode from './graphs/PointNode';
 
 export const Elements = {
-  Arrow,
-  Circle,
-  DisplayWindow,
-  ElementContext,
-  ElementGroup,
-  ElementProps,
-  ElementPropTypes,
-  Image,
-  Label,
-  Line,
-  Point,
-  Rectangle,
-  WindowContext,
-  geometryUtils,
+  Arrow: YellowArrow,
+  Circle: YellowCircle,
+  DisplayWindow: YellowDisplayWindow,
+  ElementContext: YellowElementContext,
+  ElementGroup: YellowElementGroup,
+  ElementProps: YellowElementProps,
+  ElementPropTypes: YellowElementPropTypes,
+  Image: YellowImage,
+  Label: YellowLabel,
+  Line: YellowLine,
+  Point: YellowPoint,
+  Rectangle: YellowRectangle,
+  WindowContext: YellowWindowContext,
+  geometryUtils: YellowGeometryUtils,
 }
+export const Arrow = YellowArrow
+export const Circle = YellowCircle
+export const DisplayWindow = YellowDisplayWindow
+export const ElementContext = YellowElementContext
+export const ElementGroup = YellowElementGroup
+export const ElementProps = YellowElementProps
+export const ElementPropTypes = YellowElementPropTypes
+export const Image = YellowImage
+export const Label = YellowLabel
+export const Line = YellowLine
+export const Point = YellowPoint
+export const Rectangle = YellowRectangle
+export const WindowContext = YellowWindowContext
+export const geometryUtils = YellowGeometryUtils
 
 export const Simulations = {
-  Orientation,
-  Rules,
-  SimulatedElementGroup,
-  SimulatedElement,
-  SimulatedLayout,
-  SimulatedLink,
-  SimulationContext,
-  SimulationWindow,
+  Orientation: YellowOrientation,
+  Rules: YellowRules,
+  SimulatedElementGroup: YellowSimulatedElementGroup,
+  SimulatedElement: YellowSimulatedElement,
+  SimulatedLayout: YellowSimulatedLayout,
+  SimulatedLink: YellowSimulatedLink,
+  SimulationContext: YellowSimulationContext,
+  SimulationWindow: YellowSimulationWindow,
 }
 
+export const Orientation = YellowOrientation
+export const Rules = YellowRules
+export const SimulatedElementGroup = YellowSimulatedElementGroup
+export const SimulatedElement = YellowSimulatedElement
+export const SimulatedLayout = YellowSimulatedLayout
+export const SimulatedLink = YellowSimulatedLink
+export const SimulationContext = YellowSimulationContext
+export const SimulationWindow = YellowSimulationWindow
+
 export const Graphs = {
-  CircleNode,
-  Edge,
-  Graph,
-  ImageNode,
-  Node,
-  PointNode,
+  CircleNode: YellowCircleNode,
+  Edge: YellowEdge,
+  Graph: YellowGraph,
+  ImageNode: YellowImageNode,
+  Node: YellowNode,
+  PointNode: YellowPointNode,
 }
+
+export const CircleNode = YellowCircleNode
+export const Edge = YellowEdge
+export const Graph = YellowGraph
+export const ImageNode = YellowImageNode
+export const Node = YellowNode
+export const PointNode = YellowPointNode
 
 export default Object.assign(
   { },
