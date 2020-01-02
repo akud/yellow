@@ -18,7 +18,7 @@ export default class SimulatedLink extends React.Component {
   }
 
   static defaultProps = {
-    render: (fromElementId, toElementId) => null,
+    render: (sourcePosition, targetPosition) => null,
     distance: 100,
     bindingStrength: 1.0,
   }

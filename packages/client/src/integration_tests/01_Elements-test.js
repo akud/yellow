@@ -11,7 +11,7 @@ describe('Basic Element Display', () => {
 <Line from={{x: 120, y: 120}} to={{x: 390, y: 390}} color='black' />
 <Arrow
   thickness={2}
-  position={{x: 120, y: 120}}
+  to={{x: 120, y: 120}}
   color='black'
   angle={geometryUtils.computeHorizontalIntersectionAngle(
     { x: 400, y: 400 },
@@ -19,7 +19,7 @@ describe('Basic Element Display', () => {
   )}
   />
 <Arrow
-  position={{x: 390, y: 390}}
+  to={{x: 390, y: 390}}
   color='black'
   angle={geometryUtils.computeHorizontalIntersectionAngle(
     { x: 100, y: 100 },
