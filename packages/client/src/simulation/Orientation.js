@@ -37,7 +37,7 @@ class Orientation {
       targetPoint
     );
 
-    return Math.abs(this.getAngle() - angle) <= Math.PI / 6;
+    return Math.abs(this.getAngle() - angle) <= Math.PI / 12;
   }
 }
 
