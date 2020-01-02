@@ -17,6 +17,14 @@ export const approximatelyEqual = (n1, n2) => {
 }
 
 /**
+ * Find the point a given distance from the target point at the target angle
+ *
+ */
+export const pointAwayFrom = ({base, distance, angle}) => {
+  return addVectors(base, { x: distance * Math.cos(angle), y: distance * Math.sin(angle) });
+}
+
+/**
  * Compute the angle formed by the line determined by the provided points and the x axis.
  * The returned angle will always be in the range [0, 2pi].
  *
@@ -71,4 +79,5 @@ export default {
   computeHorizontalIntersectionAngle,
   radiansToDegrees,
   addVectors,
+  pointAwayFrom,
 };

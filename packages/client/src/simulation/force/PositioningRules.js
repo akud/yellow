@@ -90,24 +90,30 @@ export const createOrientingRule = ({ baseElementId, targetElements, orientation
       });
 
       if (!isOriented) {
-        const currentAngle = geometryUtils.computeHorizontalIntersectionAngle(
-          baseElementData.position,
-          targetElementData.position
-        );
-        const angleMisalignment = Math.abs(orientation.getAngle() - currentAngle);
-        const applicationStrength = strength * angleMisalignment;
-
+        const desiredPosition = geometryUtils.pointAwayFrom({
+          base: baseElementData.position,
+          distance: geometryUtils.distance(
+            baseElementData.position, targetElementData.position
+          ),
+          angle: orientation.getAngle(),
+        });
         LOGGER.debug(
-          'target element {} is not {}-oriented with respect to element {}; pushing with strength {}',
+          'target element {} is not {}-oriented with respect to element {}; pushing towards {}',
           targetElementId,
           orientation.getName(),
           baseElementId,
-          applicationStrength
+          desiredPosition
         );
         return new ForceApplication({
           elements: { id: targetElementId },
-          angle: orientation.getAngle(),
-          strength: applicationStrength,
+          angle: geometryUtils.computeHorizontalIntersectionAngle(
+            targetElementData.position,
+            desiredPosition
+          ),
+          strength: strength * SPRING_CONSTANT * geometryUtils.distance(
+            targetElementData.position,
+            desiredPosition
+          )
         });
       }
     })

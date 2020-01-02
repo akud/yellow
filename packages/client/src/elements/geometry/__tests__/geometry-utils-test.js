@@ -27,6 +27,42 @@ describe('geometry utils', () => {
     });
   });
 
+  describe('pointAwayFrom', () => {
+    it('finds point the specified distance away at the specified angle', () => {
+      const testCases = [
+        {
+          base: { x: 0, y: 0 },
+          distance: 45,
+          angle: PI_OVER_TWO,
+          expected: { x: 0, y: 45 }
+        },
+        {
+          base: { x: 0, y: 10 },
+          distance: 23,
+          angle: PI,
+          expected: { x: -23, y: 10 }
+        },
+        {
+          base: { x: -56, y: 89 },
+          distance: 2,
+          angle: PI_OVER_FOUR,
+          expected: { x: -56 + ROOT_TWO, y: 89 + ROOT_TWO }
+        },
+        {
+          base: { x: 0, y: 0 },
+          distance: 10,
+          angle: FIVE_PI_OVER_FOUR,
+          expected: { x: -5 * ROOT_TWO, y: -5 * ROOT_TWO }
+        },
+      ];
+      testCases.forEach(({ base, distance, angle, expected }) => {
+        const actual = geometryUtils.pointAwayFrom({ base, distance, angle });
+        expect(actual.x).toBeCloseTo(expected.x);
+        expect(actual.y).toBeCloseTo(expected.y);
+      });
+    });
+  });
+
   describe('computeHorizontalIntersectionAngle', () => {
     it('computes the angle of the line formed by the two points with the x axis', () => {
       const testCases = [
