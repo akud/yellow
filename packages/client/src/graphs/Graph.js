@@ -33,7 +33,6 @@ export default class Graph extends React.Component {
       style,
     } = this.props;
 
-    debugger;
     return (
       <SimulationWindow
         width={width}
