@@ -99,18 +99,20 @@ export class PositioningRule extends RuleComponent {
  */
 export class CenteringRule extends React.Component {
   static propTypes = {
+    elements: SimulationPropTypes.elementSelector,
     strength: PropTypes.number,
   };
 
   static defaultProps = {
+    elements: 'all',
     strength: 1.0,
   };
 
   render() {
-    const { strength } = this.props;
+    const { elements, strength } = this.props;
     return (
       <WindowContext.Consumer>
-        { ({center}) => <PositioningRule elements='all' position={center} strength={strength} /> }
+        { ({center}) => <PositioningRule elements={elements} position={center} strength={strength} /> }
       </WindowContext.Consumer>
     );
   }
