@@ -15,4 +15,16 @@ describe('ElementGroup', () => {
     expect(wrapper.find('g').prop('data-element-id')).toEqual('123');
     expect(wrapper.find('circle').length).toBe(1);
   });
+
+  it('renders the <g> inside a link if one is provided', () => {
+    const wrapper = shallow(
+      <ElementGroup link='https://foo.bar.com'>
+      </ElementGroup>
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.find('g').length).toBe(1);
+  });
 });

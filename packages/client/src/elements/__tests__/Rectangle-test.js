@@ -53,4 +53,22 @@ describe('Rectangle', () => {
       new RectangleDefinition({ width: 20, height: 18 })
     );
   });
+
+  it('renders the rectangle inside a link if one is provided', () => {
+    const wrapper = mount(
+      <ElementContext.Provider value={context}>
+        <Rectangle
+          width={20}
+          height={18}
+          position={{ x: 420, y: 69 }}
+          link='https://foo.bar.com'
+        />
+      </ElementContext.Provider>
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.find('rect').length).toBe(1);
+  });
 });

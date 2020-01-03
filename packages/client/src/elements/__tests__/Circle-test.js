@@ -46,4 +46,17 @@ describe('Circle', () => {
       'circle-register-id', new CircleDefinition({ radius: 5 })
     );
   });
+
+  it('renders the circle inside a link if one is provided', () => {
+    const wrapper = mount(
+      <ElementContext.Provider value={context}>
+        <Circle link='https://foo.bar.com' />
+      </ElementContext.Provider>
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.find('circle').length).toBe(1);
+  });
 });

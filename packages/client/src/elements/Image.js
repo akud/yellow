@@ -3,6 +3,7 @@ import RectangleDefinition from './geometry/RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
+import Link from './Link';
 
 export default class Image extends React.Component {
   static contextType = ElementContext;
@@ -22,10 +23,10 @@ export default class Image extends React.Component {
   }
 
   render() {
-    const { id, position, src, width, height } = this.props;
+    const { id, position, src, width, height, link } = this.props;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
-    return (
+    const image =  (
       <image
         x={x}
         y={y}
@@ -35,6 +36,12 @@ export default class Image extends React.Component {
         data-element-id={id}
       />
     );
+
+    if (link && link.length) {
+      return <Link href={link}>{image}</Link>;
+    } else {
+      return image;
+    }
   }
 }
 
