@@ -44,12 +44,12 @@ export default class Label extends React.Component {
   }
 
   render() {
-    const { id, position, border, text, padding } = this.props;
+    const { id, position, border, text, padding, link } = this.props;
     const { width, height } = this.state;
     const x = position.x - width / 2;
     const y = position.y + height / 4;
     return (
-      <ElementGroup className="label" data-element-id={id}>
+      <ElementGroup className="label" data-element-id={id} link={link}>
         { border && this.renderBorder({ position, width, height, padding }) }
         <text x={x} y={y} ref={this.refCallback}>{text}</text>
       </ElementGroup>

@@ -3,6 +3,7 @@ import RectangleDefinition from './geometry/RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
+import Link from './Link';
 
 export default class Rectangle extends React.Component {
   static contextType = ElementContext;
@@ -28,16 +29,24 @@ export default class Rectangle extends React.Component {
   }
 
   render() {
-    const { color, position, id, width, height } = this.props;
+    const { color, position, id, width, height, link } = this.props;
     const cornerX = position.x - width / 2;
     const cornerY = position.y - height / 2;
-    return <rect
-      x={cornerX}
-      y={cornerY}
-      fill={color}
-      width={width}
-      height={height}
-      data-element-id={id}
-    />;
+    const rect = (
+      <rect
+        x={cornerX}
+        y={cornerY}
+        fill={color}
+        width={width}
+        height={height}
+        data-element-id={id}
+      />
+    );
+
+    if (link && link.length) {
+      return <Link href={link}>{rect}</Link>;
+    } else {
+      return rect;
+    }
   }
 }

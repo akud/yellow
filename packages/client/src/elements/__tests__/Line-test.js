@@ -23,4 +23,19 @@ describe('Line', () => {
     expect(wrapper.find('line').at(0).prop('stroke')).toEqual('red');
     expect(wrapper.find('line').at(0).prop('strokeWidth')).toBe(3);
   });
+
+  it('renders the line inside a link if one is provided', () => {
+    const wrapper = shallow(
+      <Line
+        from={{ x: 23, y: 56 }}
+        to={{ x: 98, y: -12 }}
+        link='https://foo.bar.com'
+      />
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.find('line').length).toBe(1);
+  });
 });

@@ -8,6 +8,7 @@ import YellowElementPropTypes from './elements/ElementPropTypes';
 import YellowImage from './elements/Image';
 import YellowLabel from './elements/Label';
 import YellowLine from './elements/Line';
+import YellowLink from './elements/Link';
 import YellowPoint from './elements/Point';
 import YellowRectangle from './elements/Rectangle';
 import YellowWindowContext from './elements/WindowContext';
@@ -40,6 +41,7 @@ export const Elements = {
   Image: YellowImage,
   Label: YellowLabel,
   Line: YellowLine,
+  Link: YellowLink,
   Point: YellowPoint,
   Rectangle: YellowRectangle,
   WindowContext: YellowWindowContext,
@@ -55,6 +57,7 @@ export const ElementPropTypes = YellowElementPropTypes
 export const Image = YellowImage
 export const Label = YellowLabel
 export const Line = YellowLine
+export const Link = YellowLink
 export const Point = YellowPoint
 export const Rectangle = YellowRectangle
 export const WindowContext = YellowWindowContext

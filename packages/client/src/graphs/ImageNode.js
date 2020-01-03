@@ -10,17 +10,17 @@ export default class ImageNode extends React.Component {
     src: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
+    link: PropTypes.string,
   };
 
   static defaultProps = {
-    color: '#4286f4',
-    radius: 10,
+    link: '',
   }
 
   render() {
-    const { nodeId, src, width, height } = this.props;
+    const { nodeId, src, width, height, link } = this.props;
     return (
-      <Node nodeId={nodeId}>
+      <Node nodeId={nodeId} link={link}>
         <Image src={src} width={width} height={height} />
       </Node>
     );

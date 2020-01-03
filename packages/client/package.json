@@ -13,7 +13,7 @@
     "prepublishOnly": "npm run clean && npm run transpile",
     "test": "f() { jest $* --testPathIgnorePatterns=\"/src/integration_tests/\"; }; f",
     "test:debug": "f() { node-inspect $(npm bin)/jest $* --testPathIgnorePatterns=\"/src/integration_tests/\"; }; f",
-    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/integration_tests/**.js\""
+    "transpile": "babel src --out-dir distribution --ignore \"**/__tests__/*.js\",\"**/__mocks__/*.js\",\"src/test-utils/*.js\",\"src/integration_tests/*.js\""
   },
   "repository": {
     "type": "git",

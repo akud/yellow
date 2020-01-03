@@ -9,17 +9,19 @@ export default class CircleNode extends React.Component {
     nodeId: PropTypes.string.isRequired,
     color: PropTypes.string,
     radius: PropTypes.number,
+    link: PropTypes.string,
   };
 
   static defaultProps = {
     color: '#4286f4',
     radius: 10,
+    link: '',
   }
 
   render() {
-    const { color, radius, nodeId } = this.props;
+    const { color, radius, nodeId, link } = this.props;
     return (
-      <Node nodeId={nodeId}>
+      <Node nodeId={nodeId} link={link}>
         <Circle color={color} radius={radius} />
       </Node>
     );

@@ -23,4 +23,17 @@ describe('Arrow', () => {
       'rotate(45 56 89)'
     );
   });
+
+  it('wraps the arrow in a Link if one is provided', () => {
+    const wrapper = shallow(
+      <Arrow
+        to={{ x: 56, y: 89 }}
+        link='/foo/bar'
+      />
+    );
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('/foo/bar');
+    expect(link.find('path').length).toBe(1);
+  });
 });

@@ -50,4 +50,24 @@ describe('Image', () => {
       'image-register-id', new RectangleDefinition({ width: 100, height: 200 })
     );
   });
+
+  it('renders the image inside a link if one is provided', () => {
+    const wrapper = mount(
+      <ElementContext.Provider value={context}>
+        <Image
+          src="image_src"
+          width={100}
+          height={200}
+          id='234'
+          position={point(500, 700)}
+          link='https://foo.bar.com'
+        />
+      </ElementContext.Provider>
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.find('image').length).toBe(1);
+  });
 });

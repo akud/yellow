@@ -34,8 +34,8 @@ describe('Graph', () => {
   <CircleNode nodeId="red-node-2" color="#fc2f38" />
   <CircleNode nodeId="blue-node-1" color="#5b41fc" />
   <CircleNode nodeId="blue-node-2" color="#5b41fc" />
-  <Node nodeId="yellow-node">
-    <Label text='bottom right' orientation={Orientation.BOTTOM_RIGHT} />
+  <Node nodeId="yellow-node" link='https://alexkudlick.com'>
+    <Label text='bottom right link' orientation={Orientation.BOTTOM_RIGHT} />
     <Circle color="#fcf95d" />
   </Node>
   <CircleNode nodeId="green-node" color="#3ba226" />
