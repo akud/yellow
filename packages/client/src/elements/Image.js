@@ -19,7 +19,9 @@ export default class Image extends React.Component {
   componentDidMount() {
     const { registerShape } = this.context;
     const { id, width, height } = this.props;
-    registerShape(id, new RectangleDefinition({ width, height }));
+    if (registerShape) {
+      registerShape(id, new RectangleDefinition({ width, height }));
+    }
   }
 
   render() {

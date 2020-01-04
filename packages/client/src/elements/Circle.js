@@ -23,7 +23,10 @@ export default class Circle extends React.Component {
   componentDidMount() {
     const { registerShape } = this.context;
     const { id, radius } = this.props;
-    registerShape(id, new CircleDefinition({ radius }));
+
+    if (registerShape) {
+      registerShape(id, new CircleDefinition({ radius }));
+    }
   }
 
   render() {

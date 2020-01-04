@@ -28,10 +28,12 @@ export default class Label extends React.Component {
       const { id, padding } = this.props;
       const rect = element.getBoundingClientRect();
       this.setState({ width: rect.width, height: rect.height });
-      registerShape(id, new RectangleDefinition({
-        width: rect.width + padding,
-        height: rect.height + padding,
-      }));
+      if (registerShape) {
+        registerShape(id, new RectangleDefinition({
+          width: rect.width + padding,
+          height: rect.height + padding,
+        }));
+      }
     }
   }
 
