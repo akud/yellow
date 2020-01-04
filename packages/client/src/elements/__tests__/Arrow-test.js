@@ -34,6 +34,23 @@ describe('Arrow', () => {
     const link = wrapper.find('Link');
     expect(link.length).toBe(1);
     expect(link.prop('href')).toEqual('/foo/bar');
+    expect(link.prop('inline')).toEqual(false);
+
+    expect(link.find('path').length).toBe(1);
+  });
+
+  it('handles object-style links', () => {
+    const wrapper = shallow(
+      <Arrow
+        to={{ x: 56, y: 89 }}
+        link={{ href: '/foo/bar', inline: true }}
+      />
+    );
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('/foo/bar');
+    expect(link.prop('inline')).toEqual(true);
+
     expect(link.find('path').length).toBe(1);
   });
 });

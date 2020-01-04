@@ -68,6 +68,30 @@ describe('Image', () => {
     const link = wrapper.find('Link');
     expect(link.length).toBe(1);
     expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.prop('inline')).toBe(false);
+
+    expect(link.find('image').length).toBe(1);
+  });
+
+  it('handles object-style links', () => {
+    const wrapper = mount(
+      <ElementContext.Provider value={context}>
+        <Image
+          src="image_src"
+          width={100}
+          height={200}
+          id='234'
+          position={point(500, 700)}
+          link={{ href: 'https://foo.bar.com', inline: true }}
+        />
+      </ElementContext.Provider>
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.prop('inline')).toBe(true);
+
     expect(link.find('image').length).toBe(1);
   });
 });

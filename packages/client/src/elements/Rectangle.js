@@ -3,7 +3,7 @@ import RectangleDefinition from './geometry/RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
-import Link from './Link';
+import { wrapInLink } from './Link';
 
 export default class Rectangle extends React.Component {
   static contextType = ElementContext;
@@ -34,7 +34,8 @@ export default class Rectangle extends React.Component {
     const { color, position, id, width, height, link } = this.props;
     const cornerX = position.x - width / 2;
     const cornerY = position.y - height / 2;
-    const rect = (
+    return wrapInLink(
+      link,
       <rect
         x={cornerX}
         y={cornerY}
@@ -44,11 +45,5 @@ export default class Rectangle extends React.Component {
         data-element-id={id}
       />
     );
-
-    if (link && link.length) {
-      return <Link href={link}>{rect}</Link>;
-    } else {
-      return rect;
-    }
   }
 }

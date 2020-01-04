@@ -36,6 +36,26 @@ describe('Line', () => {
     const link = wrapper.find('Link');
     expect(link.length).toBe(1);
     expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.prop('inline')).toBe(false);
+
     expect(link.find('line').length).toBe(1);
   });
+
+  it('handles object-style links', () => {
+    const wrapper = shallow(
+      <Line
+        from={{ x: 23, y: 56 }}
+        to={{ x: 98, y: -12 }}
+        link={{ href: 'https://foo.bar.com', inline: true }}
+      />
+    );
+
+    const link = wrapper.find('Link');
+    expect(link.length).toBe(1);
+    expect(link.prop('href')).toEqual('https://foo.bar.com');
+    expect(link.prop('inline')).toBe(true);
+
+    expect(link.find('line').length).toBe(1);
+  });
+
 });

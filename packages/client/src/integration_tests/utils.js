@@ -129,6 +129,7 @@ import ElementPropTypes from '../elements/ElementPropTypes';
 import Image from '../elements/Image';
 import Label from '../elements/Label';
 import Line from '../elements/Line';
+import Link from '../elements/Link';
 import Point from '../elements/Point';
 import Rectangle from '../elements/Rectangle';
 import WindowContext from '../elements/WindowContext';

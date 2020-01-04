@@ -26,6 +26,16 @@ describe('Basic Element Display', () => {
     { x: 400, y: 400 },
   )}
   />
+  <Link href='https://example.com'>
+    <ElementGroup>
+      <Label text='linked circle' position={{x: 100, y: 400}} />
+      <Circle position={{x: 120, y: 420}} />
+    </ElementGroup>
+  </Link>
+  <ElementGroup link={{ href: 'https://example.com', inline: true }}>
+    <Label text='linked square' position={{x: 400, y: 100}} />
+    <Rectangle position={{x: 420, y: 120}} width={10} height={10} />
+  </ElementGroup>
 `
     );
   });
