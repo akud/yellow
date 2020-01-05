@@ -158,6 +158,25 @@ describe('utils', () => {
     });
   });
 
+  describe('filterKeys', () => {
+    it('returns a copy of the object without the specified keys', () => {
+      const original = {
+        foo: 'bar',
+        remove: 'this',
+        filter: 'this too',
+        keep: 'this'
+      };
+      const filtered = utils.filterKeys(original, 'remove', 'filter');
+      expect(filtered).toEqual({ foo: 'bar', keep: 'this' });
+      expect(original).toEqual({
+        foo: 'bar',
+        remove: 'this',
+        filter: 'this too',
+        keep: 'this'
+      });
+    });
+  });
+
   const expectHandlesOnlyOneArgument = (func, testCases) => {
     testCases.forEach(testCase => {
       testCase = Object.assign(

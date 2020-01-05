@@ -19,6 +19,15 @@ describe('Link', () => {
     expect(a.find(Circle).length).toBe(1);
   });
 
+  it('passes extra props to children', () => {
+    const wrapper = shallow(
+      <Link href='https://example.com/foo/bar' position={{ x: 42, y: -23 }}>
+        <Circle />
+      </Link>
+    );
+    expect(wrapper.find(Circle).prop('position')).toEqual({ x: 42, y: -23 });
+  });
+
   it('sets the target attribute for inline links', () => {
     const wrapper = shallow(
       <Link href='https://example.com/foo/bar' inline={true}>

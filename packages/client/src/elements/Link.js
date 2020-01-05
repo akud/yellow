@@ -1,4 +1,5 @@
 import React from 'react';
+import utils from '../utils';
 import PropTypes from 'prop-types';
 
 export default class Link extends React.Component {
@@ -15,16 +16,18 @@ export default class Link extends React.Component {
 
   render() {
     const { href, inline, className, children } = this.props;
+    const extraProps = utils.filterKeys(
+      this.props, 'href', 'inline', 'className', 'children'
+    );
     return (
       <a href={href} className={className} target={inline ? '_self' : '_blank'}>
-        {children}
+        {React.Children.map(children, c => React.cloneElement(c, extraProps))}
       </a>
     );
   }
 }
 
 export const wrapInLink = (linkProp, component) => {
-  debugger;
   if (typeof linkProp === 'string') {
     linkProp = { href: linkProp, inline: false };
   }
