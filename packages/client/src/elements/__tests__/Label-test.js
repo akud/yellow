@@ -1,12 +1,17 @@
+jest.mock('../geometry/monitor-element-shape');
+
 import React from 'react';
 import Label from '../Label';
 import RectangleDefinition from '../geometry/RectangleDefinition';
 import ElementContext from '../ElementContext';
+import {
+  resetMockElementShapeMonitor,
+  setMockElementShape
+} from '../geometry/monitor-element-shape';
 
 import { mount } from 'enzyme';
 
 describe('Label', () => {
-  let mockBoundingClientRect;
   let context;
 
   const baseElementProps = opts => Object.assign({
@@ -15,7 +20,7 @@ describe('Label', () => {
   }, opts);
 
   beforeEach(() => {
-    mockBoundingClientRect = registerBoundingClientRectMock();
+    resetMockElementShapeMonitor();
     context = {
       registerShape: jest.fn()
     };
@@ -58,7 +63,7 @@ describe('Label', () => {
   });
 
   it('positions the text based on actual width and height', () => {
-    mockBoundingClientRect.mockReturnValue({
+    setMockElementShape({
       width: 42,
       height: 24
     });
@@ -76,7 +81,7 @@ describe('Label', () => {
   });
 
   it('renders a border with padding if specified', () => {
-    mockBoundingClientRect.mockReturnValue({
+    setMockElementShape({
       width: 44,
       height: 24
     });
@@ -103,7 +108,7 @@ describe('Label', () => {
   });
 
   it('registers a rectangle defined by actual size and padding', () => {
-    mockBoundingClientRect.mockReturnValue({
+    setMockElementShape({
       width: 100,
       height: 29
     });
