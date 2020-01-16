@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Node from './Node';
+import ElementPropTypes from '../elements/ElementPropTypes';
 import Image from '../elements/Image';
+
+import Node from './Node';
 
 export default class ImageNode extends React.Component {
   static propTypes = {
@@ -10,11 +12,10 @@ export default class ImageNode extends React.Component {
     src: PropTypes.string.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    link: PropTypes.string,
+    link: ElementPropTypes.link,
   };
 
   static defaultProps = {
-    link: '',
   }
 
   render() {
