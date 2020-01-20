@@ -126,6 +126,7 @@ import ElementContext from '../elements/ElementContext';
 import ElementGroup from '../elements/ElementGroup';
 import ElementProps from '../elements/ElementProps';
 import ElementPropTypes from '../elements/ElementPropTypes';
+import HtmlFragment from '../elements/HtmlFragment';
 import Image from '../elements/Image';
 import Label from '../elements/Label';
 import Line from '../elements/Line';
@@ -151,6 +152,7 @@ const graphImports = () => (
 `import CircleNode from '../graphs/CircleNode';
 import Edge from '../graphs/Edge';
 import Graph from '../graphs/Graph';
+import HtmlNode from '../graphs/HtmlNode';
 import ImageNode from '../graphs/ImageNode';
 import Node from '../graphs/Node';
 import PointNode from '../graphs/PointNode';

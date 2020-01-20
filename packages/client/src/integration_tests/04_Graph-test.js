@@ -9,7 +9,9 @@ describe('Graph', () => {
   <CircleNode nodeId="blue-node-1" color="#5b41fc" />
   <CircleNode nodeId="blue-node-2" color="#5b41fc" />
   <CircleNode nodeId="yellow-node" color="#fcf95d" />
-  <CircleNode nodeId="green-node" color="#3ba226" />
+  <HtmlNode nodeId="green-node" >
+    <p style={{ color: '#3ba226', margin: 0 }}>green</p>
+  </HtmlNode>
   <Edge fromNodeId="red-node-1" toNodeId="yellow-node" directed={true} />
   <Edge fromNodeId="red-node-1" toNodeId="blue-node-1" />
   <Edge fromNodeId="red-node-1" toNodeId="green-node" />
@@ -50,5 +52,4 @@ describe('Graph', () => {
 `
     );
   });
-
 });

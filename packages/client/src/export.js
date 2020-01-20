@@ -5,6 +5,7 @@ import YellowElementContext from './elements/ElementContext';
 import YellowElementGroup from './elements/ElementGroup';
 import YellowElementProps from './elements/ElementProps';
 import YellowElementPropTypes from './elements/ElementPropTypes';
+import YellowHtmlFragment from './elements/HtmlFragment';
 import YellowImage from './elements/Image';
 import YellowLabel from './elements/Label';
 import YellowLine from './elements/Line';
@@ -26,6 +27,7 @@ import YellowSimulationWindow from './simulation/SimulationWindow';
 import YellowCircleNode from './graphs/CircleNode';
 import YellowEdge from './graphs/Edge';
 import YellowGraph from './graphs/Graph';
+import YellowHtmlNode from './graphs/HtmlNode';
 import YellowImageNode from './graphs/ImageNode';
 import YellowNode from './graphs/Node';
 import YellowPointNode from './graphs/PointNode';
@@ -38,6 +40,7 @@ export const Elements = {
   ElementGroup: YellowElementGroup,
   ElementProps: YellowElementProps,
   ElementPropTypes: YellowElementPropTypes,
+  HtmlFragment: YellowHtmlFragment,
   Image: YellowImage,
   Label: YellowLabel,
   Line: YellowLine,
@@ -54,6 +57,7 @@ export const ElementContext = YellowElementContext
 export const ElementGroup = YellowElementGroup
 export const ElementProps = YellowElementProps
 export const ElementPropTypes = YellowElementPropTypes
+export const HtmlFragment = YellowHtmlFragment
 export const Image = YellowImage
 export const Label = YellowLabel
 export const Line = YellowLine
@@ -87,6 +91,7 @@ export const Graphs = {
   CircleNode: YellowCircleNode,
   Edge: YellowEdge,
   Graph: YellowGraph,
+  HtmlNode: YellowHtmlNode,
   ImageNode: YellowImageNode,
   Node: YellowNode,
   PointNode: YellowPointNode,
@@ -95,6 +100,7 @@ export const Graphs = {
 export const CircleNode = YellowCircleNode
 export const Edge = YellowEdge
 export const Graph = YellowGraph
+export const HtmlNode = YellowHtmlNode
 export const ImageNode = YellowImageNode
 export const Node = YellowNode
 export const PointNode = YellowPointNode
