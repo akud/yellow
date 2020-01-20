@@ -1,5 +1,6 @@
 import YellowArrow from './elements/Arrow';
 import YellowCircle from './elements/Circle';
+import YellowCurve from './elements/Curve';
 import YellowDisplayWindow from './elements/DisplayWindow';
 import YellowElementContext from './elements/ElementContext';
 import YellowElementGroup from './elements/ElementGroup';
@@ -35,6 +36,7 @@ import YellowPointNode from './graphs/PointNode';
 export const Elements = {
   Arrow: YellowArrow,
   Circle: YellowCircle,
+  Curve: YellowCurve,
   DisplayWindow: YellowDisplayWindow,
   ElementContext: YellowElementContext,
   ElementGroup: YellowElementGroup,
@@ -52,6 +54,7 @@ export const Elements = {
 }
 export const Arrow = YellowArrow
 export const Circle = YellowCircle
+export const Curve = YellowCurve
 export const DisplayWindow = YellowDisplayWindow
 export const ElementContext = YellowElementContext
 export const ElementGroup = YellowElementGroup

@@ -7,7 +7,9 @@ import Node from './Node';
 
 import SimulatedLink from '../simulation/SimulatedLink';
 
+import ElementPropTypes from '../elements/ElementPropTypes';
 import ElementGroup from '../elements/ElementGroup';
+import Curve from '../elements/Curve';
 import Line from '../elements/Line';
 import Arrow from '../elements/Arrow';
 
@@ -23,6 +25,7 @@ export default class Edge extends React.Component {
     directed: PropTypes.bool,
     bidirectional: PropTypes.bool,
     bindingStrength: PropTypes.number,
+    curvature: ElementPropTypes.curvature,
   }
 
   static defaultProps = {
@@ -42,6 +45,7 @@ export default class Edge extends React.Component {
       bindingStrength,
       directed,
       bidirectional,
+      curvature
     } = this.props;
 
     const fromElementId = this.getFromElementId();
@@ -66,18 +70,26 @@ export default class Edge extends React.Component {
                   color={color}
                   thickness={thickness}
                   angle={
-                    geometryUtils.computeHorizontalIntersectionAngle(
-                      targetPosition, sourcePosition
-                    )
+                    this.computeAngle(targetPosition, sourcePosition)
                   }
                 />
             }
-            <Line
-              from={sourcePosition}
-              to={targetPosition}
-              color={color}
-              thickness={thickness}
-            />
+            {
+              curvature ?
+                <Curve
+                  from={sourcePosition}
+                  to={targetPosition}
+                  color={color}
+                  thickness={thickness}
+                  curvature={curvature}
+                /> :
+                <Line
+                  from={sourcePosition}
+                  to={targetPosition}
+                  color={color}
+                  thickness={thickness}
+                />
+            }
             {
               (bidirectional || directed) &&
                 <Arrow
@@ -85,9 +97,7 @@ export default class Edge extends React.Component {
                   color={color}
                   thickness={thickness}
                   angle={
-                    geometryUtils.computeHorizontalIntersectionAngle(
-                      sourcePosition, targetPosition
-                    )
+                    this.computeAngle(sourcePosition, targetPosition)
                   }
                 />
             }
@@ -103,5 +113,15 @@ export default class Edge extends React.Component {
 
   getToElementId() {
     return Node.getPrimaryElementId(this.props.toNodeId);
+  }
+
+  computeAngle(p1, p2) {
+    if (this.props.curvature) {
+      return Curve.getAngleOfApproach(p1, p2, this.props.curvature);
+    } else {
+      return geometryUtils.computeHorizontalIntersectionAngle(
+        p1, p2
+      );
+    }
   }
 }

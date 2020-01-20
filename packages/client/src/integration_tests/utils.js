@@ -121,6 +121,7 @@ const checkForResponse = () => new Promise((resolve, reject) => {
 const elementImports = () => (
 `import Arrow from '../elements/Arrow';
 import Circle from '../elements/Circle';
+import Curve from '../elements/Curve';
 import DisplayWindow from '../elements/DisplayWindow';
 import ElementContext from '../elements/ElementContext';
 import ElementGroup from '../elements/ElementGroup';

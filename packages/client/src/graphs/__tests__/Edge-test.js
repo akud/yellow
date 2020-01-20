@@ -3,13 +3,28 @@ jest.mock('../../elements/geometry/ShapeDefinition');
 
 import React from 'react';
 
+import Curve from '../../elements/Curve';
+
 import Edge from '../Edge';
 
 import geometryUtils from '../../elements/geometry/geometry-utils';
 
 import { shallow } from 'enzyme';
 
+const originalCurveGetAngleOfApproach = Curve.getAngleOfApproach;
+
 describe('Edge', () => {
+
+  let mockGetAngleOfApproach;
+
+  beforeEach(() => {
+    mockGetAngleOfApproach = jest.fn();
+    Curve.getAngleOfApproach = mockGetAngleOfApproach;
+  });
+
+  afterEach(() => {
+    Curve.getAngleOfApproach = originalCurveGetAngleOfApproach;
+  });
 
   it('renders a line inside a simulated link', () => {
     const wrapper = shallow(
@@ -122,5 +137,49 @@ describe('Edge', () => {
       { x: 123, y: 56 },
       { x: 45, y: 87 },
     );
+  });
+
+  it('renders a curve if curvature is provided', () => {
+    mockGetAngleOfApproach
+      .mockReturnValueOnce(PI_OVER_FOUR)
+      .mockReturnValueOnce(THREE_PI_OVER_TWO);
+
+    const wrapper = shallow(
+      <Edge
+        fromNodeId='1'
+        toNodeId='2'
+        color='green'
+        thickness={3}
+        curvature='3'
+        bidirectional={true}
+      />
+    );
+    const from = { x: 45, y: 87 };
+    const to = { x: 123, y: 56 };
+    const content = wrapper.find('SimulatedLink').renderProp('render')(
+      from, to
+    );
+
+    expect(content.find('Curve').length).toBe(1);
+    expect(content.find('Curve').prop('from')).toEqual(from);
+    expect(content.find('Curve').prop('to')).toEqual(to);
+    expect(content.find('Curve').prop('curvature')).toEqual('3');
+    expect(content.find('Curve').prop('color')).toEqual('green');
+    expect(content.find('Curve').prop('thickness')).toEqual(3);
+
+    expect(content.find('Arrow').length).toBe(2);
+
+    expect(content.find('Arrow').at(0).prop('to')).toEqual(from);
+    expect(content.find('Arrow').at(0).prop('angle')).toBeCloseTo(
+      PI_OVER_FOUR
+    );
+
+    expect(content.find('Arrow').at(1).prop('to')).toEqual(to);
+    expect(content.find('Arrow').at(1).prop('angle')).toBeCloseTo(
+      THREE_PI_OVER_TWO
+    );
+    expect(mockGetAngleOfApproach).toHaveBeenCalledWith(from, to, '3');
+    expect(mockGetAngleOfApproach).toHaveBeenCalledWith(to, from, '3');
+    expect(mockGetAngleOfApproach).toHaveBeenCalledTimes(2);
   });
 });

@@ -42,4 +42,61 @@ describe('Basic Element Display', () => {
 `
     );
   });
+
+  it('renders curves correctly', async () => {
+    await checkElementFragment(
+`
+<Circle radius={2} color='red' position={{ x: 100, y: 250 }} />
+<Circle radius={2} color='red' position={{ x: 400, y: 200 }} />
+<Curve
+  id='4'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={4}
+  />
+<Curve
+  id='3'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={3}
+  />
+<Curve
+  id='2'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={2}
+  />
+<Curve
+  id='1'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={1}
+  />
+<Curve
+  id='-1'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={-1}
+  />
+<Curve
+  id='-2'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={-2}
+  />
+<Curve
+  id='-3'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={-3}
+  />
+<Curve
+  id='-4'
+  from={{ x: 100, y: 250 }}
+  to={{ x: 400, y: 200 }}
+  curvature={-4}
+  />
+`
+    );
+  });
 });

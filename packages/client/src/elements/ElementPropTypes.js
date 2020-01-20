@@ -14,7 +14,13 @@ export const link = PropTypes.oneOfType([
   }),
 ]);
 
+export const curvature = PropTypes.oneOf([
+  4, 3, 2, 1, -1, -2, -3, -4,
+  '4', '3', '2', '1', '-1', '-2', '-3', '-4',
+]);
+
 export default {
   position,
   link,
+  curvature,
 };
