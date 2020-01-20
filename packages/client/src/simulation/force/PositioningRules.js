@@ -72,8 +72,15 @@ export const createPositioningRule = ({ elements, position, strength=1.0}) => {
  * targetElements - element selector defining the elements to be moved into orientation
  * orientation - Orientation determining the desired positioning. e.g. Orientation.TOP_LEFT
  * strength - rule strength
+ * tolerance - radians to allow target elements to fall on either side
  */
-export const createOrientingRule = ({ baseElementId, targetElements, orientation=Orientation.TOP_LEFT, strength=1.0}) => {
+export const createOrientingRule = ({
+  baseElementId,
+  targetElements,
+  orientation=Orientation.TOP_LEFT,
+  strength=1.0,
+  tolerance=Math.PI/12,
+}) => {
   const selector = ElementSelector.create(targetElements);
   utils.requirePresent(baseElementId);
   utils.requireOneOf(orientation, Object.values(Orientation));
@@ -87,6 +94,7 @@ export const createOrientingRule = ({ baseElementId, targetElements, orientation
       const isOriented = orientation.isOriented({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
+        tolerance,
       });
 
       if (!isOriented) {

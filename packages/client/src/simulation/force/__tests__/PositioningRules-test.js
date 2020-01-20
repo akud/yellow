@@ -176,6 +176,7 @@ describe('PositioningRules', () => {
         targetElements: { ids: [ 'target-element1', 'target-element2' ] },
         orientation,
         strength: 5.6,
+        tolerance: Math.PI / 3,
       });
 
       expect(rule(simulation)).toEqual([
@@ -204,10 +205,12 @@ describe('PositioningRules', () => {
       expect(orientation.isOriented).toHaveBeenCalledWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData1.position,
+        tolerance: Math.PI / 3,
       });
       expect(orientation.isOriented).toHaveBeenCalledWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData2.position,
+        tolerance: Math.PI / 3,
       });
       expect(orientation.isOriented).toHaveBeenCalledTimes(2);
 
@@ -283,6 +286,7 @@ describe('PositioningRules', () => {
       expect(orientation.isOriented).toHaveBeenCalledOnceWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
+        tolerance: Math.PI / 12,
       });
       expect(geometryUtils.computeHorizontalIntersectionAngle).not.toHaveBeenCalled();
     });

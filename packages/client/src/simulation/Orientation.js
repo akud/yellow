@@ -26,8 +26,10 @@ class Orientation {
    * Indicate if the target point is oriented correctly relative to the
    * anchor point, using this orientation
    *
+   * tolerance - radians to allow on either side of desired angle
+   *
    */
-  isOriented({anchorPoint, targetPoint}) {
+  isOriented({anchorPoint, targetPoint, tolerance=Math.PI/12}) {
     if (!this.isSpatiallyOriented()) {
       return true;
     }
@@ -37,7 +39,7 @@ class Orientation {
       targetPoint
     );
 
-    return Math.abs(this.getAngle() - angle) <= Math.PI / 12;
+    return Math.abs(this.getAngle() - angle) <= tolerance;
   }
 }
 

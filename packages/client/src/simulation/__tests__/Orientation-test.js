@@ -74,4 +74,21 @@ describe('Orientation', () => {
       });
     });
   });
+
+  it('accepts a tolerance value to determine orientation', () => {
+    const anchorPoint = { x: 0, y: 0 };
+    const targetPoint = { x: 1, y: -1 };
+
+    expect(Orientation.TOP.isOriented({ anchorPoint, targetPoint })).toBe(false);
+    expect(Orientation.TOP.isOriented({
+      anchorPoint,
+      targetPoint,
+      tolerance: Math.PI / 3
+    })).toBe(true);
+    expect(Orientation.BOTTOM.isOriented({
+      anchorPoint,
+      targetPoint,
+      tolerance: Math.PI / 3
+    })).toBe(false);
+  });
 });

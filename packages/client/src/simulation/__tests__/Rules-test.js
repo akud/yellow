@@ -237,6 +237,7 @@ describe('Rules', () => {
         targetElements: { ids: ['target-element1', 'target-element2'] },
         orientation: Orientation.BOTTOM_RIGHT,
         strength: 4.2,
+        tolerance: Math.PI / 6,
       });
       expectOtherRulesNotToHaveBeenCalled(createOrientingRule);
     });
@@ -263,8 +264,39 @@ describe('Rules', () => {
         targetElements: { ids: ['target-element1', 'target-element2'] },
         orientation: Orientation.TOP_LEFT,
         strength: 1.0,
+        tolerance: Math.PI / 6,
       });
       expectOtherRulesNotToHaveBeenCalled(createOrientingRule);
+    });
+
+    it('translates the style prop to tolerance values', () => {
+      const testCases = [
+        { style: 'exact', tolerance: Math.PI / 12 },
+        { style: 'narrow', tolerance: Math.PI / 6 },
+        { style: 'medium', tolerance: Math.PI / 4 },
+        { style: 'wide', tolerance: Math.PI / 3 },
+      ];
+      testCases.forEach(({ style, tolerance }) => {
+        const wrapper = mount(
+          <SimulationContext.Provider value={simulation}>
+            <OrientingRule
+              baseElementId='base-element'
+              targetElements={{ id: 'target-element' }}
+              orientation={Orientation.TOP_LEFT}
+              style={style}
+            />
+          </SimulationContext.Provider>
+        );
+
+        expect(createOrientingRule).toHaveBeenCalledOnceWith({
+          baseElementId: 'base-element',
+          targetElements: { id: 'target-element' },
+          orientation: Orientation.TOP_LEFT,
+          strength: 1.0,
+          tolerance,
+        });
+        createOrientingRule.mockReset();
+      });
     });
   });
 

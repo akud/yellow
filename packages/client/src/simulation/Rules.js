@@ -20,6 +20,8 @@ import {
   createLinkingRule,
 } from './force/LinkingRules';
 
+import utils from '../utils';
+
 let ruleIdSequence = 0;
 
 class RuleComponent extends React.Component {
@@ -125,6 +127,7 @@ export class CenteringRule extends React.Component {
  * targetElements - element selector defining the elements to be moved into orientation
  * orientation - Orientation determining the desired positioning. e.g. Orientation.TOP_LEFT
  * strength - rule strength
+ * style - narrow, medium, or wide. Defaults to narrow. Determines how strictly the rule orients
  */
 export class OrientingRule extends RuleComponent {
   static propTypes = {
@@ -132,14 +135,33 @@ export class OrientingRule extends RuleComponent {
     targetElements: SimulationPropTypes.elementSelector.isRequired,
     orientation: PropTypes.oneOf(Object.values(Orientation)).isRequired,
     strength: PropTypes.number,
+    style: PropTypes.oneOf([
+      'exact',
+      'narrow',
+      'medium',
+      'wide',
+    ]),
   };
 
   static defaultProps = {
     strength: 1.0,
+    style: 'narrow',
   };
 
+  static toleranceValues = {
+    exact: Math.PI / 12,
+    narrow: Math.PI / 6,
+    medium: Math.PI / 4,
+    wide: Math.PI / 3,
+  }
+
   createRule() {
-    return createOrientingRule(Object.assign({}, this.props));
+    return createOrientingRule(Object.assign(
+      {
+        tolerance: OrientingRule.toleranceValues[this.props.style],
+      },
+      utils.filterKeys(this.props, 'style')
+    ));
   }
 }
 

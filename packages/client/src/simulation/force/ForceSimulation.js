@@ -137,6 +137,7 @@ export default class ForceSimulation {
         shape: element.shape,
       };
     } else {
+      LOGGER.debug('Attempted to retrieve element data for unknown element {}', id);
       return EMPTY_ELEMENT_DATA;
     }
   }
