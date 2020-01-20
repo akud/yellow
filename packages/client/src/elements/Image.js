@@ -3,7 +3,7 @@ import RectangleDefinition from './geometry/RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
-import Link from './Link';
+import { wrapInLink }  from './Link';
 
 export default class Image extends React.Component {
   static contextType = ElementContext;
@@ -19,14 +19,17 @@ export default class Image extends React.Component {
   componentDidMount() {
     const { registerShape } = this.context;
     const { id, width, height } = this.props;
-    registerShape(id, new RectangleDefinition({ width, height }));
+    if (registerShape) {
+      registerShape(id, new RectangleDefinition({ width, height }));
+    }
   }
 
   render() {
     const { id, position, src, width, height, link } = this.props;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
-    const image =  (
+    return wrapInLink(
+      link,
       <image
         x={x}
         y={y}
@@ -36,12 +39,6 @@ export default class Image extends React.Component {
         data-element-id={id}
       />
     );
-
-    if (link && link.length) {
-      return <Link href={link}>{image}</Link>;
-    } else {
-      return image;
-    }
   }
 }
 

@@ -150,6 +150,15 @@ export const flatten = (array) => {
 
 export const isWithin = (num1, num2, tolerance) => Math.abs(num1 - num2) < tolerance;
 
+/**
+ * Copy an object, filtering out specified keys
+ */
+export const filterKeys = (obj, ...keys) => {
+  const newObj = {...obj};
+  keys.forEach(k => { delete newObj[k] });
+  return newObj;
+}
+
 export default {
   requireCondition,
   requirePresent,
@@ -165,4 +174,5 @@ export default {
   makeArray,
   flatten,
   isWithin,
+  filterKeys,
 }

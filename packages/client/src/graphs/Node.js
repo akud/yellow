@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ElementPropTypes from '../elements/ElementPropTypes';
+
 import SimulatedElementGroup from '../simulation/SimulatedElementGroup';
 
 export default class Node extends React.Component {
   static propTypes = {
     nodeId: PropTypes.string.isRequired,
-    link: PropTypes.string,
+    link: ElementPropTypes.link,
   };
 
   static defaultProps = {
-    link: ''
   };
 
   static getPrimaryElementId(nodeId) {

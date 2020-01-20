@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import CircleDefinition from './geometry/CircleDefinition';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
-import Link from './Link';
+import { wrapInLink }  from './Link';
 
 export default class Circle extends React.Component {
   static contextType = ElementContext;
@@ -23,12 +23,16 @@ export default class Circle extends React.Component {
   componentDidMount() {
     const { registerShape } = this.context;
     const { id, radius } = this.props;
-    registerShape(id, new CircleDefinition({ radius }));
+
+    if (registerShape) {
+      registerShape(id, new CircleDefinition({ radius }));
+    }
   }
 
   render() {
     const { color, radius, position, id, link } = this.props;
-    const circle = (
+    return wrapInLink(
+      link,
       <circle
         r={radius}
         fill={color}
@@ -37,11 +41,5 @@ export default class Circle extends React.Component {
         data-element-id={id}
       />
     );
-
-    if (link && link.length) {
-      return <Link href={link}>{circle}</Link>;
-    } else {
-      return circle;
-    }
   }
 }

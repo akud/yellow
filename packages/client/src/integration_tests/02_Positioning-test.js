@@ -6,7 +6,9 @@ describe('Positioning', () => {
 `
 <SimulatedElementGroup id='top'>
   <Circle orientation={Orientation.PRIMARY} />
-  <Label text='top' orientation={Orientation.TOP} />
+  <HtmlFragment orientation={Orientation.TOP}>
+    <p><strong>top</strong></p>
+  </HtmlFragment>
 </SimulatedElementGroup>
 <SimulatedElementGroup id='bottom'>
   <Circle orientation={Orientation.PRIMARY} />
@@ -14,7 +16,9 @@ describe('Positioning', () => {
 </SimulatedElementGroup>
 <SimulatedElementGroup id='left'>
   <Circle orientation={Orientation.PRIMARY} />
-  <Label text='left' orientation={Orientation.LEFT} />
+  <HtmlFragment orientation={Orientation.LEFT}>
+    <p><em>left</em></p>
+  </HtmlFragment>
 </SimulatedElementGroup>
 <SimulatedElementGroup id='right'>
   <Circle orientation={Orientation.PRIMARY} />
@@ -33,7 +37,9 @@ describe('Positioning', () => {
 </SimulatedElementGroup>
 <SimulatedElementGroup id='bottom-right'>
   <Circle orientation={Orientation.PRIMARY} />
-  <Label text='bottom right' orientation={Orientation.BOTTOM_RIGHT} />
+  <HtmlFragment orientation={Orientation.BOTTOM_RIGHT}>
+    <p style={{ margin: 0 }}>bottom <em>right</em></p>
+  </HtmlFragment>
 </SimulatedElementGroup>
 <SimulatedElementGroup id='bottom-left'>
   <Circle orientation={Orientation.PRIMARY} />

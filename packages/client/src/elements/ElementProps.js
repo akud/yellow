@@ -1,16 +1,17 @@
 import PropTypes from 'prop-types';
-import { position } from './ElementPropTypes';
+import ElementPropTypes from './ElementPropTypes';
 
 export const BasePropTypes = {
   id: PropTypes.string,
-  position: position,
-  velocity: position,
-  link: PropTypes.string,
+  className: PropTypes.string,
+  position: ElementPropTypes.position,
+  velocity: ElementPropTypes.position,
+  link: ElementPropTypes.link,
 }
 
 export const DefaultBaseProps = {
   id: 'default-element-id',
-  link: '',
+  className: 'element',
   position: { x: 0, y: 0 },
   velocity: { x: 0, y: 0 },
 }

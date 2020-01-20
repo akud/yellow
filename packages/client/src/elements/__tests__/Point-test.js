@@ -9,8 +9,8 @@ describe('Point', () => {
   it('registers a PointDefinition on the context', () => {
     const registerShape = jest.fn();
     const wrapper = mount(
-      <ElementContext.Provider value={{registerShape}}>
-        <Point id='hij' registerShape={registerShape} />
+      <ElementContext.Provider value={{ registerShape }}>
+        <Point id='hij'/>
       </ElementContext.Provider>
     );
 

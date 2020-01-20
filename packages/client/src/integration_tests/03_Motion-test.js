@@ -37,7 +37,9 @@ describe('Motion', () => {
 </SimulatedElementGroup>
 <SimulatedElementGroup id='left2'>
   <Label text='going' />
-  <Label text='left' />
+  <HtmlFragment>
+    <em>left</em>
+  </HtmlFragment>
 </SimulatedElementGroup>
 
 <Rules.DirectionalRule

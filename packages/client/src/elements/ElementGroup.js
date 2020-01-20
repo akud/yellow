@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from './Link';
+import { wrapInLink }  from './Link';
 
 export default class ElementGroup extends React.Component {
   render() {
@@ -8,12 +8,6 @@ export default class ElementGroup extends React.Component {
     delete gProps.link;
     delete gProps.children;
 
-    const g = <g {...gProps}>{children}</g>;
-
-    if (link && link.length) {
-      return <Link href={link}>{g}</Link>;
-    } else {
-      return g;
-    }
+    return wrapInLink(link, <g {...gProps}>{children}</g>);
   }
 }
