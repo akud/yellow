@@ -26,19 +26,3 @@ export default class Link extends React.Component {
     );
   }
 }
-
-export const wrapInLink = (linkProp, component) => {
-  if (typeof linkProp === 'string') {
-    linkProp = { href: linkProp, inline: false };
-  }
-
-  if (linkProp && linkProp.href && linkProp.href.length) {
-    return (
-      <Link {...linkProp}>
-        {component}
-      </Link>
-    );
-  } else {
-    return component;
-  }
-}

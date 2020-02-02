@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import CircleDefinition from './geometry/CircleDefinition';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
-import { wrapInLink }  from './Link';
+import linkable  from './linkable';
 
-export default class Circle extends React.Component {
+export class Circle extends React.Component {
   static contextType = ElementContext;
 
   static propTypes = {
@@ -31,8 +31,7 @@ export default class Circle extends React.Component {
 
   render() {
     const { color, radius, position, id, link } = this.props;
-    return wrapInLink(
-      link,
+    return (
       <circle
         r={radius}
         fill={color}
@@ -43,3 +42,5 @@ export default class Circle extends React.Component {
     );
   }
 }
+
+export default linkable(Circle)

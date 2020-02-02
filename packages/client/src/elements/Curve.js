@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import ElementPropTypes from './ElementPropTypes';
 import geometryUtils from './geometry/geometry-utils';
 
-import { wrapInLink }  from './Link';
+import linkable from './linkable'
 
-export default class Curve extends React.Component {
+export class Curve extends React.Component {
 
   static propTypes = {
     id: PropTypes.string,
@@ -13,7 +13,6 @@ export default class Curve extends React.Component {
     thickness: PropTypes.number,
     from: ElementPropTypes.position.isRequired,
     to: ElementPropTypes.position.isRequired,
-    link: PropTypes.string,
     curvature: ElementPropTypes.curvature,
   };
 
@@ -21,7 +20,6 @@ export default class Curve extends React.Component {
     id: 'curve',
     color: '#c7c7c7',
     thickness: 1,
-    link: '',
     curvature: 2,
   };
 
@@ -47,10 +45,9 @@ export default class Curve extends React.Component {
   }
 
   render() {
-    const { id, from, to, color, thickness, link } = this.props;
+    const { id, from, to, color, thickness } = this.props;
     const { p1, p2 } = this.getControlPoints();
-    return wrapInLink(
-      link,
+    return (
       <path
         d={
           `M ${from.x} ${from.y} C ${p1.x} ${p1.y}, ${p2.x} ${p2.y}, ${to.x} ${to.y}`
@@ -81,3 +78,5 @@ export default class Curve extends React.Component {
     };
   }
 }
+
+export default linkable(Curve)

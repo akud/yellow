@@ -1,5 +1,6 @@
 import CircleNode from '../CircleNode';
 import React from 'react';
+import Circle from '../../elements/Circle';
 
 import { shallow } from 'enzyme';
 
@@ -14,8 +15,8 @@ describe('CircleNode', () => {
     );
     const node = wrapper.find('Node');
     expect(node.length).toBe(1);
-    expect(node.find('Circle').length).toBe(1);
-    expect(node.find('Circle').prop('radius')).toBe(5);
-    expect(node.find('Circle').prop('color')).toEqual('#442200');
+    expect(node.find(Circle).length).toBe(1);
+    expect(node.find(Circle).prop('radius')).toBe(5);
+    expect(node.find(Circle).prop('color')).toEqual('#442200');
   });
 });

@@ -49,17 +49,16 @@ describe('monitored', () => {
       </ElementContext.Provider>
     ).update();
 
-    expect(wrapper.find('ElementGroup').length).toBe(1);
-    expect(wrapper.find('BasicComponent').length).toBe(1);
-    expect(wrapper.find('BasicComponent').prop('position')).toEqual(
+    expect(wrapper.find(BasicComponent).length).toBe(1);
+    expect(wrapper.find(BasicComponent).prop('position')).toEqual(
       { x: 123, y: -94 }
     );
-    expect(wrapper.find('BasicComponent').prop('width')).toBe(42);
-    expect(wrapper.find('BasicComponent').prop('height')).toBe(24);
-    expect(wrapper.find('BasicComponent').prop('shapeRef')).toBeDefined();
+    expect(wrapper.find(BasicComponent).prop('width')).toBe(42);
+    expect(wrapper.find(BasicComponent).prop('height')).toBe(24);
+    expect(wrapper.find(BasicComponent).prop('shapeRef')).toBeDefined();
   });
 
-  it('passes the correct props to the wrapping ElementGroup', () => {
+  it('passes props to the component component class', () => {
     const wrapper = mount(
       <ElementContext.Provider value={context}>
         <MonitoredComponent
@@ -70,10 +69,10 @@ describe('monitored', () => {
       </ElementContext.Provider>
     );
 
-    expect(wrapper.find('ElementGroup').length).toBe(1);
-    expect(wrapper.find('ElementGroup').prop('data-element-id')).toEqual('124');
-    expect(wrapper.find('ElementGroup').prop('className')).toEqual('foobar');
-    expect(wrapper.find('ElementGroup').prop('link')).toEqual('https://example.com');
+    expect(wrapper.find(BasicComponent).length).toBe(1);
+    expect(wrapper.find(BasicComponent).prop('id')).toEqual('124');
+    expect(wrapper.find(BasicComponent).prop('className')).toEqual('foobar');
+    expect(wrapper.find(BasicComponent).prop('link')).toEqual('https://example.com');
   });
 
   it('renders initially with full width and height', () => {
@@ -90,8 +89,8 @@ describe('monitored', () => {
       </WindowContext.Provider>
     );
 
-    expect(wrapper.find('BasicComponent').prop('width')).toBe(500);
-    expect(wrapper.find('BasicComponent').prop('height')).toBe(1000);
+    expect(wrapper.find(BasicComponent).prop('width')).toBe(500);
+    expect(wrapper.find(BasicComponent).prop('height')).toBe(1000);
   });
 
   it('registers the shape from the monitor in the context', () => {
@@ -146,7 +145,7 @@ describe('monitored', () => {
       </ElementContext.Provider>
     ).update();
 
-    expect(wrapper.find('ElementGroup').length).toBe(1);
+    expect(wrapper.find(BasicComponent).length).toBe(1);
     expect(context.registerShape).lastCalledWith('lmns', new PointDefinition());
   });
 });

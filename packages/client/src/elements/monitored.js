@@ -68,29 +68,18 @@ export default (ComponentClass) => class extends React.Component {
   }
 
   render() {
-    const {
-      id,
-      className,
-      position,
-      link,
-      velocity
-    } = this.props;
     return (
       <WindowContext.Consumer>
         {
           (windowContext) => {
             const { width, height } = this.determineSize(windowContext);
             return (
-              <ElementGroup className={className} data-element-id={id} link={link}>
-                <ComponentClass
-                  width={width}
-                  height={height}
-                  position={position}
-                  velocity={velocity}
-                  shapeRef={this.shapeRef}
-                  {...utils.filterKeys(this.props, ...Object.keys(ElementProps.BasePropTypes))}
-                />
-              </ElementGroup>
+              <ComponentClass
+                width={width}
+                height={height}
+                shapeRef={this.shapeRef}
+                {...this.props}
+              />
             );
           }
         }

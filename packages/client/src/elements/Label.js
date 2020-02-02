@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import ElementPropTypes from './ElementPropTypes';
 import monitored from './monitored';
+import linkable from './linkable';
 
 
 export class Label extends React.Component {
@@ -25,4 +26,4 @@ export class Label extends React.Component {
   }
 }
 
-export default monitored(Label);
+export default monitored(linkable(Label));

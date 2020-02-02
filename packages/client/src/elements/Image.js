@@ -3,9 +3,9 @@ import RectangleDefinition from './geometry/RectangleDefinition';
 import PropTypes from 'prop-types';
 import ElementProps from './ElementProps';
 import ElementContext from './ElementContext';
-import { wrapInLink }  from './Link';
+import linkable  from './linkable';
 
-export default class Image extends React.Component {
+export class Image extends React.Component {
   static contextType = ElementContext;
   static propTypes = {
     src: PropTypes.string.isRequired,
@@ -28,8 +28,7 @@ export default class Image extends React.Component {
     const { id, position, src, width, height, link } = this.props;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
-    return wrapInLink(
-      link,
+    return (
       <image
         x={x}
         y={y}
@@ -42,4 +41,4 @@ export default class Image extends React.Component {
   }
 }
 
-
+export default linkable(Image);

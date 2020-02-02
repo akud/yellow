@@ -17,7 +17,7 @@ describe('DisplayWindow', () => {
     expect(wrapper.find('svg').prop('width')).toBe(350);
     expect(wrapper.find('svg').prop('height')).toBe(580);
     expect(wrapper.find('svg').prop('viewBox')).toEqual('0 0 350 580');
-    expect(wrapper.find('svg').find('Circle').length).toBe(1);
+    expect(wrapper.find('svg').find(Circle).length).toBe(1);
   });
 
   it('applies the zoom to width and height', () => {

@@ -1,4 +1,4 @@
-import Circle from '../Circle';
+import { Circle } from '../Circle';
 import ElementContext from '../ElementContext';
 import CircleDefinition from '../geometry/CircleDefinition';
 import React from 'react';
@@ -45,33 +45,5 @@ describe('Circle', () => {
     expect(context.registerShape).toHaveBeenCalledOnceWith(
       'circle-register-id', new CircleDefinition({ radius: 5 })
     );
-  });
-
-  it('renders the circle inside a link if one is provided', () => {
-    const wrapper = mount(
-      <ElementContext.Provider value={context}>
-        <Circle link='https://foo.bar.com' />
-      </ElementContext.Provider>
-    );
-
-    const link = wrapper.find('Link');
-    expect(link.length).toBe(1);
-    expect(link.prop('href')).toEqual('https://foo.bar.com');
-    expect(link.prop('inline')).toBe(false);
-    expect(link.find('circle').length).toBe(1);
-  });
-
-  it('handles object-style links', () => {
-    const wrapper = mount(
-      <ElementContext.Provider value={context}>
-        <Circle link={{ href: 'https://foo.bar.com', inline: true }} />
-      </ElementContext.Provider>
-    );
-
-    const link = wrapper.find('Link');
-    expect(link.length).toBe(1);
-    expect(link.prop('href')).toEqual('https://foo.bar.com');
-    expect(link.prop('inline')).toBe(true);
-    expect(link.find('circle').length).toBe(1);
   });
 });

@@ -22,6 +22,6 @@ describe('Node', () => {
 
     expect(simulatedElementGroup.prop('className')).toEqual('node');
     expect(simulatedElementGroup.prop('id')).toEqual('node-345');
-    expect(simulatedElementGroup.find('Circle').length).toBe(3);
+    expect(simulatedElementGroup.find(Circle).length).toBe(3);
   });
 });

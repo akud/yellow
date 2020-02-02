@@ -1,6 +1,8 @@
 import ImageNode from '../ImageNode';
 import React from 'react';
 
+import Image from '../../elements/Image';
+
 import { shallow } from 'enzyme';
 
 describe('ImageNode', () => {
@@ -15,9 +17,9 @@ describe('ImageNode', () => {
     );
     const node = wrapper.find('Node');
     expect(node.length).toBe(1);
-    expect(node.find('Image').length).toBe(1);
-    expect(node.find('Image').prop('src')).toEqual('image_src');
-    expect(node.find('Image').prop('width')).toBe(345);
-    expect(node.find('Image').prop('height')).toBe(8678);
+    expect(node.find(Image).length).toBe(1);
+    expect(node.find(Image).prop('src')).toEqual('image_src');
+    expect(node.find(Image).prop('width')).toBe(345);
+    expect(node.find(Image).prop('height')).toBe(8678);
   });
 });

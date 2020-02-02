@@ -6,7 +6,6 @@ export const BasePropTypes = {
   className: PropTypes.string,
   position: ElementPropTypes.position,
   velocity: ElementPropTypes.position,
-  link: ElementPropTypes.link,
 }
 
 export const DefaultBaseProps = {

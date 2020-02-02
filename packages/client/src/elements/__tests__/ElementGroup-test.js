@@ -1,5 +1,5 @@
 import React from 'react';
-import ElementGroup from '../ElementGroup';
+import { ElementGroup } from '../ElementGroup';
 
 import { shallow } from 'enzyme';
 
@@ -14,33 +14,5 @@ describe('ElementGroup', () => {
     expect(wrapper.find('g').prop('className')).toEqual('foo-bar');
     expect(wrapper.find('g').prop('data-element-id')).toEqual('123');
     expect(wrapper.find('circle').length).toBe(1);
-  });
-
-  it('renders the <g> inside a link if one is provided', () => {
-    const wrapper = shallow(
-      <ElementGroup link='https://foo.bar.com'>
-      </ElementGroup>
-    );
-
-    const link = wrapper.find('Link');
-    expect(link.length).toBe(1);
-    expect(link.prop('href')).toEqual('https://foo.bar.com');
-    expect(link.prop('inline')).toBe(false);
-
-    expect(link.find('g').length).toBe(1);
-  });
-
-  it('handles object style links', () => {
-    const wrapper = shallow(
-      <ElementGroup link={{ href: 'https://foo.bar.com', inline: false }}>
-      </ElementGroup>
-    );
-
-    const link = wrapper.find('Link');
-    expect(link.length).toBe(1);
-    expect(link.prop('href')).toEqual('https://foo.bar.com');
-    expect(link.prop('inline')).toBe(false);
-
-    expect(link.find('g').length).toBe(1);
   });
 });

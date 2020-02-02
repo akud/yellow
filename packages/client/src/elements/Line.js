@@ -1,28 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ElementPropTypes from './ElementPropTypes';
-import { wrapInLink }  from './Link';
+import linkable from './linkable';
 
-export default class Line extends React.Component {
+export class Line extends React.Component {
 
   static propTypes = {
     color: PropTypes.string,
     thickness: PropTypes.number,
     from: ElementPropTypes.position.isRequired,
     to: ElementPropTypes.position.isRequired,
-    link: PropTypes.string,
   };
 
   static defaultProps = {
     color: '#c7c7c7',
     thickness: 1,
-    link: '',
   };
 
   render() {
-    const { from, to, color, thickness, link } = this.props;
-    return wrapInLink(
-      link,
+    const { from, to, color, thickness } = this.props;
+    return (
       <line
         x1={from.x}
         y1={from.y}
@@ -34,3 +31,5 @@ export default class Line extends React.Component {
     );
   }
 }
+
+export default linkable(Line);

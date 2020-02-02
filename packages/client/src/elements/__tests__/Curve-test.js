@@ -2,7 +2,7 @@ jest.mock('../geometry/geometry-utils');
 
 import React from 'react';
 
-import Curve from '../Curve';
+import { Curve } from '../Curve';
 
 import geometryUtils from '../geometry/geometry-utils';
 

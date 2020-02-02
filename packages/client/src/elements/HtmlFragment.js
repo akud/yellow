@@ -5,6 +5,8 @@ import ElementPropTypes from './ElementPropTypes';
 
 import monitored from './monitored';
 
+import linkable from './linkable';
+
 export class HtmlFragment extends React.Component {
   static propTypes = {
     position: ElementPropTypes.position.isRequired,
@@ -37,4 +39,4 @@ export class HtmlFragment extends React.Component {
   }
 }
 
-export default monitored(HtmlFragment)
+export default monitored(linkable(HtmlFragment))

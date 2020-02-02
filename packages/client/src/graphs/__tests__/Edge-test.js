@@ -3,7 +3,10 @@ jest.mock('../../elements/geometry/ShapeDefinition');
 
 import React from 'react';
 
+import ElementGroup from '../../elements/ElementGroup';
+import Arrow from '../../elements/Arrow';
 import Curve from '../../elements/Curve';
+import Line from '../../elements/Line';
 
 import Edge from '../Edge';
 
@@ -52,17 +55,17 @@ describe('Edge', () => {
       { x: 123, y: 56 }
     );
 
-    expect(content.find('ElementGroup').length).toBe(1);
-    expect(content.find('Line').length).toBe(1);
-    expect(content.find('Line').prop('from')).toEqual({
+    expect(content.find(ElementGroup).length).toBe(1);
+    expect(content.find(Line).length).toBe(1);
+    expect(content.find(Line).prop('from')).toEqual({
       x: 45, y: 87
     });
-    expect(content.find('Line').prop('to')).toEqual({
+    expect(content.find(Line).prop('to')).toEqual({
       x: 123, y: 56
     });
 
-    expect(content.find('Line').prop('color')).toEqual('#442200');
-    expect(content.find('Line').prop('thickness')).toEqual(3);
+    expect(content.find(Line).prop('color')).toEqual('#442200');
+    expect(content.find(Line).prop('thickness')).toEqual(3);
   });
 
   it('renders an arrow at the target if directed=true', () => {
@@ -85,11 +88,11 @@ describe('Edge', () => {
     );
 
 
-    expect(content.find('Arrow').length).toBe(1);
-    expect(content.find('Arrow').prop('to')).toEqual({ x: 123, y: 56 });
-    expect(content.find('Arrow').prop('color')).toEqual('#442200');
-    expect(content.find('Arrow').prop('thickness')).toBe(45);
-    expect(content.find('Arrow').prop('angle')).toBeCloseTo(Math.PI / 3);
+    expect(content.find(Arrow).length).toBe(1);
+    expect(content.find(Arrow).prop('to')).toEqual({ x: 123, y: 56 });
+    expect(content.find(Arrow).prop('color')).toEqual('#442200');
+    expect(content.find(Arrow).prop('thickness')).toBe(45);
+    expect(content.find(Arrow).prop('angle')).toBeCloseTo(Math.PI / 3);
 
     expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledWith(
       { x: 45, y: 87 },
@@ -117,17 +120,17 @@ describe('Edge', () => {
       { x: 123, y: 56 }
     );
 
-    expect(content.find('Arrow').length).toBe(2);
+    expect(content.find(Arrow).length).toBe(2);
 
-    expect(content.find('Arrow').at(0).prop('to')).toEqual({ x: 45, y: 87 });
-    expect(content.find('Arrow').at(0).prop('color')).toEqual('#442200');
-    expect(content.find('Arrow').at(0).prop('thickness')).toBe(45);
-    expect(content.find('Arrow').at(0).prop('angle')).toBeCloseTo(Math.PI / 3);
+    expect(content.find(Arrow).at(0).prop('to')).toEqual({ x: 45, y: 87 });
+    expect(content.find(Arrow).at(0).prop('color')).toEqual('#442200');
+    expect(content.find(Arrow).at(0).prop('thickness')).toBe(45);
+    expect(content.find(Arrow).at(0).prop('angle')).toBeCloseTo(Math.PI / 3);
 
-    expect(content.find('Arrow').at(1).prop('to')).toEqual({ x: 123, y: 56 });
-    expect(content.find('Arrow').at(1).prop('color')).toEqual('#442200');
-    expect(content.find('Arrow').at(1).prop('thickness')).toBe(45);
-    expect(content.find('Arrow').at(1).prop('angle')).toBeCloseTo(Math.PI / 4);
+    expect(content.find(Arrow).at(1).prop('to')).toEqual({ x: 123, y: 56 });
+    expect(content.find(Arrow).at(1).prop('color')).toEqual('#442200');
+    expect(content.find(Arrow).at(1).prop('thickness')).toBe(45);
+    expect(content.find(Arrow).at(1).prop('angle')).toBeCloseTo(Math.PI / 4);
 
     expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledWith(
       { x: 45, y: 87 },
@@ -160,22 +163,22 @@ describe('Edge', () => {
       from, to
     );
 
-    expect(content.find('Curve').length).toBe(1);
-    expect(content.find('Curve').prop('from')).toEqual(from);
-    expect(content.find('Curve').prop('to')).toEqual(to);
-    expect(content.find('Curve').prop('curvature')).toEqual('3');
-    expect(content.find('Curve').prop('color')).toEqual('green');
-    expect(content.find('Curve').prop('thickness')).toEqual(3);
+    expect(content.find(Curve).length).toBe(1);
+    expect(content.find(Curve).prop('from')).toEqual(from);
+    expect(content.find(Curve).prop('to')).toEqual(to);
+    expect(content.find(Curve).prop('curvature')).toEqual('3');
+    expect(content.find(Curve).prop('color')).toEqual('green');
+    expect(content.find(Curve).prop('thickness')).toEqual(3);
 
-    expect(content.find('Arrow').length).toBe(2);
+    expect(content.find(Arrow).length).toBe(2);
 
-    expect(content.find('Arrow').at(0).prop('to')).toEqual(from);
-    expect(content.find('Arrow').at(0).prop('angle')).toBeCloseTo(
+    expect(content.find(Arrow).at(0).prop('to')).toEqual(from);
+    expect(content.find(Arrow).at(0).prop('angle')).toBeCloseTo(
       PI_OVER_FOUR
     );
 
-    expect(content.find('Arrow').at(1).prop('to')).toEqual(to);
-    expect(content.find('Arrow').at(1).prop('angle')).toBeCloseTo(
+    expect(content.find(Arrow).at(1).prop('to')).toEqual(to);
+    expect(content.find(Arrow).at(1).prop('angle')).toBeCloseTo(
       THREE_PI_OVER_TWO
     );
     expect(mockGetAngleOfApproach).toHaveBeenCalledWith(from, to, '3');

@@ -1,11 +1,11 @@
 import geometryUtils from './geometry/geometry-utils';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { wrapInLink }  from './Link';
+import linkable  from './linkable';
 
 import ElementPropTypes from './ElementPropTypes';
 
-export default class Arrow extends React.Component {
+export class Arrow extends React.Component {
   static propTypes = {
     to: ElementPropTypes.position.isRequired,
     color: PropTypes.string,
@@ -22,10 +22,9 @@ export default class Arrow extends React.Component {
   };
 
   render() {
-    const { to, color, thickness, angle, link } = this.props;
+    const { to, color, thickness, angle } = this.props;
     const angleInDegrees = geometryUtils.radiansToDegrees(angle);
-    return wrapInLink(
-      link,
+    return (
       <path
         d={`M${to.x} ${to.y} l -10 -5 z l -10 5 z`}
         stroke={color}
@@ -35,3 +34,5 @@ export default class Arrow extends React.Component {
     );
   }
 };
+
+export default linkable(Arrow);
