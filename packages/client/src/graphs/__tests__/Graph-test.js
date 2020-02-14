@@ -30,6 +30,7 @@ describe('Graph', () => {
         height={1500}
         zoom={2.0}
         border={true}
+        background='green'
       >
         <p>Hello!</p>
       </Graph>
@@ -39,5 +40,6 @@ describe('Graph', () => {
     expect(simulationWindow.prop('height')).toBe(1500);
     expect(simulationWindow.prop('zoom')).toBe(2.0);
     expect(simulationWindow.prop('border')).toBe(true)
+    expect(simulationWindow.prop('background')).toEqual('green')
   });
 });

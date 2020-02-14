@@ -52,9 +52,13 @@ describe('DisplayWindow', () => {
     expect(wrapper.find('svg').prop('style').border).toBe(undefined);
   });
 
-  it('renders a border if told to', () => {
-    const wrapper = shallow(<DisplayWindow border={true} />);
+  it('passes extra props as style props on the svg', () => {
+    const wrapper = shallow(<DisplayWindow border='1px solid black' background='green' />);
     expect(wrapper.find('svg').length).toBe(1);
-    expect(wrapper.find('svg').prop('style').border).toEqual('1px solid black');
+    expect(wrapper.find('svg').prop('style')).toEqual({
+      border: '1px solid black',
+      background: 'green'
+    });
   });
+
 });

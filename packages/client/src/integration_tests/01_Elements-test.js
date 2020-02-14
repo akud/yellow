@@ -1,4 +1,4 @@
-import { checkElementFragment } from './utils';
+import { check, checkElementFragment } from './utils';
 
 describe('Basic Element Display', () => {
   it('renders elements correctly', async () => {
@@ -97,6 +97,20 @@ describe('Basic Element Display', () => {
   curvature={-4}
   />
 `
+    );
+  });
+
+  it.only('can set a background on the window', async () => {
+    await check(
+      `import React from 'react';
+import DisplayWindow from '../elements/DisplayWindow';
+import Circle from '../elements/Circle';
+
+export default () => (
+  <DisplayWindow background='rgba(100, 100, 100, 0.5)'>
+    <Circle position={{ x: 250, y: 250 }} />
+  </DisplayWindow>
+)`
     );
   });
 });

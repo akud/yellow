@@ -8,19 +8,23 @@ const OUTPUT_PATH = './src/tmp/it.js';
  * Display some markup in the local browser and await user feedback. Returns a promise
  *
  */
-const check = (fileString) => writeLocalReactFile(fileString)
+const doCheck = (fileString) => writeLocalReactFile(fileString)
   .then(runDisplayCommand)
   .then(checkForResponse);
+
+export const check = async (content) => {
+  clear();
+  process.stdout.write(`Checking \n${content}\n`);
+  await doCheck(content);
+}
 
 /**
  * Display a fragment within a graph and ask for user feedback
  *
  */
 export const checkGraphFragment = async (fragment) => {
-  clear();
-  process.stdout.write(`Checking fragment \n${fragment}`);
   await check(
-  `import React from 'react';
+`import React from 'react';
 ${elementImports()}
 
 ${simulationImports()}
@@ -32,7 +36,8 @@ export default () => (
   ${fragment}
   </Graph>
 )
-`);
+`
+  );
 }
 
 
@@ -42,8 +47,6 @@ export default () => (
  *
  */
 export const checkSimulationFragment = async (fragment) => {
-  clear();
-  process.stdout.write(`Checking fragment \n${fragment}`);
   await check(
   `import React from 'react';
 ${elementImports()}
@@ -63,15 +66,13 @@ export default () => (
  *
  */
 export const checkElementFragment = async (fragment) => {
-  clear();
-  process.stdout.write(`Checking fragment \n${fragment}`);
   await check(
 `import React from 'react';
 
 ${elementImports()}
 
 export default () => (
-  <DisplayWindow border={true}>
+  <DisplayWindow>
   ${fragment}
   </DisplayWindow>
 )
@@ -161,6 +162,7 @@ import PointNode from '../graphs/PointNode';
 
 
 export default {
+  check,
   checkSimulationFragment,
   checkElementFragment,
   checkGraphFragment,
