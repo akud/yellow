@@ -5,6 +5,7 @@ import ElementGroup from '../elements/ElementGroup';
 import SimulationWindow from '../simulation/SimulationWindow';
 
 import GraphStyle from './GraphStyle';
+import utils from '../utils';
 
 export default class Graph extends React.Component {
   static propTypes = {
@@ -24,22 +25,11 @@ export default class Graph extends React.Component {
   };
 
   render() {
-    const {
-      width,
-      height,
-      border,
-      zoom,
-      children,
-      style,
-    } = this.props;
+    const { children, style } = this.props;
+    const windowProps = utils.filterKeys(this.props, 'style', 'children');
 
     return (
-      <SimulationWindow
-        width={width}
-        height={height}
-        border={border}
-        zoom={zoom}
-      >
+      <SimulationWindow {...windowProps} >
         <ElementGroup className="yellow-graph">
           {children}
         </ElementGroup>

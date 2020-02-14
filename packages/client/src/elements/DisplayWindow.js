@@ -2,19 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import WindowContext from './WindowContext';
+import utils from '../utils';
 
 export default class DisplayWindow extends React.Component {
   static propTypes = {
     width: PropTypes.number,
     height: PropTypes.number,
-    border: PropTypes.bool,
     zoom: PropTypes.number,
   };
 
   static defaultProps = {
     width: 500,
     height: 500,
-    border: false,
     zoom: 1.0,
   };
 
@@ -22,7 +21,6 @@ export default class DisplayWindow extends React.Component {
     const {
       width,
       height,
-      border,
       zoom,
       children,
     } = this.props;
@@ -37,13 +35,17 @@ export default class DisplayWindow extends React.Component {
       center,
     };
 
+    const style = utils.filterKeys(
+      this.props, 'width', 'height', 'zoom', 'children'
+    );
+
     return (
       <svg
         xmlns='http://www.w3.org/2000/svg'
         viewBox={`0 0 ${realWidth} ${realHeight}`}
         width={width}
         height={height}
-        style={ border ? { border: '1px solid black' } : {} }
+        style={style}
       >
         <WindowContext.Provider value={context}>
           {children}
