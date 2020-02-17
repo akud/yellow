@@ -29,7 +29,7 @@ export class HtmlFragment extends React.Component {
         width={width}
         height={height}
       >
-        <body style={{ padding: 0, margin: 0 }} xmlns='http://www.w3.org/1999/xhtml'>
+        <body style={{ padding: 0, margin: 0, background: 'transparent' }} xmlns='http://www.w3.org/1999/xhtml'>
           <div ref={shapeRef || React.createRef()} style={{ display: 'inline-block' }}>
             {children}
           </div>

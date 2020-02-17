@@ -32,7 +32,11 @@ describe('HtmlFragment', () => {
 
     const body = foreignObject.find('body');
     expect(body.prop('xmlns')).toEqual('http://www.w3.org/1999/xhtml');
-    expect(body.prop('style')).toEqual({ padding: 0, margin: 0 });
+    expect(body.prop('style')).toEqual({
+      padding: 0,
+      margin: 0,
+      background: transparent
+    });
 
     const div = body.find('div');
     expect(div.length).toBe(1);
