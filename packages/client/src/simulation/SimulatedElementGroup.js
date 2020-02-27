@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ElementPropTypes from '../elements/ElementPropTypes';
 import ElementGroup from '../elements/ElementGroup';
 import ElementContext from '../elements/ElementContext';
 
@@ -26,13 +27,12 @@ export default class SimulatedElementGroup extends React.Component {
     id: PropTypes.string.isRequired,
     className: PropTypes.string,
     bindingStrength: PropTypes.number,
-    link: PropTypes.string,
+    link: ElementPropTypes.link,
   };
 
   static defaultProps = {
     className: 'simulated-element-group',
     bindingStrength: 5.0,
-    link: '',
   };
 
   static getPrimaryElementId(groupId) {
