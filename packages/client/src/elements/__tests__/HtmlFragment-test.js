@@ -35,7 +35,7 @@ describe('HtmlFragment', () => {
     expect(body.prop('style')).toEqual({
       padding: 0,
       margin: 0,
-      background: transparent
+      background: 'transparent'
     });
 
     const div = body.find('div');
