@@ -10,8 +10,13 @@ export default React.createContext({
 
   /**
    * Add an element to the underlying simulation, specifying it's id and shape
-  */
+   */
   registerElement: (elementId, shape) => {},
+
+  /**
+   * Get a list of ids of all the elements in the simulation
+   */
+  getElementIds: () => simulation.getElementIds(),
 
   /**
    * Retrieve a blob of data about an element in the underlying simulation:
@@ -45,4 +50,22 @@ export default React.createContext({
    * in the simulation
    */
   registerRule: (ruleId, rule) => {},
+
+  /**
+   * Register a group of elements with the simulation, which can be retrieved with
+   * getGroupElementIds
+   */
+  registerGroup: (groupId, elementIds) => simulation.registerGroup(groupId, elementIds),
+
+  /**
+   * Retrieve a list of a previously defined element group
+   */
+  getGroupElementIds: (groupId) => simulation.getGroupElementIds(groupId),
+
+  /**
+   * Set the strength of the simulation-wide force that causes elements to repel
+   * or attract each other. 1.0 is the base repelling force strength, -1.0 would
+   * be an equivalent attractive force.
+   */
+  setRepellingForceStrength: (strength) => simulation.setRepellingForceStrength(strength),
 });
