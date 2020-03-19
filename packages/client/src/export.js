@@ -79,6 +79,7 @@ export const Simulations = {
   SimulatedLink: YellowSimulatedLink,
   SimulationContext: YellowSimulationContext,
   SimulationWindow: YellowSimulationWindow,
+  ...YellowRules
 }
 
 export const Orientation = YellowOrientation
