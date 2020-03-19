@@ -9,6 +9,7 @@ import linkable from './linkable';
 
 export class HtmlFragment extends React.Component {
   static propTypes = {
+    id: PropTypes.string,
     position: ElementPropTypes.position.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
@@ -19,7 +20,7 @@ export class HtmlFragment extends React.Component {
   };
 
   render() {
-    const { children, position, width, height, shapeRef } = this.props;
+    const { id, children, position, width, height, shapeRef } = this.props;
     const x = position.x - width / 2;
     const y = position.y - height / 2;
     return (
@@ -28,6 +29,7 @@ export class HtmlFragment extends React.Component {
         y={y}
         width={width}
         height={height}
+        data-element-id={id}
       >
         <body style={{ padding: 0, margin: 0, background: 'transparent' }} xmlns='http://www.w3.org/1999/xhtml'>
           <div ref={shapeRef || React.createRef()} style={{ display: 'inline-block' }}>

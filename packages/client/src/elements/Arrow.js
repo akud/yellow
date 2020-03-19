@@ -11,14 +11,12 @@ export class Arrow extends React.Component {
     color: PropTypes.string,
     thickness: PropTypes.number,
     angle: PropTypes.number,
-    link: PropTypes.string,
   };
 
   static defaultProps = {
     color: '#c7c7c7',
     thickness: 1,
     angle: 0,
-    link: '',
   };
 
   render() {
