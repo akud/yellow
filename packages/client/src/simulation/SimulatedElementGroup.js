@@ -27,7 +27,6 @@ export default class SimulatedElementGroup extends React.Component {
     id: PropTypes.string.isRequired,
     className: PropTypes.string,
     bindingStrength: PropTypes.number,
-    link: ElementPropTypes.link,
   };
 
   static defaultProps = {
@@ -64,7 +63,7 @@ export default class SimulatedElementGroup extends React.Component {
 
   render() {
     const simulation = this.context;
-    const { children, id, className, link } = this.props;
+    const { children, id, className } = this.props;
 
     const registerShape = (id, shape) => {
       simulation.registerElement(id, shape);
@@ -75,7 +74,7 @@ export default class SimulatedElementGroup extends React.Component {
     };
 
     return (
-      <ElementGroup className={className} data-group-id={id} link={link}>
+      <ElementGroup className={className} data-group-id={id}>
         <ElementContext.Provider value={{ registerShape }}>
           {
             utils.makeArray(children).map((c, i) => {
