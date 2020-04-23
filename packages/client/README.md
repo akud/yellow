@@ -843,7 +843,7 @@ from its children.
 
   * `link`: [ElementPropTypes.link](#element-prop-types-link) Optional link object describing a web page for the node to link to
 
- * <a name='pointnode' href='https://github.com/akud/yellow/blob/master/packages/client/src/graphs/PointNode.js'>PointNode</a> - Renders a point-sized, invisible node
+* <a name='pointnode' href='https://github.com/akud/yellow/blob/master/packages/client/src/graphs/PointNode.js'>PointNode</a> - Renders a point-sized, invisible node
 
   Props:
 
