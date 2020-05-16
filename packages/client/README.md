@@ -294,7 +294,13 @@ part this prop should be passed in automatically by `Simulations` or
     '4', '3', '2', '1', '-1', '-2', '-3', '-4',
   ]);
   ```
+* <a name='grid' href="https://github.com/akud/yellow/blob/master/packages/client/src/elements/Grid.js">Grid</a> - Renders a grid cooridnate system on the current display window
 
+  Props:
+
+  * `color`: PropTypes.string - color to use to render the grid points
+
+  * `stepsPerSide`: PropTypes.number - number of steps to take per side when laying out the grid
 
 * <a name="html-fragment" href="https://github.com/akud/yellow/blob/master/packages/client/src/elements/HtmlFragment.js">`HtmlFragment`</a> - renders `children` inside an html fragment centered at the given position
 

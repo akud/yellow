@@ -5,6 +5,7 @@ import YellowDisplayWindow from './elements/DisplayWindow';
 import YellowElementContext from './elements/ElementContext';
 import YellowElementGroup from './elements/ElementGroup';
 import YellowElementProps from './elements/ElementProps';
+import YellowGrid from './elements/Grid';
 import YellowElementPropTypes from './elements/ElementPropTypes';
 import YellowHtmlFragment from './elements/HtmlFragment';
 import YellowImage from './elements/Image';
@@ -42,6 +43,7 @@ export const Elements = {
   ElementGroup: YellowElementGroup,
   ElementProps: YellowElementProps,
   ElementPropTypes: YellowElementPropTypes,
+  Grid: YellowGrid,
   HtmlFragment: YellowHtmlFragment,
   Image: YellowImage,
   Label: YellowLabel,

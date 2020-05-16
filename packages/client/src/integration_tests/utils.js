@@ -128,6 +128,7 @@ import ElementContext from '../elements/ElementContext';
 import ElementGroup from '../elements/ElementGroup';
 import ElementProps from '../elements/ElementProps';
 import ElementPropTypes from '../elements/ElementPropTypes';
+import Grid from '../elements/Grid';
 import HtmlFragment from '../elements/HtmlFragment';
 import Image from '../elements/Image';
 import Label from '../elements/Label';
