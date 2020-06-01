@@ -119,3 +119,6 @@ export default Object.assign(
   Simulations,
   Graphs
 )
+
+import logging from '@akud/logging';
+logging.setLevel(logging.WARN);
