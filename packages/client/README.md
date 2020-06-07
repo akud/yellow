@@ -491,7 +491,7 @@ that can be changed with
   These can be used in
   [SimulatedElementGroups](#simulated-element-group),
   [DirectionalRules](#directional-rule) and
-  [OrientingRules](#orientating-rule).
+  [OrientingRules](#orienting-rule).
 
 * <a name='rules' href='https://github.com/akud/yellow/blob/master/packages/client/src/simulation/Rules.js'>Rules</a> - module containing embeddable `Rule` components to
 interact with the [SimulationContext)](#simulation-context). Each `Rule`
