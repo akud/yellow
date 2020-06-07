@@ -1,12 +1,12 @@
 import Orientation from '../Orientation';
 
 describe('Orientation', () => {
-  describe('isOriented', () => {
-    it('is always true if the orientation is not spatially oriented', () => {
+  describe('getOrientationRating', () => {
+    it('is always 1.0 if the orientation is not spatially oriented', () => {
       const anchorPoint = { x: 0, y: 10 };
       const targetPoint = { x: 10, y: 10 };
-      expect(Orientation.PRIMARY.isOriented({ anchorPoint, targetPoint })).toBe(true);
-      expect(Orientation.UNSPECIFIED.isOriented({ anchorPoint, targetPoint })).toBe(true);
+      expect(Orientation.PRIMARY.getOrientationRating({ anchorPoint, targetPoint })).toBeCloseTo(1.0);
+      expect(Orientation.UNSPECIFIED.getOrientationRating({ anchorPoint, targetPoint })).toBeCloseTo(1.0);
     });
 
     it('indicates if the points are correctly oriented within an svg geometry', () => {
@@ -54,41 +54,90 @@ describe('Orientation', () => {
       ];
 
       testCases.forEach(({ anchorPoint, targetPoint, expectedOrientation }) => {
+        let orientationRating = expectedOrientation.getOrientationRating({
+          anchorPoint,
+          targetPoint,
+          range: PI_OVER_FOUR
+        });
         expect(
-          expectedOrientation.isOriented({ anchorPoint, targetPoint }),
+          orientationRating,
           `expected ${JSON.stringify(targetPoint)} ` +
           `to be ${expectedOrientation.getName()}-oriented w.r.t. ` +
-          `${JSON.stringify(anchorPoint)}`
-        ).toBe(true);
+          `${JSON.stringify(anchorPoint)} (value: ${orientationRating})`
+        ).toBeCloseTo(1);
         Object.values(Orientation)
           .filter(o => o !== expectedOrientation)
           .filter(o => o.isSpatiallyOriented())
           .forEach((notExpected) => {
+            orientationRating = notExpected.getOrientationRating({
+              anchorPoint,
+              targetPoint,
+              range: PI_OVER_FOUR,
+            });
             expect(
-              notExpected.isOriented({ anchorPoint, targetPoint }),
+              orientationRating,
               `expected ${JSON.stringify(targetPoint)} ` +
               `not to be ${notExpected.getName()}-oriented w.r.t. ` +
               `${JSON.stringify(anchorPoint)}`
-            ).toBe(false);
+            ).toBeCloseTo(0);
           });
       });
     });
   });
 
-  it('accepts a tolerance value to determine orientation', () => {
-    const anchorPoint = { x: 0, y: 0 };
-    const targetPoint = { x: 1, y: -1 };
+  it('returns a range of orientation ratings up to the specified range', () => {
+    const testCases = [
+      {
+        anchorPoint: { x: 0, y: 0 },
+        targetPoint: { x: 0, y: 1 },
+        orientation: Orientation.RIGHT,
+        range: PI_OVER_THREE,
+        expectedRating: 0,
+      },
+      {
+        anchorPoint: { x: 1, y: 1 },
+        targetPoint: { x: 0, y: 1.5 },
+        orientation: Orientation.BOTTOM_LEFT, //svg geometry
+        range: PI_OVER_FOUR,
+        expectedRating: 0.6,
+      },
+      {
+        anchorPoint: { x: 4, y: 5 },
+        targetPoint: { x: 4 + ROOT_THREE, y: 4 },
+        orientation: Orientation.TOP_RIGHT, //svg geometry
+        range: PI_OVER_FOUR,
+        expectedRating: 0.7,
+      },
+      {
+        anchorPoint: { x: 0, y: 0 },
+        targetPoint: { x: -1, y: 0.1 },
+        orientation: Orientation.LEFT,
+        range: PI_OVER_THREE,
+        expectedRating: 0.9,
+      },
+      {
+        anchorPoint: { x: 0, y: 0 },
+        targetPoint: { x: ROOT_THREE, y: -1 },
+        orientation: Orientation.RIGHT,
+        range: PI_OVER_FOUR,
+        expectedRating: 0.3,
+      },
+    ];
 
-    expect(Orientation.TOP.isOriented({ anchorPoint, targetPoint })).toBe(false);
-    expect(Orientation.TOP.isOriented({
-      anchorPoint,
-      targetPoint,
-      tolerance: Math.PI / 3
-    })).toBe(true);
-    expect(Orientation.BOTTOM.isOriented({
-      anchorPoint,
-      targetPoint,
-      tolerance: Math.PI / 3
-    })).toBe(false);
+    testCases.forEach(({ anchorPoint, targetPoint, orientation, range, expectedRating }) => {
+      const orientationRating = orientation.getOrientationRating({
+        anchorPoint,
+        targetPoint,
+        range
+      });
+      expect(
+        orientationRating,
+        `${orientation.name}.getOrientationRating({ ` +
+        `anchorPoint=${JSON.stringify(anchorPoint)}, ` +
+        `targetPoint=${JSON.stringify(targetPoint)}, ` +
+        `range=${range} ` +
+        `}) == ${orientationRating} (!~ ${expectedRating})`
+      ).toBeCloseTo(expectedRating, 1);
+    });
   });
 });

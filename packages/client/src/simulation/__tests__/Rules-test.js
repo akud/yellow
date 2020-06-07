@@ -114,6 +114,10 @@ describe('Rules', () => {
   describe('PositioningRule', () => {
     it('registers a positioning rule with the simulation context', () => {
       const rule = jest.fn();
+      simulation.getWindowSize.mockReturnValue({
+        width: 100,
+        height: 100,
+      });
       createPositioningRule.mockReturnValue(rule);
 
       const wrapper = mount(
@@ -133,12 +137,20 @@ describe('Rules', () => {
         elements: { ids: ['node-43', 'node-55'] },
         position: { x: 45, y: 91 },
         strength: 4.2,
+        windowSize: {
+          width: 100,
+          height: 100,
+        },
       });
       expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
 
     it('defaults the strength to 1.0', () => {
       const rule = jest.fn();
+      simulation.getWindowSize.mockReturnValue({
+        width: 100,
+        height: 100,
+      });
       createPositioningRule.mockReturnValue(rule);
 
       const wrapper = mount(
@@ -157,6 +169,10 @@ describe('Rules', () => {
         elements: { ids: ['node-43', 'node-55'] },
         position: { x: 45, y: 91 },
         strength: 1.0,
+        windowSize: {
+          width: 100,
+          height: 100,
+        }
       });
       expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
@@ -166,6 +182,10 @@ describe('Rules', () => {
     it('registers a universal positioning rule pointed towards the window center', () => {
       const center = { x: 500, y: 500 };
       const rule = jest.fn();
+      simulation.getWindowSize.mockReturnValue({
+        width: 1000,
+        height: 1000,
+      });
       createPositioningRule.mockReturnValue(rule);
 
       const wrapper = mount(
@@ -183,6 +203,10 @@ describe('Rules', () => {
         elements: 'all',
         position: { x: 500, y: 500 },
         strength: 4.2,
+        windowSize: {
+          width: 1000,
+          height: 1000,
+        }
       });
       expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });
@@ -191,6 +215,10 @@ describe('Rules', () => {
       const center = { x: 500, y: 500 };
       const rule = jest.fn();
       createPositioningRule.mockReturnValue(rule);
+      simulation.getWindowSize.mockReturnValue({
+        width: 1000,
+        height: 1000,
+      });
 
       const wrapper = mount(
         <WindowContext.Provider value={{center}}>
@@ -207,6 +235,10 @@ describe('Rules', () => {
         elements: 'all',
         position: { x: 500, y: 500 },
         strength: 1.0,
+        windowSize: {
+          width: 1000,
+          height: 1000,
+        }
       });
       expectOtherRulesNotToHaveBeenCalled(createPositioningRule);
     });

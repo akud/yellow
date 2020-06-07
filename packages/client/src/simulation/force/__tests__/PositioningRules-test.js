@@ -53,6 +53,10 @@ describe('PositioningRules', () => {
         elements: { groupId: 'g134' },
         position,
         strength: 2.5,
+        windowSize: {
+          width: 100,
+          height: 100,
+        }
       });
 
       const position1 = { x: 0, y: 0 };
@@ -71,26 +75,26 @@ describe('PositioningRules', () => {
         .mockReturnValueOnce(PI_OVER_TWO)
         .mockReturnValueOnce(THREE_PI_OVER_TWO);
       geometryUtils.distance
-        .mockReturnValueOnce(4)
-        .mockReturnValueOnce(10)
-        .mockReturnValueOnce(7.5);
+        .mockReturnValueOnce(20)
+        .mockReturnValueOnce(30)
+        .mockReturnValueOnce(11.5);
 
       const forceApplications = rule(simulation);
 
-      expect(forceApplications).toEqual([
+      expect(forceApplications).toAlmostEqual([
         new ForceApplication({
           elements: { id: '1' },
-          strength: 2.5,
+          strength: 10,
           angle: PI,
         }),
         new ForceApplication({
           elements: { id: '2' },
-          strength: 6.25,
+          strength: 22.5,
           angle: PI_OVER_TWO,
         }),
         new ForceApplication({
           elements: { id: '7' },
-          strength: 4.6875,
+          strength: 3.3062500000000004,
           angle: THREE_PI_OVER_TWO,
         }),
       ]);
@@ -154,7 +158,7 @@ describe('PositioningRules', () => {
         'target-element2': targetElementData2,
       }[elementId]));
 
-      orientation.isOriented.mockReturnValue(false);
+      orientation.getOrientationRating.mockReturnValue(0.0);
       orientation.getAngle.mockReturnValue(PI_OVER_FOUR);
 
       geometryUtils.computeHorizontalIntersectionAngle
@@ -167,9 +171,7 @@ describe('PositioningRules', () => {
 
       geometryUtils.distance
         .mockReturnValueOnce(1)
-        .mockReturnValueOnce(2)
-        .mockReturnValueOnce(3)
-        .mockReturnValueOnce(4);
+        .mockReturnValueOnce(2);
 
       const rule = createOrientingRule({
         baseElementId: 'base-element',
@@ -183,12 +185,12 @@ describe('PositioningRules', () => {
         new ForceApplication({
           elements: { id: 'target-element1' },
           angle: THREE_PI_OVER_FOUR,
-          strength: 2 * 0.25 * 5.6
+          strength: 28
         }),
         new ForceApplication({
           elements: { id: 'target-element2' },
           angle: PI_OVER_TWO,
-          strength: 4 * 0.25 * 5.6
+          strength: 28
         }),
       ]);
 
@@ -202,17 +204,17 @@ describe('PositioningRules', () => {
       expect(simulation.getElementData).toHaveBeenCalledWith('target-element2');
       expect(simulation.getElementData).toHaveBeenCalledTimes(3);
 
-      expect(orientation.isOriented).toHaveBeenCalledWith({
+      expect(orientation.getOrientationRating).toHaveBeenCalledWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData1.position,
-        tolerance: Math.PI / 3,
+        range: Math.PI / 3,
       });
-      expect(orientation.isOriented).toHaveBeenCalledWith({
+      expect(orientation.getOrientationRating).toHaveBeenCalledWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData2.position,
-        tolerance: Math.PI / 3,
+        range: Math.PI / 3,
       });
-      expect(orientation.isOriented).toHaveBeenCalledTimes(2);
+      expect(orientation.getOrientationRating).toHaveBeenCalledTimes(2);
 
       expect(orientation.getAngle).toHaveBeenCalled();
 
@@ -223,7 +225,7 @@ describe('PositioningRules', () => {
       });
       expect(geometryUtils.pointAwayFrom).toHaveBeenCalledWith({
         base: baseElementData.position,
-        distance: 3,
+        distance: 2,
         angle: orientation.getAngle()
       });
       expect(geometryUtils.pointAwayFrom).toHaveBeenCalledTimes(2);
@@ -232,15 +234,9 @@ describe('PositioningRules', () => {
         baseElementData.position, targetElementData1.position
       );
       expect(geometryUtils.distance).toHaveBeenCalledWith(
-        targetElementData1.position, desiredPosition1
-      );
-      expect(geometryUtils.distance).toHaveBeenCalledWith(
         baseElementData.position, targetElementData2.position
       );
-      expect(geometryUtils.distance).toHaveBeenCalledWith(
-        targetElementData2.position, desiredPosition2
-      );
-      expect(geometryUtils.distance).toHaveBeenCalledTimes(4);
+      expect(geometryUtils.distance).toHaveBeenCalledTimes(2);
 
       expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledWith(
         targetElementData1.position,
@@ -253,6 +249,119 @@ describe('PositioningRules', () => {
       expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledTimes(2);
     });
 
+    it('scales the force strength with mis-alignment', () => {
+      const orientation = Orientation.BOTTOM_LEFT;
+      const baseElementData = newElementData();
+      const targetElementData1 = newElementData();
+      const targetElementData2 = newElementData();
+
+      const desiredPosition1 = newElementData();
+      const desiredPosition2 = newElementData();
+
+      mockSelector.select.mockReturnValue([
+        'target-element1',
+        'target-element2',
+      ]);
+      simulation.getElementData.mockImplementation((elementId) => ({
+        'base-element': baseElementData,
+        'target-element1': targetElementData1,
+        'target-element2': targetElementData2,
+      }[elementId]));
+
+      orientation.getOrientationRating
+        .mockReturnValueOnce(0.3)
+        .mockReturnValueOnce(0.8);
+      orientation.getAngle.mockReturnValue(PI_OVER_FOUR);
+
+      geometryUtils.computeHorizontalIntersectionAngle
+        .mockReturnValueOnce(THREE_PI_OVER_FOUR)
+        .mockReturnValueOnce(PI_OVER_TWO);
+
+      geometryUtils.pointAwayFrom
+        .mockReturnValueOnce(desiredPosition1)
+        .mockReturnValueOnce(desiredPosition2);
+
+      geometryUtils.distance
+        .mockReturnValueOnce(1)
+        .mockReturnValueOnce(2);
+
+      const rule = createOrientingRule({
+        baseElementId: 'base-element',
+        targetElements: { ids: [ 'target-element1', 'target-element2' ] },
+        orientation,
+        strength: 5.6,
+        tolerance: Math.PI / 3,
+      });
+
+      expect(rule(simulation)).toAlmostEqual([
+        new ForceApplication({
+          elements: { id: 'target-element1' },
+          angle: THREE_PI_OVER_FOUR,
+          strength: 13.719999999999997,
+        }),
+        new ForceApplication({
+          elements: { id: 'target-element2' },
+          angle: PI_OVER_TWO,
+          strength: 1.12,
+        }),
+      ]);
+
+      expect(createElementSelector).toHaveBeenCalledOnceWith({
+        ids: ['target-element1', 'target-element2'],
+      });
+      expect(mockSelector.select).toHaveBeenCalledOnceWith(simulation);
+
+      expect(simulation.getElementData).toHaveBeenCalledWith('base-element');
+      expect(simulation.getElementData).toHaveBeenCalledWith('target-element1');
+      expect(simulation.getElementData).toHaveBeenCalledWith('target-element2');
+      expect(simulation.getElementData).toHaveBeenCalledTimes(3);
+
+      expect(orientation.getOrientationRating).toHaveBeenCalledWith({
+        anchorPoint: baseElementData.position,
+        targetPoint: targetElementData1.position,
+        range: Math.PI / 3,
+      });
+      expect(orientation.getOrientationRating).toHaveBeenCalledWith({
+        anchorPoint: baseElementData.position,
+        targetPoint: targetElementData2.position,
+        range: Math.PI / 3,
+      });
+      expect(orientation.getOrientationRating).toHaveBeenCalledTimes(2);
+
+      expect(orientation.getAngle).toHaveBeenCalled();
+
+      expect(geometryUtils.pointAwayFrom).toHaveBeenCalledWith({
+        base: baseElementData.position,
+        distance: 1,
+        angle: orientation.getAngle()
+      });
+      expect(geometryUtils.pointAwayFrom).toHaveBeenCalledWith({
+        base: baseElementData.position,
+        distance: 2,
+        angle: orientation.getAngle()
+      });
+      expect(geometryUtils.pointAwayFrom).toHaveBeenCalledTimes(2);
+
+      expect(geometryUtils.distance).toHaveBeenCalledWith(
+        baseElementData.position, targetElementData1.position
+      );
+      expect(geometryUtils.distance).toHaveBeenCalledWith(
+        baseElementData.position, targetElementData2.position
+      );
+      expect(geometryUtils.distance).toHaveBeenCalledTimes(2);
+
+      expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledWith(
+        targetElementData1.position,
+        desiredPosition1
+      );
+      expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledWith(
+        targetElementData2.position,
+        desiredPosition2
+      );
+      expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledTimes(2);
+    });
+
+
     it('does nothing if the target element is oriented correctly', () => {
       const orientation = Orientation.TOP;
       const baseElementData = { position: { x: 234, y: 4754 } };
@@ -264,7 +373,7 @@ describe('PositioningRules', () => {
         'target-element': targetElementData,
       }[elementId]));
 
-      orientation.isOriented.mockReturnValue(true);
+      orientation.getOrientationRating.mockReturnValue(0.9999);
 
       const rule = createOrientingRule({
         baseElementId: 'base-element',
@@ -283,10 +392,10 @@ describe('PositioningRules', () => {
       expect(simulation.getElementData).toHaveBeenCalledWith('target-element');
       expect(simulation.getElementData).toHaveBeenCalledTimes(2);
 
-      expect(orientation.isOriented).toHaveBeenCalledOnceWith({
+      expect(orientation.getOrientationRating).toHaveBeenCalledOnceWith({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
-        tolerance: Math.PI / 12,
+        range: Math.PI / 12,
       });
       expect(geometryUtils.computeHorizontalIntersectionAngle).not.toHaveBeenCalled();
     });

@@ -17,6 +17,19 @@ export const approximatelyEqual = (n1, n2) => {
 }
 
 /**
+ * Get a true absolute differnce between angle, considering reset around 2 pi
+ */
+export const subtractAngles = (angle1, angle2) => {
+  return Math.min(
+    Math.abs(angle1 - angle2),
+    Math.min(
+      Math.abs(angle1 - (angle2 + 2 * Math.PI)),
+      Math.abs((angle1 + 2 * Math.PI) - angle2)
+    )
+  );
+}
+
+/**
  * Find the point a given distance from the target point at the target angle
  *
  */
@@ -75,6 +88,7 @@ export const addVectors = (point, vector) => ({ x: point.x + vector.x, y: point.
 export default {
   slope,
   distance,
+  subtractAngles,
   approximatelyEqual,
   computeHorizontalIntersectionAngle,
   radiansToDegrees,

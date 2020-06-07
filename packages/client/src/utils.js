@@ -109,6 +109,17 @@ export const requirePositionObject = function() {
   );
 }
 
+export const requireSizeObject = function() {
+  const { name, value } = extractArgs(arguments);
+  requirePresent(value);
+
+  return requireCondition(
+    typeof value === 'object' && typeof value.width === 'number' && typeof value.height === 'number',
+    value,
+    expectationMessage(name, value, 'a size object')
+  );
+}
+
 export const requireInstanceOf = function() {
   const { name, value, clazz } = extractArgs(arguments, 'clazz');
   return requireCondition(
@@ -168,6 +179,7 @@ export default {
   requireOneOf,
   requireBetween,
   requirePositionObject,
+  requireSizeObject,
   requireInstanceOf,
   requireGreaterThanZero,
   requireNonNegative,

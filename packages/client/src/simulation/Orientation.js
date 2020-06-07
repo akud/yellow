@@ -24,14 +24,15 @@ class Orientation {
 
   /**
    * Indicate if the target point is oriented correctly relative to the
-   * anchor point, using this orientation
+   * anchor point with a 0-1 scale, 1 being completely oriented and 0 being completely
+   * not oriented
    *
    * tolerance - radians to allow on either side of desired angle
    *
    */
-  isOriented({anchorPoint, targetPoint, tolerance=Math.PI/12}) {
+  getOrientationRating({anchorPoint, targetPoint, range=Math.PI/12}) {
     if (!this.isSpatiallyOriented()) {
-      return true;
+      return 1;
     }
 
     const angle = geometryUtils.computeHorizontalIntersectionAngle(
@@ -39,7 +40,13 @@ class Orientation {
       targetPoint
     );
 
-    return Math.abs(this.getAngle() - angle) <= tolerance;
+    const angleDifference = geometryUtils.subtractAngles(
+      this.getAngle(),
+      angle
+    );
+    return angleDifference >= range ?
+      0 :
+      (range - angleDifference) / range;
   }
 }
 

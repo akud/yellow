@@ -27,6 +27,7 @@ const DEFAULT_REPELLING_FORCE_STRENGTH = -30;
  */
 export default class ForceSimulation {
   constructor({ width, height, center }) {
+    this.windowSize = { width, height };
     this.elements = {};
     this.listeners = [];
     this.rules = {};
@@ -155,6 +156,13 @@ export default class ForceSimulation {
   onNewLayout(listener) {
     this.listeners.push(listener);
     return this;
+  }
+
+  /**
+   * Return the size of the simulation window
+   */
+  getWindowSize() {
+    return this.windowSize;
   }
 
   _applyRules(alpha) {

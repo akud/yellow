@@ -1,4 +1,5 @@
 const diff = require('jest-diff');
+const deepEqual = require('deep-equal');
 
 export const toHaveBeenCalledTimes = function(mock, n) {
   if (!this) { return; }
@@ -59,19 +60,7 @@ export const toAlmostEqual = function(received, expected, precision) {
 
   precision = precision || 4;
 
-  let pass;
-  if (typeof expected == 'number') {
-    pass = expected.toFixed(precision) === (received || 0).toFixed(precision);
-  } else if (Array.isArray(expected)) {
-    pass = expected.every(
-      (element, index) => element.toFixed(precision) === (received || [])[index].toFixed(precision)
-    );
-  } else {
-    pass = Object.keys(expected).every(
-      (key) => expected[key].toFixed(precision) === (received || {})[key].toFixed(precision)
-    );
-  }
-
+  let pass = deepAlmostEqual(received, expected, precision);
   pass = this.isNot ? !pass : pass;
 
   return expectationResult.call(this, {
@@ -82,6 +71,45 @@ export const toAlmostEqual = function(received, expected, precision) {
     description: 'almost ' + JSON.stringify(expected)
   });
 }
+
+
+export const toEqualWithoutOrder = function(received, expected) {
+  if (!this) { return; }
+
+  let pass;
+  if (Array.isArray(received)) {
+    pass = (received.length == expected.length) && expected.every(
+      (element, index) => {
+        const expectedCount = expected
+          .filter(e => deepEqual(element, e))
+          .reduce((c, a) => c + 1, 0)
+        const actualCount = received
+          .filter(e => deepEqual(element, e))
+          .reduce((c, a) => c + 1, 0)
+        return expectedCount == actualCount;
+      }
+    );
+  } else {
+    pass = false;
+  }
+
+  pass = this.isNot ? !pass : pass;
+
+  const sorter = (a, b) => {
+    const stringifiedA = JSON.stringify(a);
+    const stringifiedB = JSON.stringify(b);
+    return stringifiedA.localeCompare(stringifiedB);
+  };
+
+  return expectationResult.call(this, {
+    expected: expected.sort(sorter),
+    received: Array.isArray(received) ? received.sort(sorter) : received,
+    pass,
+    name: 'toEqualWithoutOrder',
+    description: 'equalWithoutOrderTo ' + JSON.stringify(expected)
+  });
+}
+
 
 const expectationResult = function({ expected, received, pass, name, description }) {
   const options = {
@@ -113,10 +141,28 @@ const expectationResult = function({ expected, received, pass, name, description
   return {actual: received, message, pass};
 }
 
+const deepAlmostEqual = (a, b, precision) => {
+  if (a === undefined || a === null) {
+    return b === undefined || b === null;
+  } else if (typeof a == 'number') {
+    return a.toFixed(precision) === (b || 0).toFixed(precision);
+  } else if (typeof a == 'string') {
+    return a === b;
+  } else if (Array.isArray(a)) {
+    return Array.isArray(b) && a.every(
+      (element, index) => deepAlmostEqual(element, b[index], precision)
+    );
+  } else {
+    return Object.keys(a).every(
+      key => deepAlmostEqual(a[key], (b || {})[key], precision)
+    );
+  }
+}
 
 export default {
   toHaveBeenCalledTimes,
   toHaveBeenCalledOnce,
   toHaveBeenCalledOnceWith,
   toAlmostEqual,
+  toEqualWithoutOrder,
 }

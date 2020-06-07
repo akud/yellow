@@ -90,7 +90,10 @@ export class PositioningRule extends RuleComponent {
   };
 
   createRule() {
-    return createPositioningRule(Object.assign({}, this.props));
+    return createPositioningRule(Object.assign(
+      { windowSize: this.context.getWindowSize() },
+      this.props
+    ));
   }
 }
 

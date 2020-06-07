@@ -5,6 +5,7 @@ export const getElementData = jest.fn();
 export const registerElement = jest.fn();
 export const registerGroup = jest.fn();
 export const getGroupElementIds = jest.fn();
+export const getWindowSize = jest.fn().mockReturnValue({ width: 500, height: 500 });
 export const registerRule = jest.fn();
 export const setRepellingForceStrength = jest.fn();
 export const onNewLayout = jest.fn();
@@ -20,6 +21,7 @@ export const resetMockSimulation = () => {
   registerGroup.mockClear();
   getGroupElementIds.mockClear();
   onNewLayout.mockClear();
+  getWindowSize.mockClear();
   setRepellingForceStrength.mockClear();
   MockSimulation.mockClear();
 };
@@ -30,6 +32,7 @@ const MockSimulation = jest.fn().mockImplementation(() => {
     getElementData,
     registerGroup,
     getGroupElementIds,
+    getWindowSize,
     registerElement,
     registerRule,
     setRepellingForceStrength,

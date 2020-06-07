@@ -57,6 +57,7 @@ export default class SimulatedLayout extends React.Component {
       registerGroup: (groupId, elementIds) => simulation.registerGroup(groupId, elementIds),
       getGroupElementIds: (groupId) => simulation.getGroupElementIds(groupId),
       setRepellingForceStrength: (strength) => simulation.setRepellingForceStrength(strength),
+      getWindowSize: () => simulation.getWindowSize(),
     };
   }
 }

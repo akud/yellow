@@ -10,7 +10,6 @@ import logging from '@akud/logging';
 
 const LOGGER = new logging.Logger('PositioningRules');
 
-const SPRING_CONSTANT = 0.25;
 
 /**
  * Create a simulation rule that pushes the specified elements in the direction of the
@@ -42,10 +41,11 @@ export const createDirectionalRule = ({ elements, orientation, strength=1.0}) =>
  * position - position to push the elements towards
  * strength - rule strength
  */
-export const createPositioningRule = ({ elements, position, strength=1.0}) => {
+export const createPositioningRule = ({ elements, position, windowSize, strength=1.0}) => {
   ElementSelector.validate(elements);
   utils.requirePositionObject(position);
   utils.requireNonNegative(strength);
+  utils.requireSizeObject(windowSize);
 
   return (simulation) => ElementSelector.select(elements, simulation).map(elementId => {
     const elementData = simulation.getElementData(elementId);
@@ -55,10 +55,14 @@ export const createPositioningRule = ({ elements, position, strength=1.0}) => {
     );
     const distance = geometryUtils.distance(elementData.position, position);
 
+    const distancePercentage = distance / Math.max(
+      windowSize.width,
+      windowSize.height
+    );
     return new ForceApplication({
       elements: { id: elementId },
-      strength: strength * SPRING_CONSTANT * distance,
       angle,
+      strength: 100 * strength * distancePercentage * distancePercentage
     });
   });
 }
@@ -91,37 +95,37 @@ export const createOrientingRule = ({
 
     return selector.select(simulation).map((targetElementId) => {
       const targetElementData = simulation.getElementData(targetElementId);
-      const isOriented = orientation.isOriented({
+      const orientationRating = orientation.getOrientationRating({
         anchorPoint: baseElementData.position,
         targetPoint: targetElementData.position,
-        tolerance,
+        range: tolerance,
       });
 
-      if (!isOriented) {
+      if (Math.round(orientationRating * 100) / 100 < 1) {
+        const distanceToBaseElement = geometryUtils.distance(
+          baseElementData.position, targetElementData.position
+        );
         const desiredPosition = geometryUtils.pointAwayFrom({
           base: baseElementData.position,
-          distance: geometryUtils.distance(
-            baseElementData.position, targetElementData.position
-          ),
+          distance: distanceToBaseElement,
           angle: orientation.getAngle(),
         });
         LOGGER.debug(
-          'target element {} is not {}-oriented with respect to element {}; pushing towards {}',
+          'target element {} is not {}-oriented (rating {}) with respect to element {}; pushing towards {}',
           targetElementId,
           orientation.getName(),
+          orientationRating,
           baseElementId,
+          desiredPosition
+        );
+       const angleToDesiredPosition = geometryUtils.computeHorizontalIntersectionAngle(
+          targetElementData.position,
           desiredPosition
         );
         return new ForceApplication({
           elements: { id: targetElementId },
-          angle: geometryUtils.computeHorizontalIntersectionAngle(
-            targetElementData.position,
-            desiredPosition
-          ),
-          strength: strength * SPRING_CONSTANT * geometryUtils.distance(
-            targetElementData.position,
-            desiredPosition
-          )
+          angle: angleToDesiredPosition,
+          strength: 5 * strength * (1 - orientationRating) * (1 - orientationRating)
         });
       }
     })

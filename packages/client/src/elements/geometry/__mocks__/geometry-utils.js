@@ -5,6 +5,7 @@ export const computeHorizontalIntersectionAngle = jest.fn();
 export const radiansToDegrees = jest.fn();
 export const addVectors = jest.fn();
 export const pointAwayFrom = jest.fn();
+export const subtractAngles = jest.fn();
 export const mockReset = () => {
   slope.mockReset();
   distance.mockReset();
@@ -13,10 +14,12 @@ export const mockReset = () => {
   radiansToDegrees.mockReset();
   addVectors.mockReset();
   pointAwayFrom.mockReset();
+  subtractAngles.mockReset();
 };
 
 export default {
   slope,
+  subtractAngles,
   distance,
   approximatelyEqual,
   computeHorizontalIntersectionAngle,

@@ -68,4 +68,9 @@ export default React.createContext({
    * be an equivalent attractive force.
    */
   setRepellingForceStrength: (strength) => simulation.setRepellingForceStrength(strength),
+
+  /**
+   * Get the size of the window the simulation is running in
+   */
+  getWindowSize: () => ({ width: 0, height: 0 }),
 });

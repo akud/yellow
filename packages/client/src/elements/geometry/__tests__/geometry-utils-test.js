@@ -16,6 +16,35 @@ describe('geometry utils', () => {
     });
   });
 
+  describe('subtractAngles', () => {
+    it('subtracts angles considering their distance around the circle', () => {
+      expect(
+        geometryUtils.subtractAngles(
+          PI_OVER_FOUR,
+          PI_OVER_TWO
+        )
+      ).toBeCloseTo(PI_OVER_FOUR);
+      expect(
+        geometryUtils.subtractAngles(
+          PI_OVER_FOUR,
+          TWO_PI
+        )
+      ).toBeCloseTo(PI_OVER_FOUR);
+      expect(
+        geometryUtils.subtractAngles(
+          0,
+          PI_OVER_THREE
+        )
+      ).toBeCloseTo(PI_OVER_THREE);
+      expect(
+        geometryUtils.subtractAngles(
+          SEVEN_PI_OVER_FOUR,
+          0
+        )
+      ).toBeCloseTo(PI_OVER_FOUR);
+    });
+  });
+
   describe('radiansToDegrees', () => {
     it('converts radians to degrees', () => {
       expect(geometryUtils.radiansToDegrees(Math.PI)).toBeCloseTo(180);
