@@ -13,12 +13,12 @@ describe('Graph', () => {
     <p style={{ color: '#3ba226', margin: 0 }}>green</p>
   </HtmlNode>
   <Edge fromNodeId="red-node-1" toNodeId="yellow-node" directed={true} />
-  <Edge fromNodeId="red-node-1" toNodeId="blue-node-1" curvature={2} />
+  <Edge fromNodeId="red-node-1" toNodeId="blue-node-1" curvature={2} directed={true} />
   <Edge fromNodeId="red-node-1" toNodeId="green-node" />
   <Edge fromNodeId="red-node-2" toNodeId="yellow-node" bidirectional={true} />
   <Edge fromNodeId="red-node-2" toNodeId="blue-node-1" />
   <Edge fromNodeId="red-node-2" toNodeId="blue-node-2" />
-  <Edge fromNodeId="red-node-2" toNodeId="green-node" curvature={-3} />
+  <Edge fromNodeId="red-node-2" toNodeId="green-node" curvature={-3} bidirectional={true} />
   <Edge fromNodeId="blue-node-1" toNodeId="green-node" />
   <Edge fromNodeId="blue-node-1" toNodeId="yellow-node" directed={true} />
   <Edge fromNodeId="blue-node-2" toNodeId="green-node" />

@@ -117,7 +117,9 @@ export default class Edge extends React.Component {
 
   computeAngle(p1, p2) {
     if (this.props.curvature) {
-      return Curve.getAngleOfApproach(p1, p2, this.props.curvature);
+      return geometryUtils.complement(
+        Curve.getAngleOfApproach(p1, p2, this.props.curvature)
+      );
     } else {
       return geometryUtils.computeHorizontalIntersectionAngle(
         p1, p2

@@ -23,6 +23,7 @@ describe('Edge', () => {
   beforeEach(() => {
     mockGetAngleOfApproach = jest.fn();
     Curve.getAngleOfApproach = mockGetAngleOfApproach;
+    geometryUtils.mockReset();
   });
 
   afterEach(() => {
@@ -147,6 +148,10 @@ describe('Edge', () => {
       .mockReturnValueOnce(PI_OVER_FOUR)
       .mockReturnValueOnce(THREE_PI_OVER_TWO);
 
+    geometryUtils.complement
+      .mockReturnValueOnce(FIVE_PI_OVER_FOUR)
+      .mockReturnValueOnce(PI_OVER_TWO);
+
     const wrapper = shallow(
       <Edge
         fromNodeId='1'
@@ -174,15 +179,19 @@ describe('Edge', () => {
 
     expect(content.find(Arrow).at(0).prop('to')).toEqual(from);
     expect(content.find(Arrow).at(0).prop('angle')).toBeCloseTo(
-      PI_OVER_FOUR
+      FIVE_PI_OVER_FOUR
     );
 
     expect(content.find(Arrow).at(1).prop('to')).toEqual(to);
     expect(content.find(Arrow).at(1).prop('angle')).toBeCloseTo(
-      THREE_PI_OVER_TWO
+      PI_OVER_TWO
     );
     expect(mockGetAngleOfApproach).toHaveBeenCalledWith(from, to, '3');
     expect(mockGetAngleOfApproach).toHaveBeenCalledWith(to, from, '3');
     expect(mockGetAngleOfApproach).toHaveBeenCalledTimes(2);
+
+    expect(geometryUtils.complement).toHaveBeenCalledWith(PI_OVER_FOUR);
+    expect(geometryUtils.complement).toHaveBeenCalledWith(THREE_PI_OVER_TWO);
+    expect(geometryUtils.complement).toHaveBeenCalledTimes(2);
   });
 });

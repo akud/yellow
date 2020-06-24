@@ -45,6 +45,14 @@ describe('geometry utils', () => {
     });
   });
 
+  describe('complement', () => {
+    it('returns the opposite angle', () => {
+      expect(geometryUtils.complement(PI_OVER_FOUR)).toBeCloseTo(FIVE_PI_OVER_FOUR);
+      expect(geometryUtils.complement(PI_OVER_TWO)).toBeCloseTo(THREE_PI_OVER_TWO);
+      expect(geometryUtils.complement(SEVEN_PI_OVER_FOUR)).toBeCloseTo(THREE_PI_OVER_FOUR);
+    });
+  });
+
   describe('radiansToDegrees', () => {
     it('converts radians to degrees', () => {
       expect(geometryUtils.radiansToDegrees(Math.PI)).toBeCloseTo(180);

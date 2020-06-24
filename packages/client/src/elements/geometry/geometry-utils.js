@@ -30,6 +30,19 @@ export const subtractAngles = (angle1, angle2) => {
 }
 
 /**
+ * Compute the complement of an angle (i.e. the angle pointing the opposite direction).
+ *
+ */
+export const complement = (angle) => {
+  const comp = angle + Math.PI;
+  if (comp > 2 * Math.PI) {
+    return comp - (2 * Math.PI);
+  } else {
+    return comp;
+  }
+}
+
+/**
  * Find the point a given distance from the target point at the target angle
  *
  */
@@ -94,4 +107,5 @@ export default {
   radiansToDegrees,
   addVectors,
   pointAwayFrom,
+  complement,
 };
