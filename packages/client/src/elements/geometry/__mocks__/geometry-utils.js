@@ -7,6 +7,7 @@ export const addVectors = jest.fn();
 export const pointAwayFrom = jest.fn();
 export const subtractAngles = jest.fn();
 export const complement = jest.fn();
+export const normalize = jest.fn();
 export const mockReset = () => {
   slope.mockReset();
   distance.mockReset();
@@ -17,6 +18,7 @@ export const mockReset = () => {
   pointAwayFrom.mockReset();
   subtractAngles.mockReset();
   complement.mockReset();
+  normalize.mockReset();
 };
 
 export default {
@@ -30,4 +32,5 @@ export default {
   mockReset,
   pointAwayFrom,
   complement,
+  normalize,
 };

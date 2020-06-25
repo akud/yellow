@@ -33,13 +33,19 @@ export const subtractAngles = (angle1, angle2) => {
  * Compute the complement of an angle (i.e. the angle pointing the opposite direction).
  *
  */
-export const complement = (angle) => {
-  const comp = angle + Math.PI;
-  if (comp > 2 * Math.PI) {
-    return comp - (2 * Math.PI);
-  } else {
-    return comp;
+export const complement = (angle) => normalize(angle + Math.PI);
+
+/**
+ * Normalize an angle to be between 0 and 2 pi
+ */
+export const normalize = (angle) => {
+  while (angle < 0) {
+    angle = angle + 2 * Math.PI;
   }
+  while (angle > (2 * Math.PI)) {
+    angle = angle - 2 * Math.PI;
+  }
+  return angle;
 }
 
 /**
@@ -108,4 +114,5 @@ export default {
   addVectors,
   pointAwayFrom,
   complement,
+  normalize,
 };

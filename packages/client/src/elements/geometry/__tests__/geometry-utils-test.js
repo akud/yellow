@@ -53,6 +53,16 @@ describe('geometry utils', () => {
     });
   });
 
+  describe('normalize', () => {
+    it('normalizes the angle to be within 0 and 2 pi', () => {
+      expect(geometryUtils.normalize(-PI_OVER_THREE)).toBeCloseTo(FIVE_PI_OVER_THREE);
+      expect(geometryUtils.normalize(11 * Math.PI / 4)).toBeCloseTo(THREE_PI_OVER_FOUR);
+      expect(geometryUtils.normalize(0)).toBeCloseTo(0);
+      expect(geometryUtils.normalize(TWO_PI)).toBeCloseTo(TWO_PI);
+      expect(geometryUtils.normalize(TWO_PI_OVER_THREE)).toBeCloseTo(TWO_PI_OVER_THREE);
+    });
+  });
+
   describe('radiansToDegrees', () => {
     it('converts radians to degrees', () => {
       expect(geometryUtils.radiansToDegrees(Math.PI)).toBeCloseTo(180);

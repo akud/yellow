@@ -30,18 +30,18 @@ export class Curve extends React.Component {
     const angleModification = from.x < to.x ?
       Curve.curvatureAngles[curvature] :
       Curve.curvatureAngles[-parseInt(curvature)];
-    return naturalAngle + angleModification;
+    return geometryUtils.normalize(naturalAngle + angleModification);
   }
 
   static curvatureAngles = {
-    '4': -Math.PI / 3,
-    '3': -Math.PI / 4,
-    '2': -Math.PI / 6,
-    '1': -Math.PI / 12,
-    '-1': Math.PI / 12,
-    '-2': Math.PI / 6,
-    '-3': Math.PI / 4,
-    '-4': Math.PI / 3,
+    '4': Math.PI / 3,
+    '3': Math.PI / 4,
+    '2': Math.PI / 6,
+    '1': Math.PI / 12,
+    '-1': -Math.PI / 12,
+    '-2': -Math.PI / 6,
+    '-3': -Math.PI / 4,
+    '-4': -Math.PI / 3,
   }
 
   render() {

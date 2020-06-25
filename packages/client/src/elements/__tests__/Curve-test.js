@@ -17,8 +17,11 @@ describe('Curve', () => {
   it('renders a curve between the provided points with the given curvature', () => {
     geometryUtils.distance.mockReturnValue(150);
     geometryUtils.computeHorizontalIntersectionAngle
-      .mockReturnValueOnce(PI_OVER_FOUR)
-      .mockReturnValueOnce(THREE_PI_OVER_FOUR);
+      .mockReturnValueOnce(PI_OVER_THREE)
+      .mockReturnValueOnce(TWO_PI_OVER_THREE);
+    geometryUtils.normalize
+      .mockReturnValueOnce(PI / 12)
+      .mockReturnValueOnce(11 * PI / 12);
     geometryUtils.pointAwayFrom
       .mockReturnValueOnce({ x: 160, y: 130 })
       .mockReturnValueOnce({ x: 190, y: 130 });
@@ -44,15 +47,20 @@ describe('Curve', () => {
 
     expect(geometryUtils.pointAwayFrom).toHaveBeenCalledWith({
       base: { x: 150, y: 150 },
-      angle: PI_OVER_TWO,
+      angle: PI / 12,
       distance: 75,
     });
     expect(geometryUtils.pointAwayFrom).toHaveBeenCalledWith({
       base: { x: 200, y: 100 },
-      angle: PI_OVER_TWO,
+      angle: 11 * PI / 12,
       distance: 75,
     });
     expect(geometryUtils.pointAwayFrom).toHaveBeenCalledTimes(2);
+
+    expect(geometryUtils.normalize.mock.calls).toAlmostEqual([
+      [PI / 12],
+      [11 * PI / 12],
+    ]);
   });
 
   describe('getAngleOfApproach', () => {
@@ -63,28 +71,46 @@ describe('Curve', () => {
           to: { x: 250, y: 350 },
           curvature: -4,
           naturalAngle: Math.PI / 6,
-          expected: Math.PI / 2,
+          expectedAdjustment: -PI_OVER_THREE,
+          normalizedAngle: 11 * Math.PI / 6,
         },
         {
           from: { x: 250, y: 350 },
           to: { x: 150, y: 350 },
           curvature: '-4',
           naturalAngle: Math.PI / 6,
-          expected: - Math.PI / 6,
+          expectedAdjustment: PI_OVER_THREE,
+          normalizedAngle: PI_OVER_TWO,
         },
       ];
-      testCases.forEach(({ from, to, curvature, naturalAngle, expected }) => {
+      testCases.forEach(({
+        from,
+        to,
+        curvature,
+        naturalAngle,
+        normalizedAngle,
+        expectedAdjustment,
+      }) => {
         geometryUtils.computeHorizontalIntersectionAngle.mockReturnValue(
           naturalAngle
         );
+        geometryUtils.normalize.mockReturnValue(normalizedAngle);
+
         expect(
           Curve.getAngleOfApproach(from, to, curvature),
           "Failed testing " +
             JSON.stringify(from) + " to " +
             JSON.stringify(to) + " at " + curvature
         ).toBeCloseTo(
-          expected
+          normalizedAngle
         );
+        expect(geometryUtils.computeHorizontalIntersectionAngle).toHaveBeenCalledOnceWith(
+          to, from
+        );
+        expect(geometryUtils.normalize).toHaveBeenCalledOnceWith(
+          naturalAngle + expectedAdjustment
+        );
+        geometryUtils.mockReset();
       });
     });
   });
