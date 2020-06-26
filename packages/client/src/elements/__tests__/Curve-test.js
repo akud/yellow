@@ -6,7 +6,7 @@ import { Curve } from '../Curve';
 
 import geometryUtils from '../geometry/geometry-utils';
 
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 
 
 describe('Curve', () => {
@@ -26,7 +26,7 @@ describe('Curve', () => {
       .mockReturnValueOnce({ x: 160, y: 130 })
       .mockReturnValueOnce({ x: 190, y: 130 });
 
-    const wrapper = shallow(
+    const wrapper = mount(
       <Curve
         from={{ x: 150, y: 150 }}
         to={{ x: 200, y: 100 }}
@@ -39,6 +39,7 @@ describe('Curve', () => {
       'M 150 150 C 160 130, 190 130, 200 100'
     );
     expect(wrapper.find('path').prop('data-element-id')).toEqual('test-123');
+    expect(wrapper.find('Label').length).toBe(0);
 
     expect(geometryUtils.distance).toHaveBeenCalledOnceWith(
       { x: 150, y: 150 },

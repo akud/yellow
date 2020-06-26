@@ -45,14 +45,6 @@ describe('geometry utils', () => {
     });
   });
 
-  describe('complement', () => {
-    it('returns the opposite angle', () => {
-      expect(geometryUtils.complement(PI_OVER_FOUR)).toBeCloseTo(FIVE_PI_OVER_FOUR);
-      expect(geometryUtils.complement(PI_OVER_TWO)).toBeCloseTo(THREE_PI_OVER_TWO);
-      expect(geometryUtils.complement(SEVEN_PI_OVER_FOUR)).toBeCloseTo(THREE_PI_OVER_FOUR);
-    });
-  });
-
   describe('normalize', () => {
     it('normalizes the angle to be within 0 and 2 pi', () => {
       expect(geometryUtils.normalize(-PI_OVER_THREE)).toBeCloseTo(FIVE_PI_OVER_THREE);
@@ -71,6 +63,17 @@ describe('geometry utils', () => {
       expect(geometryUtils.radiansToDegrees(Math.PI / 6)).toBeCloseTo(30);
       expect(geometryUtils.radiansToDegrees(Math.PI / 3)).toBeCloseTo(60);
       expect(geometryUtils.radiansToDegrees(2 * Math.PI / 3)).toBeCloseTo(120);
+    });
+  });
+
+  describe('midpoint', () => {
+    it('computes the midpoint between two points', () => {
+      expect(geometryUtils.midpoint(
+        { x: 20, y: -32 },
+        { x: 30, y: -22 }
+      )).toEqual(
+        { x: 25, y: -27 }
+      );
     });
   });
 

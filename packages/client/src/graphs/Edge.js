@@ -26,6 +26,7 @@ export default class Edge extends React.Component {
     bidirectional: PropTypes.bool,
     bindingStrength: PropTypes.number,
     curvature: ElementPropTypes.curvature,
+    label: PropTypes.string,
   }
 
   static defaultProps = {
@@ -45,7 +46,8 @@ export default class Edge extends React.Component {
       bindingStrength,
       directed,
       bidirectional,
-      curvature
+      curvature,
+      label
     } = this.props;
 
     const fromElementId = this.getFromElementId();
@@ -82,12 +84,14 @@ export default class Edge extends React.Component {
                   color={color}
                   thickness={thickness}
                   curvature={curvature}
+                  label={label}
                 /> :
                 <Line
                   from={sourcePosition}
                   to={targetPosition}
                   color={color}
                   thickness={thickness}
+                  label={label}
                 />
             }
             {

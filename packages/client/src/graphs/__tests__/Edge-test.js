@@ -39,6 +39,7 @@ describe('Edge', () => {
         thickness={3}
         distance={125}
         bindingStrength={5.6}
+        label='hello'
       />
     );
     expect(wrapper.find('SimulatedLink').length).toBe(1);
@@ -67,6 +68,7 @@ describe('Edge', () => {
 
     expect(content.find(Line).prop('color')).toEqual('#442200');
     expect(content.find(Line).prop('thickness')).toEqual(3);
+    expect(content.find(Line).prop('label')).toEqual('hello');
   });
 
   it('renders an arrow at the target if directed=true', () => {
@@ -160,6 +162,7 @@ describe('Edge', () => {
         thickness={3}
         curvature='3'
         bidirectional={true}
+        label='world'
       />
     );
     const from = { x: 45, y: 87 };
@@ -174,6 +177,7 @@ describe('Edge', () => {
     expect(content.find(Curve).prop('curvature')).toEqual('3');
     expect(content.find(Curve).prop('color')).toEqual('green');
     expect(content.find(Curve).prop('thickness')).toEqual(3);
+    expect(content.find(Curve).prop('label')).toEqual('world');
 
     expect(content.find(Arrow).length).toBe(2);
 

@@ -30,12 +30,6 @@ export const subtractAngles = (angle1, angle2) => {
 }
 
 /**
- * Compute the complement of an angle (i.e. the angle pointing the opposite direction).
- *
- */
-export const complement = (angle) => normalize(angle + Math.PI);
-
-/**
  * Normalize an angle to be between 0 and 2 pi
  */
 export const normalize = (angle) => {
@@ -104,6 +98,14 @@ export const radiansToDegrees = radians => radians * 180 / Math.PI;
  */
 export const addVectors = (point, vector) => ({ x: point.x + vector.x, y: point.y + vector.y });
 
+/**
+ * Compute the midpoint between two points
+ */
+export const midpoint = (a, b) => ({
+  x: (a.x + b.x) / 2,
+  y: (a.y + b.y) / 2,
+});
+
 export default {
   slope,
   distance,
@@ -113,6 +115,6 @@ export default {
   radiansToDegrees,
   addVectors,
   pointAwayFrom,
-  complement,
   normalize,
+  midpoint,
 };

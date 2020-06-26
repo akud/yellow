@@ -1,4 +1,4 @@
-import { check, checkElementFragment } from './utils';
+import { check, checkElementFragment, checkSimulationFragment } from './utils';
 
 describe('Basic Element Display', () => {
   it('renders elements correctly', async () => {
@@ -96,6 +96,52 @@ describe('Basic Element Display', () => {
   to={{ x: 400, y: 200 }}
   curvature={-4}
   />
+`
+    );
+  });
+
+  it('can render labels with different styles', async () => {
+    await checkElementFragment(
+`
+<Circle position={{ x: 100, y: 100 }} radius={2} color='black' />
+<Label position={{ x: 100, y: 100 }} alignment='bottom' text='the circle is on the bottom' />
+
+<Circle position={{ x: 200, y: 300 }} radius={2} color='black' />
+<Label position={{ x: 200, y: 300 }} alignment='top' text='the circle is on the top' />
+
+<Circle position={{ x: 150, y: 200 }} radius={2} color='black' />
+<Label position={{ x: 150, y: 200 }} alignment='bottom' rotation={Math.PI / 3} text='rotated' />
+
+<Line from={{ x: 150, y: 205 }} to={{ x: 450, y: 450 }} label='along a line' thickness={3} />
+
+`
+    );
+  });
+
+  it.only('can render labels along curves', async () => {
+    await checkElementFragment(
+`
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=1' curvature={1} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=2' curvature={2} thickness={2} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=3' curvature={3} thickness={3} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=4' curvature={4} />
+
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=-1' curvature={-1} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=-2' curvature={-2} thickness={2} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=-3' curvature={-3} thickness={3} />
+<Curve from={{ x: 0, y: 250 }} to={{ x: 375, y: 200 }} label='curvature=-4' curvature={-4} />
+
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=1' curvature={1} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=2' curvature={2} thickness={2} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=3' curvature={3} thickness={3} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=4' curvature={4} />
+
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=-1' curvature={-1} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=-2' curvature={-2} thickness={2} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=-3' curvature={-3} thickness={3} />
+<Curve from={{ x: 375, y: 200 }} to={{ x: 500, y: 350 }} label='curvature=-4' curvature={-4} />
+
+
 `
     );
   });
