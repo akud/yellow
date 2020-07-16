@@ -33,6 +33,22 @@ export class Curve extends React.Component {
     return geometryUtils.normalize(naturalAngle + angleModification);
   }
 
+  static computeControlPoints(from, to, curvature) {
+    const distance = geometryUtils.distance(from, to) / 2;
+    return {
+      p1: geometryUtils.pointAwayFrom({
+        base: from,
+        angle: Curve.getAngleOfApproach(to, from, curvature),
+        distance,
+      }),
+      p2: geometryUtils.pointAwayFrom({
+        base: to,
+        angle: Curve.getAngleOfApproach(from, to, curvature),
+        distance,
+      }),
+    };
+  }
+
   static curvatureAngles = {
     '4': Math.PI / 3,
     '3': Math.PI / 4,
@@ -62,20 +78,7 @@ export class Curve extends React.Component {
 
   getControlPoints() {
     const { from, to, curvature } = this.props;
-
-    const distance = geometryUtils.distance(from, to) / 2;
-    return {
-      p1: geometryUtils.pointAwayFrom({
-        base: from,
-        angle: Curve.getAngleOfApproach(to, from, curvature),
-        distance,
-      }),
-      p2: geometryUtils.pointAwayFrom({
-        base: to,
-        angle: Curve.getAngleOfApproach(from, to, curvature),
-        distance,
-      }),
-    };
+    return Curve.computeControlPoints(from, to, curvature);
   }
 }
 
