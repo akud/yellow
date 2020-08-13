@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ElementPropTypes from '../elements/ElementPropTypes';
 import ElementGroup from '../elements/ElementGroup';
 import ElementContext from '../elements/ElementContext';
+import linkable from '../elements/linkable';
 
 import Orientation from './Orientation';
 import SimulationContext from './SimulationContext';
@@ -20,7 +21,7 @@ const LOGGER = new logging.Logger('SimulatedElementGroup');
  * Wrap a group of elements and keep them bound to each other around a primary element
  *
  */
-export default class SimulatedElementGroup extends React.Component {
+class SimulatedElementGroup extends React.Component {
   static contextType = SimulationContext
 
   static propTypes = {
@@ -153,3 +154,5 @@ export default class SimulatedElementGroup extends React.Component {
     return this.context.getElementData(elementId).shape.getBoundingRadius();
   }
 }
+
+export default linkable(SimulatedElementGroup);

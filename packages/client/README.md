@@ -614,6 +614,8 @@ component is also accessible as a top level property of `Simulations`.
   * `bindingStrength`: PropTypes.number - optional strength to set on
     the rules that bind elements together
 
+  * `link`: [ElementPropTypes.link](#element-prop-types-link) Optional link object describing a web page to wrap the group in a link.
+
 * <a name='simulated-link' href='https://github.com/akud/yellow/blob/master/packages/client/src/simulation/SimulatedLink.js'>SimulatedLink</a> - links two elements in the simulation together and passes their positions to a render prop. This is used to render edges between nodes in a graph
 
   Props:

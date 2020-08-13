@@ -9,7 +9,7 @@ describe('Graph', () => {
   <CircleNode nodeId="blue-node-1" color="#5b41fc" />
   <CircleNode nodeId="blue-node-2" color="#5b41fc" />
   <CircleNode nodeId="yellow-node" color="#fcf95d" />
-  <HtmlNode nodeId="green-node" >
+  <HtmlNode nodeId="green-node" link='https://google.com' >
     <p style={{ color: '#3ba226', margin: 0 }}>green</p>
   </HtmlNode>
   <Edge fromNodeId="red-node-1" toNodeId="yellow-node" directed={true} />

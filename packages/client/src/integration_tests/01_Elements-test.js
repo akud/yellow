@@ -9,7 +9,7 @@ describe('Basic Element Display', () => {
 <Circle radius={10} color='blue' position={{x: 400, y: 400}} />
 <Label text='small' position={{x: 400, y: 400}} />
 <Line from={{x: 120, y: 120}} to={{x: 390, y: 390}} color='black' />
-<HtmlFragment position={{ x: 250, y: 100 }}>
+<HtmlFragment position={{ x: 250, y: 100 }} link='https://google.com'>
   <p>This is <b>html</b></p>
 </HtmlFragment>
 <Arrow
